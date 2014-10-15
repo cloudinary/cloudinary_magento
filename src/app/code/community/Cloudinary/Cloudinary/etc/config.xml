@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Cloudinary_Cloudinary>
+            <version>0.1.0</version>
+        </Cloudinary_Cloudinary>
+    </modules>
+    <global>
+    </global>
+</config>

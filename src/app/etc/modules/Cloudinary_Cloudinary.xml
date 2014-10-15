@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Cloudinary_Cloudinary>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Cloudinary_Cloudinary>
+    </modules>
+</config>
