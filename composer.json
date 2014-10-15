@@ -1,0 +1,48 @@
+{
+    "name": "inviqa/Cloudinary",
+    "type": "magento-module",
+    "license": "proprietary",
+    "description": "Cloudinary Magento Integration.",
+    "require": {
+        "php": ">=5.3.0",
+        "magento-hackathon/magento-composer-installer":"*"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.*",
+        "phpspec/prophecy": "1.2.*",
+        "magetest/magento-phpspec-extension": "2.1.*",
+        "magetest/magento-behat-extension": "dev-feature/Behat3",
+        "magetest/manager": "dev-master",
+        "sensiolabs/behat-page-object-extension": "*@dev",
+        "behat/mink-selenium2-driver": "*",
+        "behat/mink-goutte-driver": "1.0.*",
+        "squizlabs/php_codesniffer": "1.*",
+        "phpmd/phpmd": "1.*",
+        "sebastian/phpcpd": "2.*",
+        "pdepend/pdepend": "1.*",
+        "phploc/phploc": "2.*",
+        "theseer/phpdox": "0.6.*",
+        "theseer/fxsl": "1.0.*@dev",
+        "phpunit/phpunit": "3.7.*",
+        "covex-nn/phpcb": "1.0.*@dev",
+        "bossa/phpspec2-expect": "dev-master"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "": [
+                "../../../public/app",
+                "../../../public/app/code/local",
+                "../../../public/app/code/community",
+                "../../../public/app/code/core",
+                "../../../public/lib",
+                "features/bootstrap"
+            ]
+        }
+    },
+    "extra": {
+        "magento-root-dir": "./"
+    }
+}
