@@ -1,5 +1,5 @@
 {
-    "name": "inviqa/Cloudinary",
+    "name": "inviqa/cloudinary",
     "type": "magento-module",
     "license": "proprietary",
     "description": "Cloudinary Magento Integration.",
