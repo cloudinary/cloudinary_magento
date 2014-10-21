@@ -6,5 +6,20 @@
         </Cloudinary_Cloudinary>
     </modules>
     <global>
+        <models>
+            <cloudinary_cloudinary>
+                <class>Cloudinary_Cloudinary_Model</class>
+            </cloudinary_cloudinary>
+        </models>
+        <blocks>
+            <cloudinary_cloudinary>
+                <class>Cloudinary_Cloudinary_Block</class>
+            </cloudinary_cloudinary>
+        </blocks>
+        <helpers>
+            <cloudinary_cloudinary>
+                <class>Cloudinary_Cloudinary_Helper</class>
+            </cloudinary_cloudinary>
+        </helpers>
     </global>
 </config>
