@@ -1,7 +1,7 @@
 <?php
 
 
-class DummyImageProvider {
+class DummyImageProvider implements Cloudinary_Cloudinary_Model_ImageProvider_Interface {
 
 
     private $key;
@@ -21,7 +21,8 @@ class DummyImageProvider {
         }
     }
 
-    public function wasUploadSuccessful(){
+    public function wasUploadSuccessful()
+    {
         return $this->uploadSuccessful;
     }
 }
