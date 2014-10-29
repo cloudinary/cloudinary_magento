@@ -3,8 +3,4 @@
 
 class FakeConfiguration
 {
-
-    public function setCredentials()
-    {
-    }
 } 

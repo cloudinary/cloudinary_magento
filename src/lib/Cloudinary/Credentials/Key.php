@@ -5,12 +5,21 @@ namespace Cloudinary\Credentials;
 class Key
 {
 
-    public static function fromString($argument1)
+    private $key;
+
+    public static function fromString($aKey)
     {
         $key = new Key();
-
-        // TODO: write logic here
-
+        $key->key = $aKey;
         return $key;
+    }
+
+    public function __toString()
+    {
+        return $this->key;
+    }
+
+    private function __construct()
+    {
     }
 }

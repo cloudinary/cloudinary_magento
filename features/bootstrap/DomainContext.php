@@ -21,9 +21,10 @@ class DomainContext implements Context, SnippetAcceptingContext
 {
     private $provider;
     private $configuration;
-    private $credentials;
     private $uploadedImage;
     private $extension;
+    private $key;
+    private $secret;
 
     /**
      * Initializes context.
@@ -34,7 +35,6 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function __construct()
     {
-        $this->provider = new FakeImageProvider();
         $this->configuration = new FakeConfiguration();
 
         $this->extension = new ImageManager($this->provider, $this->configuration);
@@ -76,30 +76,25 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
     {
-        $this->credentials = new Credentials($aKey, $aSecret);
-        $this->provider->addCredentials($this->credentials);
+        $this->provider = new FakeImageProvider();
+        $this->key = $aKey;
+        $this->secret = $aSecret;
     }
 
+
     /**
-     * @Given the extension configuration is set to use the same credentials
+     * @When I upload the image :anImage using the correct credentials
      */
-    public function theExtensionIsConfiguredToUseTheSameCredentials()
+    public function iUploadTheImageUsingTheCorrectCredentials(Image $anImage)
     {
-        $this->configuration->setCredentials($this->credentials);
+        $credentials = new Credentials($this->key, $this->secret);
+        $this->uploadedImage = $this->extension->uploadImage($anImage, $credentials);
     }
 
     /**
-     * @When I upload the image :anImage
+     * @Then the image should be available through the image provider
      */
-    public function iUploadTheImage(Image $anImage)
-    {
-        $this->uploadedImage = $this->extension->uploadImage($anImage);
-    }
-
-    /**
-     * @Then the image should be available through the provider
-     */
-    public function theImageShouldBeAvailableThroughTheProvider()
+    public function theImageShouldBeAvailableThroughTheImageProvider()
     {
         assertNotNull($this->uploadedImage->getUrl());
     }

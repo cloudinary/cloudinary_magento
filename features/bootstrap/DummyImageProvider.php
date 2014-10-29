@@ -1,22 +1,28 @@
 <?php
 
 
-class DummyImageProvider implements Cloudinary_Cloudinary_Model_ImageProvider_Interface {
+use Cloudinary\Credentials;
+use Cloudinary\Credentials\Key;
+use Cloudinary\Credentials\Secret;
+use Cloudinary\Image;
+use Cloudinary\ImageProvider;
+
+class DummyImageProvider implements ImageProvider {
 
 
     private $key;
     private $secret;
     private $uploadSuccessful = false;
 
-    public function setCredentials($aKey, $aSecret)
+    public function __construct(Key $aKey, Secret $aSecret)
     {
         $this->key = $aKey;
         $this->secret = $aSecret;
     }
 
-    public function upload($key, $secret)
+    public function upload(Image $anImage, Credentials $credentials)
     {
-        if($key == $this->key && $secret == $this->secret) {
+        if((string)$credentials->getKey() === (string)$this->key && (string)$credentials->getSecret() === (string)$this->secret) {
             $this->uploadSuccessful = true;
         }
     }
