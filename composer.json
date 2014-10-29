@@ -8,9 +8,8 @@
         "magento-hackathon/magento-composer-installer":"*"
     },
     "require-dev": {
-        "phpspec/phpspec": "2.0.*",
+        "phpspec/phpspec": "2.1.0-RC1",
         "phpspec/prophecy": "1.2.*",
-        "magetest/magento-phpspec-extension": "2.1.*",
         "magetest/magento-behat-extension": "dev-feature/Behat3",
         "magetest/manager": "dev-master",
         "sensiolabs/behat-page-object-extension": "*@dev",

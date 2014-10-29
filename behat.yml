@@ -3,6 +3,9 @@ default:
     default:
       contexts:
         - AdminCredentialsContext
+    domain:
+      contexts:
+        - DomainContext
 
   extensions:
     MageTest\MagentoExtension\Extension: ~
