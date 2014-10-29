@@ -14,7 +14,7 @@ class DummyImageProvider implements ImageProvider {
     private $secret;
     private $uploadSuccessful = false;
 
-    public function __construct(Key $aKey, Secret $aSecret)
+    public function setMockCredentials(Key $aKey, Secret $aSecret)
     {
         $this->key = $aKey;
         $this->secret = $aSecret;
