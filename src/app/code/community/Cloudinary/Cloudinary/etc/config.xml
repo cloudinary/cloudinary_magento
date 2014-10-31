@@ -21,5 +21,16 @@
                 <class>Cloudinary_Cloudinary_Helper</class>
             </cloudinary_cloudinary>
         </helpers>
+        <events>
+            <controller_action_postdispatch_adminhtml_catalog_product_gallery_upload>
+                <observers>
+                    <cloudinary_cloudinary>
+                        <type>singleton</type>
+                        <class>cloudinary_cloudinary/observer</class>
+                        <method>onGalleryUploadAction</method>
+                    </cloudinary_cloudinary>
+                </observers>
+            </controller_action_postdispatch_adminhtml_catalog_product_gallery_upload>
+        </events>
     </global>
 </config>
