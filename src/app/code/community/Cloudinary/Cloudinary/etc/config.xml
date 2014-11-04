@@ -31,6 +31,15 @@
                     </cloudinary_cloudinary>
                 </observers>
             </controller_action_postdispatch_adminhtml_catalog_product_gallery_upload>
+            <controller_front_init_before>
+                <observers>
+                    <cloudinary_cloudinary>
+                        <type>singleton</type>
+                        <class>cloudinary_cloudinary/observer</class>
+                        <method>onFrontInitBefore</method>
+                    </cloudinary_cloudinary>
+                </observers>
+            </controller_front_init_before>
         </events>
     </global>
 </config>

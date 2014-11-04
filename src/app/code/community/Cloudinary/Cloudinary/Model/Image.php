@@ -12,13 +12,14 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function upload($srcPath)
     {
+
         $cloudinary = new CloudinaryImageProvider();
         $cloudinary->upload(Image::fromPath($srcPath), $this->getCredentials());
 
         return $cloudinary->wasUploadSuccessful();
     }
 
-    private function getCredentials()
+    protected  function getCredentials()
     {
         $configuration = Mage::helper('cloudinary_cloudinary/configuration');
 
