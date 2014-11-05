@@ -1,3 +1,4 @@
 src/app/code/community/Cloudinary/Cloudinary app/code/community/Cloudinary/Cloudinary
 src/app/etc/modules/Cloudinary_Cloudinary.xml app/etc/modules/Cloudinary_Cloudinary.xml
 src/lib/CloudinaryExtension lib/CloudinaryExtension
+src/lib/Cloudinary/src lib/Cloudinary
