@@ -5,11 +5,11 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Cloudinary\Credentials;
-use Cloudinary\Credentials\Key;
-use Cloudinary\Credentials\Secret;
-use Cloudinary\Image;
-use Cloudinary\ImageManager;
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Image;
+use CloudinaryExtension\ImageManager;
 
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';

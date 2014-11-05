@@ -1,11 +1,11 @@
 <?php
 
 
-use Cloudinary\Credentials;
-use Cloudinary\Credentials\Key;
-use Cloudinary\Credentials\Secret;
-use Cloudinary\Image;
-use Cloudinary\ImageProvider;
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Image;
+use CloudinaryExtension\ImageProvider;
 
 class DummyImageProvider implements ImageProvider {
 

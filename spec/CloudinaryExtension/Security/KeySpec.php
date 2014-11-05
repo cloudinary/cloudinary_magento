@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Cloudinary\Credentials;
+namespace spec\CloudinaryExtension\Security;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -14,6 +14,6 @@ class KeySpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Cloudinary\Credentials\Key');
+        $this->shouldHaveType('CloudinaryExtension\Security\Key');
     }
 }

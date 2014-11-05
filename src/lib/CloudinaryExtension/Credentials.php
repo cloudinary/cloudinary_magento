@@ -1,9 +1,10 @@
 <?php
 
-namespace Cloudinary;
+namespace CloudinaryExtension;
 
-use Cloudinary\Credentials\Key;
-use Cloudinary\Credentials\Secret;
+
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
 
 class Credentials
 {

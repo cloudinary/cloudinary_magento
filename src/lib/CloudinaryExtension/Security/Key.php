@@ -1,6 +1,6 @@
 <?php
 
-namespace Cloudinary\Credentials;
+namespace CloudinaryExtension\Security;
 
 class Key
 {

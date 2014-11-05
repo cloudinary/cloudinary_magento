@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\Cloudinary;
+namespace spec\CloudinaryExtension;
 
-use Cloudinary\Credentials\Key;
-use Cloudinary\Credentials\Secret;
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 

@@ -2,7 +2,7 @@
  
 class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 {
-    const REGISTERED_PATH = 'Cloudinary';
+    const CLOUDINARY_LIB_EXTENSION_PATH = 'CloudinaryExtension';
 
     public function onFrontInitBefore(Varien_Event_Observer $event)
     {
@@ -32,7 +32,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     {
         spl_autoload_register(
             function ($class_name) {
-                if(strpos($class_name, Cloudinary_Cloudinary_Model_Observer::REGISTERED_PATH . '\\') === 0) {
+                if(strpos($class_name, Cloudinary_Cloudinary_Model_Observer::CLOUDINARY_LIB_EXTENSION_PATH . '\\') === 0) {
                     include_once preg_replace('#\\\|_(?!.*\\\)#', '/', $class_name) . '.php';
                 }
             }

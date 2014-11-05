@@ -1,6 +1,6 @@
 <?php
 
-namespace Cloudinary;
+namespace CloudinaryExtension;
 
 class OnlineImage
 {

@@ -5,10 +5,10 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Cloudinary\Credentials;
-use Cloudinary\Credentials\Key;
-use Cloudinary\Credentials\Secret;
-use Cloudinary\Image;
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Image;
 use MageTest\Manager\FixtureManager;
 use MageTest\Manager\Attributes\Provider\YamlProvider;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
@@ -67,7 +67,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     /**
      * @Given the image provider is aware of credentials with the API key :aKey and the secret :aSecret
      */
-    public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey,Secret $aSecret)
+    public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
     {
         $this->key = $aKey;
         $this->secret = $aSecret;

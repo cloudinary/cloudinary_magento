@@ -1,9 +1,9 @@
 <?php
 
 
-use Cloudinary\Credentials;
-use Cloudinary\Image;
-use Cloudinary\ImageProvider;
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Image;
+use CloudinaryExtension\ImageProvider;
 
 class FakeImageProvider implements ImageProvider {
 
