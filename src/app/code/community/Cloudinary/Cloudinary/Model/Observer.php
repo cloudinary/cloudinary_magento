@@ -2,10 +2,12 @@
  
 class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 {
-    const CLOUDINARY_LIB_EXTENSION_PATH = 'CloudinaryExtension';
+    const CLOUDINARY_EXTENSION_LIB_PATH = 'CloudinaryExtension';
+    const CLOUDINARY_LIB_PATH = 'Cloudinary';
 
     public function onFrontInitBefore(Varien_Event_Observer $event)
     {
+        $this->registerCloudinaryExtensionAutoloader();
         $this->registerCloudinaryAutoloader();
 
         return $event;
@@ -13,10 +15,8 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function onGalleryUploadAction(Varien_Event_Observer $event)
     {
-        $uploadedFileDetails = $this->_getUploadedFileDetails($event);
-
         $cloudinayImage = Mage::getModel('cloudinary_cloudinary/image');
-        $cloudinayImage->upload($uploadedFileDetails['file']);
+        $cloudinayImage->upload($this->_getUploadedFileDetails($event));
 
         return $event;
     }
@@ -28,12 +28,30 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $coreHelper->jsonDecode($controllerAction->getResponse()->getBody());
     }
 
-    protected function registerCloudinaryAutoloader()
+    protected function registerCloudinaryExtensionAutoloader()
     {
         spl_autoload_register(
-            function ($class_name) {
-                if(strpos($class_name, Cloudinary_Cloudinary_Model_Observer::CLOUDINARY_LIB_EXTENSION_PATH . '\\') === 0) {
-                    include_once preg_replace('#\\\|_(?!.*\\\)#', '/', $class_name) . '.php';
+            function ($className) {
+                if(
+                    strpos($className, Cloudinary_Cloudinary_Model_Observer::CLOUDINARY_EXTENSION_LIB_PATH . '\\') === 0 ||
+                    strpos($className, Cloudinary_Cloudinary_Model_Observer::CLOUDINARY_LIB_PATH . '\\') === 0
+                ) {
+                    include_once preg_replace('#\\\|_(?!.*\\\)#', '/', $className) . '.php';
+                }
+            }
+        );
+    }
+
+    protected function registerCloudinaryAutoloader()
+    {
+        $libFolder = Mage::getBaseDir('lib');
+
+        spl_autoload_register(
+            function ($className) use ($libFolder) {
+                if($className ===  Cloudinary_Cloudinary_Model_Observer::CLOUDINARY_LIB_PATH) {
+                    foreach(new GlobIterator($libFolder . DS . Cloudinary_Cloudinary_Model_Observer::CLOUDINARY_LIB_PATH . DS . '*.php') as $phpFile) {
+                        include_once $phpFile;
+                    }
                 }
             }
         );

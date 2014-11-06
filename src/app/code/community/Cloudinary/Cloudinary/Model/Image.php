@@ -10,11 +10,11 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
 
 
-    public function upload($srcPath)
+    public function upload($imageDetails)
     {
 
         $cloudinary = new CloudinaryImageProvider();
-        $cloudinary->upload(Image::fromPath($srcPath), $this->getCredentials());
+        $cloudinary->upload(Image::fromPath($this->_imagePathFromImageDetails($imageDetails)), $this->getCredentials());
 
         return $cloudinary->wasUploadSuccessful();
     }
@@ -29,4 +29,9 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
         );
     }
 
+
+    protected function _imagePathFromImageDetails($imageDetails)
+    {
+        return  preg_replace('/.tmp$/', '', $imageDetails['path'] . $imageDetails['file']);
+    }
 }

@@ -20,7 +20,7 @@ class DummyImageProvider implements ImageProvider {
         $this->secret = $aSecret;
     }
 
-    public function upload(Image $anImage, Credentials $credentials)
+    public function upload(Image $image, Credentials $credentials)
     {
         if((string)$credentials->getKey() === (string)$this->key && (string)$credentials->getSecret() === (string)$this->secret) {
             $this->uploadSuccessful = true;
