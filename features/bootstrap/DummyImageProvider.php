@@ -13,6 +13,13 @@ class DummyImageProvider implements ImageProvider {
     private $key;
     private $secret;
     private $uploadSuccessful = false;
+    private $credentials;
+
+    public function __construct(Credentials $credentials)
+    {
+
+        $this->credentials = $credentials;
+    }
 
     public function setMockCredentials(Key $aKey, Secret $aSecret)
     {
@@ -20,9 +27,9 @@ class DummyImageProvider implements ImageProvider {
         $this->secret = $aSecret;
     }
 
-    public function upload(Image $image, Credentials $credentials)
+    public function upload(Image $image)
     {
-        if((string)$credentials->getKey() === (string)$this->key && (string)$credentials->getSecret() === (string)$this->secret) {
+        if((string)$this->credentials->getKey() === (string)$this->key && (string)$this->credentials->getSecret() === (string)$this->secret) {
             $this->uploadSuccessful = true;
         }
     }

@@ -4,6 +4,6 @@ namespace CloudinaryExtension;
 
 interface ImageProvider
 {
-    public function upload(Image $image, Credentials $credentials);
+    public function upload(Image $image);
     public function getImageUrlByName($imageName);
 }

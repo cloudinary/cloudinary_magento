@@ -35,10 +35,8 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function __construct()
     {
-        $this->configuration = new FakeConfiguration();
         $this->provider = new FakeImageProvider();
-
-        $this->extension = new ImageManager($this->provider, $this->configuration);
+        $this->extension = new ImageManager($this->provider);
     }
 
     /**
@@ -77,8 +75,6 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
     {
-        $this->key = $aKey;
-        $this->secret = $aSecret;
     }
 
 

@@ -14,18 +14,25 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function upload($imageDetails)
     {
-        $configuration = Mage::helper('cloudinary_cloudinary/configuration');
-
-        $cloudinary = new ImageManager(new CloudinaryImageProvider(), new Configuration());
+        $imageProvider = new CloudinaryImageProvider($this->_getCredentials());
+        $cloudinary = new ImageManager($imageProvider);
         $cloudinary->uploadImage(
-            $this->_imagePathFromImageDetails($imageDetails),
-            $configuration->getApiKey(),
-            $configuration->getApiSecret()
+            $this->_imagePathFromImageDetails($imageDetails)
         );
     }
 
     protected function _imagePathFromImageDetails($imageDetails)
     {
-        return  preg_replace('/.tmp$/', '', $imageDetails['path'] . $imageDetails['file']);
+        return  $imageDetails['path'] . $imageDetails['file'];
+    }
+
+    protected function _getCredentials()
+    {
+        $configuration = Mage::helper('cloudinary_cloudinary/configuration');
+
+        $key = Key::fromString($configuration->getApiKey());
+        $secret = Secret::fromString($configuration->getApiSecret());
+
+        return new Credentials($key, $secret);
     }
 }

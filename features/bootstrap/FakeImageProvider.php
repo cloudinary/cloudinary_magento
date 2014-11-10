@@ -10,7 +10,7 @@ class FakeImageProvider implements ImageProvider {
 
     private $uploadSuccessful = false;
 
-    public function upload(Image $image, Credentials $credentials)
+    public function upload(Image $image)
     {
         $this->uploadSuccessful = true;
     }

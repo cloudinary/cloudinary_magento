@@ -16,16 +16,14 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     public function onGalleryUploadAction(Varien_Event_Observer $event)
     {
         $cloudinayImage = Mage::getModel('cloudinary_cloudinary/image');
-        $cloudinayImage->upload($this->_getUploadedFileDetails($event));
+        $cloudinayImage->upload($this->_getUploadedImageDetails($event));
 
         return $event;
     }
 
-    protected function _getUploadedFileDetails($event)
+    protected function _getUploadedImageDetails($event)
     {
-        $controllerAction = $event->getData('controller_action');
-        $coreHelper = Mage::helper('core');
-        return $coreHelper->jsonDecode($controllerAction->getResponse()->getBody());
+        return $event->getResult();
     }
 
     protected function registerCloudinaryExtensionAutoloader()

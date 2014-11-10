@@ -8,33 +8,20 @@ use CloudinaryExtension\Security\Secret;
 class ImageManager
 {
     private $imageProvider;
-    private $configuration;
 
-    public function __construct(ImageProvider $imageProvider,Configuration $configuration)
+    public function __construct(ImageProvider $imageProvider)
     {
         $this->imageProvider = $imageProvider;
-        $this->configuration = $configuration;
     }
 
-    public function uploadImage($imagePath, $provider_key, $provider_secret)
+    public function uploadImage($imagePath)
     {
         $image = Image::fromPath($imagePath);
-
-        $credentials = $this->getCredentials($provider_key, $provider_secret);
-        $this->imageProvider->upload($image, $credentials);
+        $this->imageProvider->upload($image);
     }
 
     public function getUrlForImage($imageName)
     {
-
         return $this->imageProvider->getImageUrlByName($imageName);
-    }
-
-    private function getCredentials($provider_key, $provider_secret)
-    {
-        $key = Key::fromString($provider_key);
-        $secret = Secret::fromString($provider_secret);
-        $credentials = new Credentials($key, $secret);
-        return $credentials;
     }
 }

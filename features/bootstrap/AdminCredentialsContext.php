@@ -70,9 +70,6 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     {
         $this->key = $aKey;
         $this->secret = $aSecret;
-
-        $this->imageProvider = new DummyImageProvider();
-        $this->imageProvider->setMockCredentials($this->key, $this->secret);
     }
 
     /**
@@ -89,7 +86,9 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
         $apiKey = Key::fromString($configuration->getApiKey());
         $apiSecret = Secret::fromString($configuration->getApiSecret());
 
-        $this->imageProvider->upload(new Image($anImage), new Credentials($apiKey, $apiSecret));
+        $this->imageProvider = new DummyImageProvider(new Credentials($apiKey, $apiSecret));
+        $this->imageProvider->setMockCredentials($this->key, $this->secret);
+        $this->imageProvider->upload(new Image($anImage));
     }
 
     /**
