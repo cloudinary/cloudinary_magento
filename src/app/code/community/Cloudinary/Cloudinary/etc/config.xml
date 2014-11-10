@@ -10,6 +10,11 @@
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Model</class>
             </cloudinary_cloudinary>
+            <catalog>
+                <rewrite>
+                    <product_image>Cloudinary_Cloudinary_Model_Catalog_Product_Image</product_image>
+                </rewrite>
+            </catalog>
         </models>
         <blocks>
             <cloudinary_cloudinary>

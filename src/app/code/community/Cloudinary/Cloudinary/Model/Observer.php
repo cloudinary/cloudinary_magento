@@ -7,8 +7,8 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function onFrontInitBefore(Varien_Event_Observer $event)
     {
-        $this->registerCloudinaryExtensionAutoloader();
         $this->registerCloudinaryAutoloader();
+        $this->registerCloudinaryExtensionAutoloader();
 
         return $event;
     }

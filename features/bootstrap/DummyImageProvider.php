@@ -27,7 +27,7 @@ class DummyImageProvider implements ImageProvider {
         }
     }
 
-    public function wasUploadSuccessful()
+    public function getImageUrlByName($imageName)
     {
         return $this->uploadSuccessful;
     }

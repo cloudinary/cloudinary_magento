@@ -13,15 +13,14 @@ use MageTest\Manager\FixtureManager;
 use MageTest\Manager\Attributes\Provider\YamlProvider;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 
-/**
- * Defines application features from the specific context.
- */
+
 class AdminCredentialsContext extends PageObjectContext implements Context, SnippetAcceptingContext
 {
     private $imageProvider;
     private $key;
     private $secret;
     private $_fixtureManager;
+    private $imageName;
 
 
     /**
@@ -81,6 +80,8 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function iUploadTheImageUsingTheCorrectCredentials($anImage)
     {
+        $this->imageName = $anImage;
+
         $this->saveCredentialsToMagentoConfiguration();
 
         $configuration = Mage::helper('cloudinary_cloudinary/configuration');
@@ -96,7 +97,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
-        expect($this->imageProvider->wasUploadSuccessful())->toBe(true);
+        expect($this->imageProvider->getImageUrlByName($this->imageName))->notToBeNull();
     }
 
     public function saveCredentialsToMagentoConfiguration()

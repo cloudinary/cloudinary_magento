@@ -15,7 +15,7 @@ class FakeImageProvider implements ImageProvider {
         $this->uploadSuccessful = true;
     }
 
-    public function wasUploadSuccessful()
+    public function getImageUrlByName($imageName)
     {
         return $this->uploadSuccessful;
     }

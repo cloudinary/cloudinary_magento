@@ -21,7 +21,7 @@ class DomainContext implements Context, SnippetAcceptingContext
 {
     private $provider;
     private $configuration;
-    private $uploadedImage;
+    private $image;
     private $extension;
     private $key;
     private $secret;
@@ -36,6 +36,7 @@ class DomainContext implements Context, SnippetAcceptingContext
     public function __construct()
     {
         $this->configuration = new FakeConfiguration();
+        $this->provider = new FakeImageProvider();
 
         $this->extension = new ImageManager($this->provider, $this->configuration);
     }
@@ -76,7 +77,6 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
     {
-        $this->provider = new FakeImageProvider();
         $this->key = $aKey;
         $this->secret = $aSecret;
     }
@@ -87,8 +87,8 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function iUploadTheImageUsingTheCorrectCredentials(Image $anImage)
     {
-        $credentials = new Credentials($this->key, $this->secret);
-        $this->uploadedImage = $this->extension->uploadImage($anImage, $credentials);
+        $this->extension->uploadImage($anImage, $this->key, $this->secret);
+        $this->image = $anImage;
     }
 
     /**
@@ -96,6 +96,12 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
-        assertNotNull($this->uploadedImage->getUrl());
+        assertNotNull($this->provider->getImageUrlByName($this->getImageName()));
+    }
+
+    private function getImageName()
+    {
+        $imagePath = explode(DS, $this->image);
+        return $imagePath[count($imagePath) - 1];
     }
 }
