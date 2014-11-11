@@ -5,23 +5,22 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Cloudinary\Credentials;
-use Cloudinary\Credentials\Key;
-use Cloudinary\Credentials\Secret;
-use Cloudinary\Image;
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Image;
 use MageTest\Manager\FixtureManager;
 use MageTest\Manager\Attributes\Provider\YamlProvider;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 
-/**
- * Defines application features from the specific context.
- */
+
 class AdminCredentialsContext extends PageObjectContext implements Context, SnippetAcceptingContext
 {
     private $imageProvider;
     private $key;
     private $secret;
     private $_fixtureManager;
+    private $imageName;
 
 
     /**
@@ -67,13 +66,10 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     /**
      * @Given the image provider is aware of credentials with the API key :aKey and the secret :aSecret
      */
-    public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey,Secret $aSecret)
+    public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
     {
         $this->key = $aKey;
         $this->secret = $aSecret;
-
-        $this->imageProvider = new DummyImageProvider();
-        $this->imageProvider->setMockCredentials($this->key, $this->secret);
     }
 
     /**
@@ -81,6 +77,8 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function iUploadTheImageUsingTheCorrectCredentials($anImage)
     {
+        $this->imageName = $anImage;
+
         $this->saveCredentialsToMagentoConfiguration();
 
         $configuration = Mage::helper('cloudinary_cloudinary/configuration');
@@ -88,7 +86,9 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
         $apiKey = Key::fromString($configuration->getApiKey());
         $apiSecret = Secret::fromString($configuration->getApiSecret());
 
-        $this->imageProvider->upload(new Image($anImage), new Credentials($apiKey, $apiSecret));
+        $this->imageProvider = new DummyImageProvider(new Credentials($apiKey, $apiSecret));
+        $this->imageProvider->setMockCredentials($this->key, $this->secret);
+        $this->imageProvider->upload(new Image($anImage));
     }
 
     /**
@@ -96,7 +96,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
-        expect($this->imageProvider->wasUploadSuccessful())->toBe(true);
+        expect($this->imageProvider->getImageUrlByName($this->imageName))->notToBe('');
     }
 
     public function saveCredentialsToMagentoConfiguration()

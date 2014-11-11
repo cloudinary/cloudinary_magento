@@ -1,22 +1,22 @@
 <?php
 
 
-use Cloudinary\Credentials;
-use Cloudinary\Image;
-use Cloudinary\ImageProvider;
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Image;
+use CloudinaryExtension\ImageProvider;
 
 class FakeImageProvider implements ImageProvider {
 
 
-    private $uploadSuccessful = false;
+    private $uploadedImageUrl = '';
 
-    public function upload(Image $anImage, Credentials $credentials)
+    public function upload(Image $image)
     {
-        $this->uploadSuccessful = true;
+        $this->uploadedImageUrl = 'Uploaded Image url';
     }
 
-    public function wasUploadSuccessful()
+    public function getImageUrlByName($imageName)
     {
-        return $this->uploadSuccessful;
+        return $this->uploadedImageUrl;
     }
 }
