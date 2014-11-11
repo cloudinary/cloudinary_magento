@@ -1,6 +1,7 @@
 <?php
 
 
+use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
@@ -14,11 +15,13 @@ class DummyImageProvider implements ImageProvider {
     private $secret;
     private $uploadedImageUrl = '';
     private $credentials;
+    private $mockCloud;
+    private $cloud;
 
-    public function __construct(Credentials $credentials)
+    public function __construct(Credentials $credentials, Cloud $cloud)
     {
-
         $this->credentials = $credentials;
+        $this->cloud = $cloud;
     }
 
     public function setMockCredentials(Key $aKey, Secret $aSecret)
@@ -27,9 +30,14 @@ class DummyImageProvider implements ImageProvider {
         $this->secret = $aSecret;
     }
 
+    public function setMockCloudName(Cloud $mockCloud)
+    {
+        $this->mockCloud = $mockCloud;
+    }
+
     public function upload(Image $image)
     {
-        if((string)$this->credentials->getKey() === (string)$this->key && (string)$this->credentials->getSecret() === (string)$this->secret) {
+        if($this->areCredentialsCorrect() && $this->isCloudCorrect()) {
             $this->uploadedImageUrl = 'uploaded image URL';
         }
     }
@@ -37,5 +45,15 @@ class DummyImageProvider implements ImageProvider {
     public function getImageUrlByName($imageName)
     {
         return $this->uploadedImageUrl;
+    }
+
+    private function areCredentialsCorrect()
+    {
+        return (string)$this->credentials->getKey() === (string)$this->key && (string)$this->credentials->getSecret() === (string)$this->secret;
+    }
+
+    private function isCloudCorrect()
+    {
+        return (string)$this->mockCloud == (string)$this->cloud;
     }
 }

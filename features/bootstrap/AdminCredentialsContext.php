@@ -5,6 +5,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
@@ -21,6 +22,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     private $secret;
     private $_fixtureManager;
     private $imageName;
+    private $cloud;
 
 
     /**
@@ -57,10 +59,26 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     }
 
     /**
+     * @Transform :aCloud
+     */
+    public function transformStringToACloud($string)
+    {
+        return Cloud::fromName($string);
+    }
+
+    /**
      * @Given I have an image :anImage
      */
     public function iHaveAnImage($anImage)
     {
+    }
+
+    /**
+     * @Given the image provider is aware of a cloud named :aCloud
+     */
+    public function theImageProviderIsAwareOfACloudNamed(Cloud $aCloud)
+    {
+        $this->cloud = $aCloud;
     }
 
     /**
@@ -79,16 +97,18 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     {
         $this->imageName = $anImage;
 
-        $this->saveCredentialsToMagentoConfiguration();
+        $this->saveCredentialsAndCloudToMagentoConfiguration();
 
         $configuration = Mage::helper('cloudinary_cloudinary/configuration');
 
         $apiKey = Key::fromString($configuration->getApiKey());
         $apiSecret = Secret::fromString($configuration->getApiSecret());
+        $cloudName = Cloud::fromName($configuration->getCloudName());
 
-        $this->imageProvider = new DummyImageProvider(new Credentials($apiKey, $apiSecret));
+        $this->imageProvider = new DummyImageProvider(new Credentials($apiKey, $apiSecret), $cloudName);
         $this->imageProvider->setMockCredentials($this->key, $this->secret);
-        $this->imageProvider->upload(new Image($anImage));
+        $this->imageProvider->setMockCloudName($this->cloud);
+        $this->imageProvider->upload(Image::fromPath($anImage));
     }
 
     /**
@@ -99,7 +119,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
         expect($this->imageProvider->getImageUrlByName($this->imageName))->notToBe('');
     }
 
-    public function saveCredentialsToMagentoConfiguration()
+    public function saveCredentialsAndCloudToMagentoConfiguration()
     {
         $loginPage = $this->getPage('AdminLogin');
         $loginPage->open();
@@ -107,6 +127,8 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
 
         $cloudinarySystemConfigurationPage = $this->getPage('CloudinaryAdminSystemConfiguration');
         $cloudinarySystemConfigurationPage->open();
-        $cloudinarySystemConfigurationPage->saveCredentials($this->key, $this->secret);
+        $cloudinarySystemConfigurationPage->enterCredentials($this->key, $this->secret);
+        $cloudinarySystemConfigurationPage->enterCloudName($this->cloud);
+        $cloudinarySystemConfigurationPage->saveCloudinaryConfiguration();
     }
 }

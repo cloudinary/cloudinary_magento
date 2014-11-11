@@ -9,6 +9,7 @@ use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
+use CloudinaryExtension\Cloud;
 use CloudinaryExtension\ImageManager;
 
 
@@ -20,7 +21,6 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 class DomainContext implements Context, SnippetAcceptingContext
 {
     private $provider;
-    private $configuration;
     private $image;
     private $extension;
     private $key;
@@ -64,9 +64,24 @@ class DomainContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @Transform :aCloud
+     */
+    public function transformStringToACloud($string)
+    {
+        return Cloud::fromName($string);
+    }
+
+    /**
      * @Given I have an image :anImage
      */
     public function iHaveAnImage(Image $anImage)
+    {
+    }
+
+    /**
+     * @Given the image provider is aware of a cloud named :aCloud
+     */
+    public function theImageProviderIsAwareOfACloudNamed(Cloud $aCloud)
     {
     }
 
