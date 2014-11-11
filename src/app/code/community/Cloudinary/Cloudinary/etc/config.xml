@@ -32,7 +32,7 @@
                     <cloudinary_cloudinary>
                         <type>singleton</type>
                         <class>cloudinary_cloudinary/observer</class>
-                        <method>onGalleryUploadAction</method>
+                        <method>uploadImageToCloudinary</method>
                     </cloudinary_cloudinary>
                 </observers>
             </catalog_product_gallery_upload_image_after>
@@ -41,7 +41,7 @@
                     <cloudinary_cloudinary>
                         <type>singleton</type>
                         <class>cloudinary_cloudinary/observer</class>
-                        <method>onFrontInitBefore</method>
+                        <method>loadCustomAutoloaders</method>
                     </cloudinary_cloudinary>
                 </observers>
             </controller_front_init_before>

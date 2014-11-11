@@ -6,7 +6,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
-    public function onFrontInitBefore(Varien_Event_Observer $event)
+    public function loadCustomAutoloaders(Varien_Event_Observer $event)
     {
         $this->registerCloudinaryAutoloader();
         $this->registerCloudinaryExtensionAutoloader();
@@ -14,7 +14,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $event;
     }
 
-    public function onGalleryUploadAction(Varien_Event_Observer $event)
+    public function uploadImageToCloudinary(Varien_Event_Observer $event)
     {
         $cloudinayImage = Mage::getModel('cloudinary_cloudinary/image');
         $cloudinayImage->upload($this->_getUploadedImageDetails($event));
