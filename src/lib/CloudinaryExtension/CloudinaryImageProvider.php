@@ -6,9 +6,7 @@ namespace CloudinaryExtension;
 use Cloudinary;
 use Cloudinary\Uploader;
 
-const DS = DIRECTORY_SEPARATOR;
-
-include_once(implode(DS, array(dirname(__FILE__), '..', 'Cloudinary', 'src', 'Helpers.php')));
+include_once(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'Cloudinary', 'src', 'Helpers.php')));
 
 class CloudinaryImageProvider implements ImageProvider
 {
@@ -34,7 +32,7 @@ class CloudinaryImageProvider implements ImageProvider
 
     private function getImageId($image)
     {
-        $imagePath = explode(DS, $image);
+        $imagePath = explode(DIRECTORY_SEPARATOR, $image);
         $imageName = explode(".", $imagePath[count($imagePath) - 1]);
         return $imageName[0];
     }
