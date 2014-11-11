@@ -96,7 +96,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
-        expect($this->imageProvider->getImageUrlByName($this->imageName))->notToBeNull();
+        expect($this->imageProvider->getImageUrlByName($this->imageName))->notToBe('');
     }
 
     public function saveCredentialsToMagentoConfiguration()

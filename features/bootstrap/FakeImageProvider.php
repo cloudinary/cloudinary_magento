@@ -8,15 +8,15 @@ use CloudinaryExtension\ImageProvider;
 class FakeImageProvider implements ImageProvider {
 
 
-    private $uploadSuccessful = false;
+    private $uploadedImageUrl = '';
 
     public function upload(Image $image)
     {
-        $this->uploadSuccessful = true;
+        $this->uploadedImageUrl = 'Uploaded Image url';
     }
 
     public function getImageUrlByName($imageName)
     {
-        return $this->uploadSuccessful;
+        return $this->uploadedImageUrl;
     }
 }

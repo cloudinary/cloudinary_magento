@@ -92,7 +92,7 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
-        assertNotNull($this->provider->getImageUrlByName($this->getImageName()));
+        expect($this->provider->getImageUrlByName($this->getImageName()))->notToBe('');
     }
 
     private function getImageName()

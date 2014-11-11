@@ -12,7 +12,7 @@ class DummyImageProvider implements ImageProvider {
 
     private $key;
     private $secret;
-    private $uploadSuccessful = false;
+    private $uploadedImageUrl = '';
     private $credentials;
 
     public function __construct(Credentials $credentials)
@@ -30,12 +30,12 @@ class DummyImageProvider implements ImageProvider {
     public function upload(Image $image)
     {
         if((string)$this->credentials->getKey() === (string)$this->key && (string)$this->credentials->getSecret() === (string)$this->secret) {
-            $this->uploadSuccessful = true;
+            $this->uploadedImageUrl = 'uploaded image URL';
         }
     }
 
     public function getImageUrlByName($imageName)
     {
-        return $this->uploadSuccessful;
+        return $this->uploadedImageUrl;
     }
 }
