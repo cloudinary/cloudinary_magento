@@ -23,21 +23,7 @@ class DomainContext implements Context, SnippetAcceptingContext
     private $provider;
     private $image;
     private $extension;
-    private $key;
-    private $secret;
 
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
-    public function __construct()
-    {
-        $this->provider = new FakeImageProvider();
-        $this->extension = new ImageManager($this->provider);
-    }
 
     /**
      * @Transform :anImage
@@ -76,30 +62,35 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function iHaveAnImage(Image $anImage)
     {
-    }
-
-    /**
-     * @Given the image provider is aware of a cloud named :aCloud
-     */
-    public function theImageProviderIsAwareOfACloudNamed(Cloud $aCloud)
-    {
-    }
-
-    /**
-     * @Given the image provider is aware of credentials with the API key :aKey and the secret :aSecret
-     */
-    public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
-    {
-    }
-
-
-    /**
-     * @When I upload the image :anImage using the correct credentials
-     */
-    public function iUploadTheImageUsingTheCorrectCredentials(Image $anImage)
-    {
-        $this->extension->uploadImage($anImage, $this->key, $this->secret);
         $this->image = $anImage;
+    }
+
+    /**
+     * @When I upload the image :anImageName to the :aCloud cloud using the credentials with the API key :aKey and the secret :aSecret
+     */
+    public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret($anImageName, Cloud $aCloud, Key $aKey, Secret $aSecret)
+    {
+        $credentials = new Credentials($aKey, $aSecret);
+        $this->provider = new FakeImageProvider($credentials, $aCloud);
+
+        $this->extension = new ImageManager($this->provider);
+        $this->extension->uploadImage($anImageName);
+    }
+
+    /**
+     * @When the image provider has a :aCloud cloud
+     */
+    public function theImageProviderHasACloud($aCloud)
+    {
+        $this->provider->setMockCloud($aCloud);
+    }
+
+    /**
+     * @When the image provider is aware of the credentials with the API key :aKey and the secret :aSecret
+     */
+    public function theImageProviderAwareOfTheCredentialsWithTheApiKeyAndTheSecret($aKey, $aSecret)
+    {
+        $this->provider->setMockCredentials($aKey, $aSecret);
     }
 
     /**

@@ -18,11 +18,8 @@ use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 class AdminCredentialsContext extends PageObjectContext implements Context, SnippetAcceptingContext
 {
     private $imageProvider;
-    private $key;
-    private $secret;
     private $_fixtureManager;
-    private $imageName;
-    private $cloud;
+    private $image;
 
 
     /**
@@ -40,6 +37,14 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     public function afterScenario()
     {
         $this->_fixtureManager->clear();
+    }
+
+    /**
+     * @Transform :anImage
+     */
+    public function transformStringToAnImage($string)
+    {
+        return Image::fromPath($string);
     }
 
     /**
@@ -71,44 +76,39 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function iHaveAnImage($anImage)
     {
+        $this->image = $anImage;
     }
 
     /**
-     * @Given the image provider is aware of a cloud named :aCloud
+     * @When I upload the image :anImage to the :aCloud cloud using the credentials with the API key :aKey and the secret :aSecret
      */
-    public function theImageProviderIsAwareOfACloudNamed(Cloud $aCloud)
+    public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret(Image $anImage, Cloud $aCloud, Key $aKey, Secret $aSecret)
     {
-        $this->cloud = $aCloud;
-    }
-
-    /**
-     * @Given the image provider is aware of credentials with the API key :aKey and the secret :aSecret
-     */
-    public function theImageProviderIsAwareOfCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
-    {
-        $this->key = $aKey;
-        $this->secret = $aSecret;
-    }
-
-    /**
-     * @When I upload the image :anImage using the correct credentials
-     */
-    public function iUploadTheImageUsingTheCorrectCredentials($anImage)
-    {
-        $this->imageName = $anImage;
-
-        $this->saveCredentialsAndCloudToMagentoConfiguration();
+        $this->saveCredentialsAndCloudToMagentoConfiguration($aKey, $aSecret, $aCloud);
 
         $configuration = Mage::helper('cloudinary_cloudinary/configuration');
-
         $apiKey = Key::fromString($configuration->getApiKey());
         $apiSecret = Secret::fromString($configuration->getApiSecret());
         $cloudName = Cloud::fromName($configuration->getCloudName());
 
-        $this->imageProvider = new DummyImageProvider(new Credentials($apiKey, $apiSecret), $cloudName);
-        $this->imageProvider->setMockCredentials($this->key, $this->secret);
-        $this->imageProvider->setMockCloudName($this->cloud);
-        $this->imageProvider->upload(Image::fromPath($anImage));
+        $this->imageProvider = new FakeImageProvider(new Credentials($apiKey, $apiSecret), $cloudName);
+        $this->imageProvider->upload($anImage);
+    }
+
+    /**
+     * @When the image provider has a :aCloud cloud
+     */
+    public function theImageProviderHasACloud($aCloud)
+    {
+        $this->imageProvider->setMockCloud($aCloud);
+    }
+
+    /**
+     * @When the image provider is aware of the credentials with the API key :aKey and the secret :aSecret
+     */
+    public function theImageProviderIsAwareOfTheCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
+    {
+        $this->imageProvider->setMockCredentials($aKey, $aSecret);
     }
 
     /**
@@ -116,10 +116,10 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
      */
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
-        expect($this->imageProvider->getImageUrlByName($this->imageName))->notToBe('');
+        expect($this->imageProvider->getImageUrlByName((string)$this->image))->notToBe('');
     }
 
-    public function saveCredentialsAndCloudToMagentoConfiguration()
+    private function saveCredentialsAndCloudToMagentoConfiguration($key, $secret, $cloud)
     {
         $loginPage = $this->getPage('AdminLogin');
         $loginPage->open();
@@ -127,8 +127,8 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
 
         $cloudinarySystemConfigurationPage = $this->getPage('CloudinaryAdminSystemConfiguration');
         $cloudinarySystemConfigurationPage->open();
-        $cloudinarySystemConfigurationPage->enterCredentials($this->key, $this->secret);
-        $cloudinarySystemConfigurationPage->enterCloudName($this->cloud);
+        $cloudinarySystemConfigurationPage->enterCredentials($key, $secret);
+        $cloudinarySystemConfigurationPage->enterCloudName($cloud);
         $cloudinarySystemConfigurationPage->saveCloudinaryConfiguration();
     }
 }
