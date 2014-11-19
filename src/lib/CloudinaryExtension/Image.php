@@ -7,11 +7,14 @@ class Image
 
     private $imagePath;
 
+    private function __construct($imagePath)
+    {
+        $this->imagePath = $imagePath;
+    }
+
     public static function fromPath($anImagePath)
     {
-        $image = new Image();
-        $image->imagePath = $anImagePath;
-        return $image;
+        return new Image($anImagePath);
     }
 
     public function __toString()

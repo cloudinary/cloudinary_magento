@@ -7,11 +7,14 @@ class Key
 
     private $key;
 
+    private function __construct($key)
+    {
+        $this->key = $key;
+    }
+
     public static function fromString($aKey)
     {
-        $key = new Key();
-        $key->key = $aKey;
-        return $key;
+        return new Key($aKey);
     }
 
     public function __toString()
@@ -19,7 +22,4 @@ class Key
         return $this->key;
     }
 
-    private function __construct()
-    {
-    }
 }

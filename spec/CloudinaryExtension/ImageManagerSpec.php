@@ -16,14 +16,14 @@ class ImageManagerSpec extends ObjectBehavior
     const IMAGE_PATH = 'image_to_upload.png';
     const IMAGE_PROVIDER_URL = "http://image.url.on.provider";
 
-    function it_uploads_an_image(ImageProvider $imageProvider, Configuration $configuration)
+    function it_uploads_an_image(ImageProvider $imageProvider)
     {
         $image = Image::fromPath(self::IMAGE_PATH);
 
         $imageProvider->upload($image, Argument::any())->shouldBeCalled();
         $imageProvider->getImageUrlByName(self::IMAGE_PATH)->willReturn(self::IMAGE_PROVIDER_URL);
 
-        $this->beConstructedWith($imageProvider, $configuration);
+        $this->beConstructedWith($imageProvider);
 
         $this->uploadImage(self::IMAGE_PATH, 'some key', 'some secret');
         $this->getUrlForImage(self::IMAGE_PATH)->shouldReturn(self::IMAGE_PROVIDER_URL);
