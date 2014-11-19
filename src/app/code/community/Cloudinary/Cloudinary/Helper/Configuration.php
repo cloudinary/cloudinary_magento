@@ -1,9 +1,5 @@
 <?php
-
-use CloudinaryExtension\Credentials;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
-
+ 
 class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstract {
 
     public function getApiKey()
@@ -22,5 +18,10 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         $secret = Secret::fromString($this->getApiSecret());
 
         return new Credentials($key, $secret);
+    }
+
+    public function getCloudName()
+    {
+        return Mage::getStoreConfig('cloudinary/cloud/cloudinary_cloud_name');
     }
 }
