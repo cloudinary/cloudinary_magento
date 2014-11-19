@@ -17,13 +17,11 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     public function uploadImageToCloudinary(Varien_Event_Observer $event)
     {
         $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
-        $image = _getUploadedImageDetails($event);
+        $image = $this->_getUploadedImageDetails($event);
 
         $cloudinaryImage->upload($image);
 
-//        if (file_exists(sprintf('%s/catalog/product%s', Mage::getBaseDir('media'), $image['file']))) {
-//            unlink(sprintf('media/catalog/product%s', Mage::getBaseDir('media'), $image['file']));
-//        }
+        $this->_deleteLocalFile($image);
 
         return $event;
     }
@@ -60,5 +58,15 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
                 }
             }
         );
+    }
+
+    private function _deleteLocalFile($image)
+    {
+        $mediaConfig = new Mage_Catalog_Model_Product_Media_Config();
+        $tmpPath = sprintf('%s%s', $mediaConfig->getBaseTmpMediaPath(), $image['file']);
+
+        if (file_exists($tmpPath)) {
+            unlink($tmpPath);
+        }
     }
 }
