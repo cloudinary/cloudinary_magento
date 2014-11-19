@@ -16,8 +16,14 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function uploadImageToCloudinary(Varien_Event_Observer $event)
     {
-        $cloudinayImage = Mage::getModel('cloudinary_cloudinary/image');
-        $cloudinayImage->upload($this->_getUploadedImageDetails($event));
+        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
+        $image = _getUploadedImageDetails($event);
+
+        $cloudinaryImage->upload($image);
+
+//        if (file_exists(sprintf('%s/catalog/product%s', Mage::getBaseDir('media'), $image['file']))) {
+//            unlink(sprintf('media/catalog/product%s', Mage::getBaseDir('media'), $image['file']));
+//        }
 
         return $event;
     }
