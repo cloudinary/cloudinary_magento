@@ -1,5 +1,9 @@
 <?php
- 
+
+use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Security\Key;
+use CloudinaryExtension\Security\Secret;
+
 class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstract {
 
     public function getApiKey()

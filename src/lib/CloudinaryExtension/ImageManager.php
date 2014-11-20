@@ -20,8 +20,9 @@ class ImageManager
         $this->imageProvider->upload($image);
     }
 
-    public function getUrlForImage($imageName)
+    public function getUrlForImage($imageName, $options = array())
     {
-        return $this->imageProvider->getImageUrlByName($imageName);
+        return $this->imageProvider->getImageUrlByName($imageName, $options);
     }
 }
+

@@ -22,8 +22,14 @@
             </cloudinary_cloudinary>
         </blocks>
         <helpers>
+            <catalog>
+                <rewrite>
+                    <image>Cloudinary_Cloudinary_Helper_Image</image>
+                </rewrite>
+            </catalog>
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Helper</class>
+
             </cloudinary_cloudinary>
         </helpers>
         <events>

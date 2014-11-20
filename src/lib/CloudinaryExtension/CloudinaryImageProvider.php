@@ -24,10 +24,10 @@ class CloudinaryImageProvider implements ImageProvider
         Uploader::upload((string)$image, array("public_id" => $this->getImageId($image)));
     }
 
-    public function getImageUrlByName($imageName)
+    public function getImageUrlByName($imageName, $options = array())
     {
         $this->logInToCloudinary();
-        return \cloudinary_url($this->getImageId($imageName));
+        return \cloudinary_url($this->getImageId($imageName), $options);
     }
 
     private function getImageId($image)
