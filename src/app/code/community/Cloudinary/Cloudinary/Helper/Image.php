@@ -6,19 +6,10 @@ use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 {
-    /**
-     * @var ImageManager
-     */
     private $_imageManager;
 
-    /**
-     * @var integer
-     */
     private $_width;
 
-    /**
-     * @var integer
-     */
     private $_height;
 
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
