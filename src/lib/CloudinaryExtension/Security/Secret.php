@@ -7,19 +7,18 @@ class Secret
 
     private $secret;
 
+    private function __construct($secret)
+    {
+        $this->secret = $secret;
+    }
+
     public static function fromString($aSecret)
     {
-        $secret = new Secret();
-        $secret->secret = $aSecret;
-        return $secret;
+        return new Secret($aSecret);
     }
 
     public function __toString()
     {
         return $this->secret;
-    }
-
-    private function __construct()
-    {
     }
 }

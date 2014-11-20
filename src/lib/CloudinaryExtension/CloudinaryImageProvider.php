@@ -12,10 +12,12 @@ class CloudinaryImageProvider implements ImageProvider
 {
 
     private $credentials;
+    private $cloud;
 
-    public function __construct(Credentials $credentials)
+    public function __construct(Credentials $credentials, Cloud $cloud)
     {
         $this->credentials = $credentials;
+        $this->cloud = $cloud;
     }
 
     public function upload(Image $image)
@@ -41,7 +43,7 @@ class CloudinaryImageProvider implements ImageProvider
     {
         Cloudinary::config(
             array(
-                "cloud_name" => "session-digital",
+                "cloud_name" => (string)$this->cloud,
                 "api_key" => (string)$this->credentials->getKey(),
                 "api_secret" => (string)$this->credentials->getSecret()
             )
