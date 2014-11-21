@@ -57,4 +57,9 @@ class FakeImageProvider implements ImageProvider {
     {
         return (string)$this->mockCloud == (string)$this->cloud;
     }
+
+    public function transformImage(Image $image, \CloudinaryExtension\Image\Transformation $transformation)
+    {
+        // TODO: Implement transformImage() method.
+    }
 }

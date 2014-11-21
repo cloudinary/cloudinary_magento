@@ -3,6 +3,7 @@
 namespace CloudinaryExtension;
 
 use CloudinaryExtension\Image\Dimensions;
+use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
@@ -25,14 +26,14 @@ class ImageManager
 
     public function getUrlForImage(Image $image)
     {
-        $options = array();
+        return $this->imageProvider->getImageUrlByName((string)$image);
+    }
 
-        if ($image->getDimensions()) {
-            $options['width'] = $image->getDimensions()->getWidth();
-            $options['height'] = $image->getDimensions()->getHeight();
-            $options['crop'] = 'pad';
-        }
+    public function getUrlForImageWithTransformation(Image $image, Transformation $transformation)
+    {
+        $image = $this->imageProvider->transformImage($image, $transformation);
 
-        return $this->imageProvider->getImageUrlByName((string)$image, $options);
+
+        return (string)$image;
     }
 }

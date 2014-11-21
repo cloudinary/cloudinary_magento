@@ -41,9 +41,15 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         $imageFile = $this->getRequestedImageFile();
 
         if ($this->isImageSpecified($imageFile)) {
-            $image = Image::fromPathAndDimensions($imageFile, $this->_dimensions);
+            $image = Image::fromPath($imageFile);
 
-            return $this->_imageManager->getUrlForImage($image);
+            if ($this->_dimensions) {
+                $transformation = Image\Transformation::toDimensions($this->_dimensions);
+                return $this->_imageManager->getUrlForImageWithTransformation($image, $transformation);
+            } else {
+                return $this->_imageManager->getUrlForImage($image);
+            }
+
         }
 
         return Mage::getDesign()->getSkinUrl($this->getPlaceholder());

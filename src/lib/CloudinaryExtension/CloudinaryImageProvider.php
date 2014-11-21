@@ -5,6 +5,7 @@ namespace CloudinaryExtension;
 
 use Cloudinary;
 use Cloudinary\Uploader;
+use CloudinaryExtension\Image\Transformation;
 
 include_once(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'Cloudinary', 'src', 'Helpers.php')));
 
@@ -29,7 +30,20 @@ class CloudinaryImageProvider implements ImageProvider
     public function getImageUrlByName($imageName, $options = array())
     {
         $this->setCloudinaryCredentialsAndCloudName();
-        return \cloudinary_url($this->getImageId($imageName), $options);
+        return \cloudinary_url($this->getImageId($imageName));
+    }
+
+    public function transformImage(Image $image, Transformation $transformation)
+    {
+        $this->setCloudinaryCredentialsAndCloudName();
+
+        $options = array(
+            'width' => $transformation->getDimensions()->getWidth(),
+            'height' => $transformation->getDimensions()->getHeight(),
+            'crop' => $transformation->getCrop()
+        );
+
+        return Image::fromPath(\cloudinary_url($this->getImageId((string)$image), $options));
     }
 
     private function getImageId($image)
@@ -49,4 +63,5 @@ class CloudinaryImageProvider implements ImageProvider
             )
         );
     }
+
 }
