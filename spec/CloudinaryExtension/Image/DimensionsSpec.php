@@ -5,7 +5,7 @@ namespace spec\CloudinaryExtension\Image;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class DimensionSpec extends ObjectBehavior
+class DimensionsSpec extends ObjectBehavior
 {
     function let()
     {

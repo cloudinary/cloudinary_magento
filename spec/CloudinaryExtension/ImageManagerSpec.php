@@ -4,7 +4,7 @@ namespace spec\CloudinaryExtension;
 
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\Image\Dimension;
+use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Security\Key;
@@ -36,7 +36,7 @@ class ImageManagerSpec extends ObjectBehavior
 
     function it_builds_an_image_url_given_specific_dimensions(ImageProvider $imageProvider)
     {
-        $image = Image::fromPathAndDimensions(self::IMAGE_PATH, new Dimension(10, 10));
+        $image = Image::fromPathAndDimensions(self::IMAGE_PATH, Dimensions::fromWithAndHeight(10, 10));
 
         $imageProvider->getImageUrlByName(Argument::cetera())->willReturn(self::IMAGE_PROVIDER_URL);
 

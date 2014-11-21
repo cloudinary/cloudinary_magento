@@ -2,7 +2,7 @@
 
 namespace spec\CloudinaryExtension;
 
-use CloudinaryExtension\Image\Dimension;
+use CloudinaryExtension\Image\Dimensions;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -20,7 +20,7 @@ class ImageSpec extends ObjectBehavior
 
     function it_can_be_constructed_with_specific_dimensions()
     {
-        $dimensions = new Dimension(10, 10);
+        $dimensions = new Dimensions(10, 10);
 
         $this->beConstructedThrough('fromPathAndDimensions', ['image_path.gif', $dimensions]);
 

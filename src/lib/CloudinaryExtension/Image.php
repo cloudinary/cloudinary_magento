@@ -2,7 +2,7 @@
 
 namespace CloudinaryExtension;
 
-use CloudinaryExtension\Image\Dimension;
+use CloudinaryExtension\Image\Dimensions;
 
 class Image
 {
@@ -11,7 +11,7 @@ class Image
 
     private $dimensions;
 
-    private function __construct($imagePath, Dimension $dimensions = null)
+    private function __construct($imagePath, Dimensions $dimensions = null)
     {
         $this->imagePath = $imagePath;
         $this->dimensions = $dimensions;
@@ -22,7 +22,7 @@ class Image
         return new Image($anImagePath);
     }
 
-    public static function fromPathAndDimensions($anImagePath, Dimension $dimensions)
+    public static function fromPathAndDimensions($anImagePath, Dimensions $dimensions)
     {
         return new Image($anImagePath, $dimensions);
     }

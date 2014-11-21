@@ -2,7 +2,7 @@
 
 namespace CloudinaryExtension;
 
-use CloudinaryExtension\Image\Dimension;
+use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 

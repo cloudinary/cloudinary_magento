@@ -2,7 +2,7 @@
 
 namespace CloudinaryExtension\Image;
 
-class Dimension
+class Dimensions
 {
 
     private $width;
@@ -26,6 +26,6 @@ class Dimension
 
     public static function fromWithAndHeight($width, $height)
     {
-        return new Dimension($width, $height);
+        return new Dimensions($width, $height);
     }
 }
