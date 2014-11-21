@@ -92,14 +92,4 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
             spl_autoload_register($autoloader);
         }
     }
-
-    private function _deleteLocalFile($image)
-    {
-        $mediaConfig = new Mage_Catalog_Model_Product_Media_Config();
-        $tmpPath = sprintf('%s%s', $mediaConfig->getBaseTmpMediaPath(), $image['file']);
-
-        if (file_exists($tmpPath)) {
-            unlink($tmpPath);
-        }
-    }
 }
