@@ -22,13 +22,13 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function upload(Image $image)
     {
-        $this->logInToCloudinary();
+        $this->setCloudinaryCredentialsAndCloudName();
         Uploader::upload((string)$image, array("public_id" => $this->getImageId($image)));
     }
 
     public function getImageUrlByName($imageName)
     {
-        $this->logInToCloudinary();
+        $this->setCloudinaryCredentialsAndCloudName();
         return \cloudinary_url($this->getImageId($imageName));
     }
 
@@ -39,7 +39,7 @@ class CloudinaryImageProvider implements ImageProvider
         return $imageName[0];
     }
 
-    private function logInToCloudinary()
+    private function setCloudinaryCredentialsAndCloudName()
     {
         Cloudinary::config(
             array(
