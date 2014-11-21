@@ -23,4 +23,9 @@ class Dimension
     {
         return $this->height;
     }
+
+    public static function fromWithAndHeight($width, $height)
+    {
+        return new Dimension($width, $height);
+    }
 }

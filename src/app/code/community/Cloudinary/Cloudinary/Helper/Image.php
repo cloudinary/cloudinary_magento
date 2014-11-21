@@ -10,9 +10,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 {
     private $_imageManager;
 
-    private $_width;
-
-    private $_height;
+    private $_dimensions;
 
     private $_attributeName;
 
@@ -33,8 +31,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function resize($width, $height = null)
     {
-        $this->_width = $width;
-        $this->_height = $height ?: $width;
+        $this->_dimensions = Dimension::fromWithAndHeight($width, $height ?: $width);
 
         return $this;
     }
@@ -44,7 +41,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         $imageFile = $this->getRequestedImageFile();
 
         if ($this->isImageSpecified($imageFile)) {
-            $image = Image::fromPath($imageFile)->setDimensions(new Dimension($this->_width, $this->_height));
+            $image = Image::fromPathAndDimensions($imageFile, $this->_dimensions);
 
             return $this->_imageManager->getUrlForImage($image);
         }

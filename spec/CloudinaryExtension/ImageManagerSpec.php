@@ -36,8 +36,7 @@ class ImageManagerSpec extends ObjectBehavior
 
     function it_builds_an_image_url_given_specific_dimensions(ImageProvider $imageProvider)
     {
-        $image = Image::fromPath(self::IMAGE_PATH);
-        $image->setDimensions(new Dimension(10, 10));
+        $image = Image::fromPathAndDimensions(self::IMAGE_PATH, new Dimension(10, 10));
 
         $imageProvider->getImageUrlByName(Argument::cetera())->willReturn(self::IMAGE_PROVIDER_URL);
 

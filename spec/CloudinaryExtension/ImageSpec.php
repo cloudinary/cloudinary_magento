@@ -18,11 +18,12 @@ class ImageSpec extends ObjectBehavior
         $this->shouldHaveType('CloudinaryExtension\Image');
     }
 
-    function it_exposes_its_dimensions()
+    function it_can_be_constructed_with_specific_dimensions()
     {
         $dimensions = new Dimension(10, 10);
 
-        $this->setDimensions($dimensions)->shouldReturn($this);
+        $this->beConstructedThrough('fromPathAndDimensions', ['image_path.gif', $dimensions]);
+
         $this->getDimensions()->shouldBe($dimensions);
     }
 }
