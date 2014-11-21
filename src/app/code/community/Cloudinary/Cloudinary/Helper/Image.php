@@ -14,8 +14,11 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     private $_height;
 
+    private $_attributeName;
+
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
     {
+        $this->_attributeName = $attributeName;
         $config = Mage::helper('cloudinary_cloudinary/configuration');
 
         $this->_imageManager = new ImageManager(new CloudinaryImageProvider(
@@ -43,7 +46,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         if ($this->isImageSpecified($imageFile)) {
             $image = Image::fromPath($imageFile)->setDimensions(new Dimension($this->_width, $this->_height));
 
-            return  $this->_imageManager->getUrlForImage($image);
+            return $this->_imageManager->getUrlForImage($image);
         }
 
         return Mage::getDesign()->getSkinUrl($this->getPlaceholder());
@@ -59,6 +62,6 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
      */
     private function getRequestedImageFile()
     {
-        return $this->getImageFile() ?: $this->getProduct()->getImage();
+        return $this->getImageFile() ?: $this->getProduct()->getData($this->_attributeName);
     }
 }
