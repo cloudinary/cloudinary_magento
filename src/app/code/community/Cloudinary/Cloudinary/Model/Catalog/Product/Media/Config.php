@@ -2,6 +2,7 @@
 
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
+use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config
@@ -25,6 +26,6 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
             Cloud::fromName($config->getCloudName())
         ));
 
-        return $cloudinary->getUrlForImage($file);
+        return $cloudinary->getUrlForImage(Image::fromPath($file));
     }
 } 

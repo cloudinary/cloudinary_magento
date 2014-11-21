@@ -29,6 +29,8 @@ class Image
     public function setDimensions(Dimension $dimension)
     {
         $this->dimension = $dimension;
+
+        return $this;
     }
 
     public function getDimensions()

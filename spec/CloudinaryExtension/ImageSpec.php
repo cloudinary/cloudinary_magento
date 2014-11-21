@@ -22,7 +22,7 @@ class ImageSpec extends ObjectBehavior
     {
         $dimensions = new Dimension(10, 10);
 
-        $this->setDimensions($dimensions);
+        $this->setDimensions($dimensions)->shouldReturn($this);
         $this->getDimensions()->shouldBe($dimensions);
     }
 }
