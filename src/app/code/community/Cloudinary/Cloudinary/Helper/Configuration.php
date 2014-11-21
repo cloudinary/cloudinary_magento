@@ -22,6 +22,6 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function getCloudName()
     {
-        return Mage::getStoreConfig('cloudinary/cloud/cloudinary_cloud_name');
+        return (string)Mage::getStoreConfig('cloudinary/cloud/cloudinary_cloud_name');
     }
 }
