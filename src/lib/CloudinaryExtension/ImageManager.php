@@ -2,12 +2,15 @@
 
 namespace CloudinaryExtension;
 
+use CloudinaryExtension\Image\Dimension;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
 class ImageManager
 {
     private $imageProvider;
+
+    private $dimension;
 
     public function __construct(ImageProvider $imageProvider)
     {
@@ -20,9 +23,16 @@ class ImageManager
         $this->imageProvider->upload($image);
     }
 
-    public function getUrlForImage($imageName, $options = array())
+    public function getUrlForImage(Image $image)
     {
-        return $this->imageProvider->getImageUrlByName($imageName, $options);
+        $options = array();
+
+        if ($image->getDimensions()) {
+            $options['width'] = $image->getDimensions()->getWidth();
+            $options['height'] = $image->getDimensions()->getHeight();
+            $options['crop'] = 'pad';
+        }
+
+        return $this->imageProvider->getImageUrlByName((string)$image, $options);
     }
 }
-

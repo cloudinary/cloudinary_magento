@@ -2,6 +2,8 @@
 
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
+use CloudinaryExtension\Image;
+use CloudinaryExtension\Image\Dimension;
 use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
@@ -36,14 +38,27 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function __toString()
     {
-        $imageFile = $this->getImageFile() ?: $this->getProduct()->getImage();
+        $imageFile = $this->getRequestedImageFile();
 
-        return ($imageFile && $imageFile !== 'no_selection') ?
-            $this->_imageManager->getUrlForImage($imageFile, array(
-                'width' => $this->_width,
-                'height' => $this->_height,
-                'crop' => 'pad')
-            ) :
-            Mage::getDesign()->getSkinUrl($this->getPlaceholder());
+        if ($this->isImageSpecified($imageFile)) {
+            $image = Image::fromPath($imageFile)->setDimensions(new Dimension($this->_width, $this->_height));
+
+            return  $this->_imageManager->getUrlForImage($image);
+        }
+
+        return Mage::getDesign()->getSkinUrl($this->getPlaceholder());
+    }
+
+    private function isImageSpecified($imageFile)
+    {
+        return $imageFile && $imageFile !== 'no_selection';
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getRequestedImageFile()
+    {
+        return $this->getImageFile() ?: $this->getProduct()->getImage();
     }
 }
