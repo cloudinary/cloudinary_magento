@@ -9,12 +9,10 @@ class TransformingImageProvider implements ImageProvider
 
     public function upload(Image $image)
     {
-        // TODO: Implement upload() method.
     }
 
     public function getImageUrlByName($imageName, $options = array())
     {
-        // TODO: Implement getImageUrlByName() method.
     }
 
     public function transformImage(Image $image, Transformation $transformation)
