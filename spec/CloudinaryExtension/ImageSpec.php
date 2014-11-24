@@ -17,13 +17,4 @@ class ImageSpec extends ObjectBehavior
     {
         $this->shouldHaveType('CloudinaryExtension\Image');
     }
-
-    function it_can_be_constructed_with_specific_dimensions()
-    {
-        $dimensions = new Dimensions(10, 10);
-
-        $this->beConstructedThrough('fromPathAndDimensions', ['image_path.gif', $dimensions]);
-
-        $this->getDimensions()->shouldBe($dimensions);
-    }
 }

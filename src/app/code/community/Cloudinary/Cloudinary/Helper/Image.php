@@ -31,7 +31,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function resize($width, $height = null)
     {
-        $this->_dimensions = Dimensions::fromWithAndHeight($width, $height ?: $width);
+        $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height ?: $width);
 
         return $this;
     }

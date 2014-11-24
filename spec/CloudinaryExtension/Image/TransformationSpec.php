@@ -10,7 +10,7 @@ class TransformationSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedThrough('toDimensions', [Dimensions::fromWithAndHeight(10, 10)]);
+        $this->beConstructedThrough('toDimensions', [Dimensions::fromWidthAndHeight(10, 10)]);
     }
 
     function it_should_be_a_transformation()
@@ -20,6 +20,6 @@ class TransformationSpec extends ObjectBehavior
 
     function it_has_dimensions()
     {
-        $this->getDimensions()->shouldBeLike(Dimensions::fromWithAndHeight(10, 10));
+        $this->getDimensions()->shouldBeLike(Dimensions::fromWidthAndHeight(10, 10));
     }
 }

@@ -8,7 +8,7 @@ class Dimensions
     private $width;
     private $height;
 
-    public function __construct($width, $height)
+    private function __construct($width, $height)
     {
         $this->width = $width;
         $this->height = $height;
@@ -24,7 +24,7 @@ class Dimensions
         return $this->height;
     }
 
-    public static function fromWithAndHeight($width, $height)
+    public static function fromWidthAndHeight($width, $height)
     {
         return new Dimensions($width, $height);
     }

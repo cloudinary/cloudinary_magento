@@ -68,7 +68,7 @@ class DomainContext implements Context, SnippetAcceptingContext
     {
         $dimensions = explode('x', $string);
 
-        return Dimensions::fromWithAndHeight($dimensions[0], $dimensions[1]);
+        return Dimensions::fromWidthAndHeight($dimensions[0], $dimensions[1]);
     }
 
     /**

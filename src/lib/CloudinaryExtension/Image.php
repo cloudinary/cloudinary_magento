@@ -22,11 +22,6 @@ class Image
         return new Image($anImagePath);
     }
 
-    public static function fromPathAndDimensions($anImagePath, Dimensions $dimensions)
-    {
-        return new Image($anImagePath, $dimensions);
-    }
-
     public function __toString()
     {
         return $this->imagePath;
