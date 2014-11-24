@@ -3,7 +3,7 @@ Feature: Uploading images to an image provider
     As a Store Admin
     I want to be able to upload images to the image provider
 
-    @javascript
+    @javascript @critical
     Scenario: Uploading an image using the correct keys
       Given I have an image "pink_dress.gif"
       When I upload the image "pink_dress.gif" to the "session-digital" cloud using the credentials with the API key "ABC123" and the secret "DEF456"
