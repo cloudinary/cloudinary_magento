@@ -40,7 +40,7 @@ class FakeImageProvider implements ImageProvider {
         $this->uploadedImageUrl[(string)$image] = 'uploaded image URL';
     }
 
-    public function getImageUrlByName($imageName)
+    public function getImageUrlByName($imageName, $options = array())
     {
         if($this->areCredentialsCorrect() && $this->isCloudCorrect()) {
             return $this->uploadedImageUrl[$imageName];
@@ -56,5 +56,9 @@ class FakeImageProvider implements ImageProvider {
     private function isCloudCorrect()
     {
         return (string)$this->mockCloud == (string)$this->cloud;
+    }
+
+    public function transformImage(Image $image, \CloudinaryExtension\Image\Transformation $transformation)
+    {
     }
 }

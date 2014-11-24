@@ -6,10 +6,14 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
+    private $originalAutoloaders;
+
     public function loadCustomAutoloaders(Varien_Event_Observer $event)
     {
+        $this->deregisterVarienAutoloaders();
         $this->registerCloudinaryAutoloader();
         $this->registerCloudinaryExtensionAutoloader();
+        $this->reregisterVarienAutoloaders();
 
         return $event;
     }
@@ -67,6 +71,25 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
         if (file_exists($tmpPath)) {
             unlink($tmpPath);
+        }
+    }
+
+    private function deregisterVarienAutoloaders()
+    {
+        $this->originalAutoloaders = array();
+
+        foreach (spl_autoload_functions() as $callback) {
+            if (is_array($callback) && $callback[0] instanceof Varien_Autoload) {
+                $this->originalAutoloaders[] = $callback;
+                spl_autoload_unregister($callback);
+            }
+        }
+    }
+
+    private function reregisterVarienAutoloaders()
+    {
+        foreach ($this->originalAutoloaders as $autoloader) {
+            spl_autoload_register($autoloader);
         }
     }
 }
