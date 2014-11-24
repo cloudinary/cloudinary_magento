@@ -2,12 +2,10 @@
 
 namespace spec\CloudinaryExtension;
 
-use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
+use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\Configuration;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -16,6 +14,11 @@ class ImageManagerSpec extends ObjectBehavior
     const IMAGE_PATH = 'image_to_upload.png';
     const IMAGE_PROVIDER_URL = "http://image.url.on.provider";
 
+    function let(ImageProvider $imageProvider)
+    {
+        $this->beConstructedWith($imageProvider);
+    }
+
     function it_uploads_an_image(ImageProvider $imageProvider)
     {
         $image = Image::fromPath(self::IMAGE_PATH);
@@ -23,9 +26,18 @@ class ImageManagerSpec extends ObjectBehavior
         $imageProvider->upload($image, Argument::any())->shouldBeCalled();
         $imageProvider->getImageUrlByName(self::IMAGE_PATH)->willReturn(self::IMAGE_PROVIDER_URL);
 
-        $this->beConstructedWith($imageProvider);
-
         $this->uploadImage(self::IMAGE_PATH, 'some key', 'some secret');
-        $this->getUrlForImage(self::IMAGE_PATH)->shouldReturn(self::IMAGE_PROVIDER_URL);
+
+        $this->getUrlForImage($image)->shouldReturn(self::IMAGE_PROVIDER_URL);
+    }
+
+    function it_builds_an_image_url_given_specific_dimensions(ImageProvider $imageProvider)
+    {
+        $image = Image::fromPath(self::IMAGE_PATH);
+        $transformation = Image\Transformation::toDimensions((Dimensions::fromWidthAndHeight(10, 10)));
+
+        $imageProvider->transformImage($image, $transformation)->willReturn(self::IMAGE_PROVIDER_URL);
+
+        $this->getUrlForImageWithTransformation($image, $transformation)->shouldReturn(self::IMAGE_PROVIDER_URL);
     }
 }

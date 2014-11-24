@@ -2,6 +2,7 @@
 
 namespace spec\CloudinaryExtension;
 
+use CloudinaryExtension\Image\Dimensions;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
