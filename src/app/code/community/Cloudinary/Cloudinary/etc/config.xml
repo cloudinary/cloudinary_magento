@@ -54,4 +54,13 @@
             </controller_front_init_before>
         </events>
     </global>
+    <crontab>
+        <jobs>
+            <cloudinary_cloudinary>
+                <run>
+                    <model>cloudinary/cron::migrateImages</model>
+                </run>
+            </cloudinary_cloudinary>
+        </jobs>
+    </crontab>
 </config>

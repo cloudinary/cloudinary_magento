@@ -1,4 +1,4 @@
-Feature: Migration is disabled when module is disabled
+it would Feature: Migration is disabled when module is disabled
 
   Scenario: Seeing a disabled Migrate button when the Cloudinary module is disabled
     Given the Cloudinary module is disabled
