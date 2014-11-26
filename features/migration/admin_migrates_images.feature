@@ -1,50 +1,35 @@
-Feature: Image migration process
-  As an Administrator
-  So that I do not need to upload each product image individually
-  I need the process of migration to be automated
+Feature: Product image migration
+  In order to easily install and use the Cloudinary module
+  As an integrator
+  I need an easy mechanism to migrate all existing catalogue images to Cloudinary
 
-  Background:
-    Given the Cloudinary module is enabled
+  Scenario: Integrator triggers the migration
+    Given the media gallery contains the images "chair.png", "table.png" and "house.png"
+    And those images have not been migrated to cloudinary
+    When the integrator triggers the migration
+    Then the images should be migrated to cloudinary
 
-  Scenario: Seeing an enabled Migrate button when there are images to migrate
-    Given the following catalog images exist:
-      | Image     | Migrated |
-      | chair.jpg | true     |
-      | table.jpg | false    |
-      | house.jpg | false    |
-     When I press the Migrate button
-     Then the following images should be migrated to Cloudinary:
-      | chair.jpg |
-      | table.jpg |
-      And all images should be flagged as migrated
+  Scenario: Integrator enables the extension
+    Given the cloudinary media gallery contains the image "lolcat.png"
+    When the integrator enables the module
+    Then the image should be provided by cloudinay
 
-  Scenario: Seeing a disabled Migrate button when there are no images to migrate
-    Given there is no migration in progress
-      And the following catalog images exist:
-      | Image     | Migrated |
-      | chair.jpg | true     |
-      | table.jpg | true     |
-      | house.jpg | true     |
-     When I load the Cloudinary admin page
-     Then the Migrate button should be disabled
+  Scenario: Integrator is unable to start the migration when a process is already running
+    Given the cloudinary migration has been triggered
+    And the cloudinary migration is still in progress
+    When the integrator tries to trigger the migration
+    Then they should not be able to start the migration
+    And there should be feedback that triggering a migration is currently disabled
 
-  Scenario: Seeing a disabled Migrate button when migration is in progress
-    Given there is a migration in progress
-     When I load the Cloudinary admin page
-     Then the Migrate button should be disabled
+  Scenario: Integrator is unable to start the migration when there are no images to migrate
+    Given there are no images to migrate
+    When the integrator tries to trigger the migration
+    Then they should not be able to start the migration
+    And there should be feedback that triggering a migration is currently disabled
 
-  Scenario: Seeing an enabled Migrate button when there is no migration in progress and there are unmigrated images
-    Given there is a migration in progress
-      And there are images that have not been migrated yet
-     When I load the Cloudinary admin page
-     Then the Migrate button should be enabled
-
-  Scenario: Seeing the current progress of the migration process
-    Given the following catalog images exist:
-      | Image     | Migrated |
-      | chair.jpg | true     |
-      | table.jpg | true     |
-      | house.jpg | false    |
-     And the migration is in progress
-    When I load the Cloudinary admin page
-    Then I should see a progress message saying "66% complete"
+  Scenario: Integrator receives feedback of the migration progress
+    Given the media gallery contains the images "chair.png", "table.png" and "house.png"
+    When a migration is triggered
+    And the images "chair.png" and "table.png" have been migrated
+    But the image "house.png" haven not been migrated yet
+    Then the integrator should receive feedback saying that the migration is at "66%"
