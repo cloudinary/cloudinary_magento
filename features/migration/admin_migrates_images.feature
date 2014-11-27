@@ -9,11 +9,6 @@ Feature: Product image migration
     When the integrator triggers the migration
     Then the images should be migrated to cloudinary
 
-  Scenario: Integrator enables the extension
-    Given the cloudinary media gallery contains the image "lolcat.png"
-    When the integrator enables the module
-    Then the image should be provided by cloudinay
-
   Scenario: Integrator is unable to start the migration when a process is already running
     Given the cloudinary migration has been triggered
     And the cloudinary migration is still in progress
@@ -29,7 +24,7 @@ Feature: Product image migration
 
   Scenario: Integrator receives feedback of the migration progress
     Given the media gallery contains the images "chair.png", "table.png" and "house.png"
-    When a migration is triggered
-    And the images "chair.png" and "table.png" have been migrated
-    But the image "house.png" haven not been migrated yet
+    And a migration has been started
+    When the images "chair.png" and "table.png" have been migrated
+    And the image "house.png" haven not been migrated yet
     Then the integrator should receive feedback saying that the migration is at "66%"
