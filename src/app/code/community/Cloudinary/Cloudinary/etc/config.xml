@@ -56,11 +56,11 @@
     </global>
     <crontab>
         <jobs>
-            <cloudinary_cloudinary>
+            <cloudinary_migrate>
                 <run>
-                    <model>cloudinary/cron::migrateImages</model>
+                    <model>cloudinary_cloudinary/cron::migrateImages</model>
                 </run>
-            </cloudinary_cloudinary>
+            </cloudinary_migrate>
         </jobs>
     </crontab>
 </config>
