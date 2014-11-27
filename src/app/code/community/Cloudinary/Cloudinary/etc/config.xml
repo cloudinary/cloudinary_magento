@@ -9,6 +9,7 @@
         <models>
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Model</class>
+                <resourceModel>cloudinary_resource</resourceModel>
             </cloudinary_cloudinary>
             <catalog>
                 <rewrite>
@@ -16,6 +17,14 @@
                     <product_media_config>Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config</product_media_config>
                 </rewrite>
             </catalog>
+            <cloudinary_resource>
+                <class>Cloudinary_Cloudinary_Model_Resource</class>
+                <entities>
+                    <migration>
+                        <table>cloudinary_migration</table>
+                    </migration>
+                </entities>
+            </cloudinary_resource>
         </models>
         <blocks>
             <cloudinary_cloudinary>
@@ -53,6 +62,13 @@
                 </observers>
             </controller_front_init_before>
         </events>
+        <resources>
+            <cloudinary_setup>
+                <setup>
+                    <module>Cloudinary_Cloudinary</module>
+                </setup>
+            </cloudinary_setup>
+        </resources>
     </global>
     <crontab>
         <jobs>
