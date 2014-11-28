@@ -20,9 +20,9 @@
             <cloudinary_resource>
                 <class>Cloudinary_Cloudinary_Model_Resource</class>
                 <entities>
-                    <migration>
-                        <table>cloudinary_migration</table>
-                    </migration>
+                    <synchronisation>
+                        <table>cloudinary_synchronisation</table>
+                    </synchronisation>
                 </entities>
             </cloudinary_resource>
         </models>

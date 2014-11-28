@@ -27,7 +27,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     private function _getImageDetailFromKey(array $imageDetails, $key)
     {
         if(!array_key_exists($key, $imageDetails)) {
-            throw new BadFilePathException("Invalid image data structure. Missing " . $key);
+            throw new Cloudinary_Cloudinary_Model_Exception_BadFilePathException("Invalid image data structure. Missing " . $key);
         }
         return $imageDetails[$key];
     }
