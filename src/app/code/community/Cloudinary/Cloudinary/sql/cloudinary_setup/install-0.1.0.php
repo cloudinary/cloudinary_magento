@@ -16,11 +16,12 @@ $table = $installer->getConnection()
         'nullable'  => true,
         'default' => null,
     ), 'Media Gallery ID')
+    ->addColumn('image_name', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255)
     ->addColumn('in_cloudinary', Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,
         'default'   => '1',
-    ), 'Media in Cloudinary')//§;
+    ), 'Media in Cloudinary')
     ->addForeignKey(
         'FK_MEDIA_GALLERY_ID_VALUE_ID',
         'media_gallery_id',
