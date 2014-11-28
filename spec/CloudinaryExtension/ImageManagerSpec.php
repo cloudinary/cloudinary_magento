@@ -40,4 +40,9 @@ class ImageManagerSpec extends ObjectBehavior
 
         $this->getUrlForImageWithTransformation($image, $transformation)->shouldReturn(self::IMAGE_PROVIDER_URL);
     }
+
+    function it_uploads_a_batch_of_images()
+    {
+
+    }
 }

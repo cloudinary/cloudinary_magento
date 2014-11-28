@@ -37,4 +37,10 @@ class ImageManager
         return (string)$image;
     }
 
+    public function migrate(array $images)
+    {
+        foreach ($images as $image) {
+            var_dump($image->getValue());
+        }
+    }
 }
