@@ -5,8 +5,7 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation extends Mage_Core_Mod
 
     protected function _construct()
     {
-        $this->_init('cloudinary_cloudinary/synchronisation', 'media_gallery_id');
-        $this->_isPkAutoIncrement = false;
+        $this->_init('cloudinary_cloudinary/synchronisation', 'cloudinary_synchronisation_id');
     }
 
 }

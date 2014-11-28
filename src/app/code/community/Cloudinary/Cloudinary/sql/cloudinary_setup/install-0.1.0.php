@@ -6,7 +6,8 @@ $installer->startSetup();
 
 $table = $installer->getConnection()
     ->newTable($installer->getTable('cloudinary_cloudinary/synchronisation'))
-    ->addColumn('cloudinary_synchronisation', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+    ->addColumn('cloudinary_synchronisation_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+        'identity'  => true,
         'unsigned'  => true,
         'nullable'  => false,
         'primary'   => true,
