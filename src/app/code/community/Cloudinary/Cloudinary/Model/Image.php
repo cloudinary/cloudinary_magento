@@ -4,6 +4,7 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\ImageManagerFactory;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
@@ -13,11 +14,9 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function upload(array $imageDetails)
     {
-        ImageManagerFactory::fromConfiguration(
-            Mage::helper('cloudinary_cloudinary/configuration')
-        )->uploadImage(
-            $this->_imageFullPathFromImageDetails($imageDetails)
-        );
+        $imageManager = ImageManagerFactory::fromConfiguration(Mage::helper('cloudinary_cloudinary/configuration'));
+
+        $imageManager->uploadImage($this->_imageFullPathFromImageDetails($imageDetails));
     }
 
     private function _imageFullPathFromImageDetails($imageDetails)

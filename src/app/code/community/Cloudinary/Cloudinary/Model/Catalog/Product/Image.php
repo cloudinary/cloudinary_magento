@@ -4,6 +4,7 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Model_Product_Image
 {
