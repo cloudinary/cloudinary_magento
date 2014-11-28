@@ -20,11 +20,13 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
         $cloudinary->uploadImage(
             $this->_imageFullPathFromImageDetails($imageDetails)
         );
+
+        Mage::getModel('cloudinary_cloudinary/synchronisation')->tagImageAsBeingInCloudinary($imageDetails);
     }
 
     private function _imageFullPathFromImageDetails($imageDetails)
     {
-        return  $this->_getImageDetailFromKey($imageDetails, 'path') . $this->_getImageDetailFromKey($imageDetails, 'file');
+        return  Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath() . $this->_getImageDetailFromKey($imageDetails, 'file');
     }
 
     private function _getCredentials()
