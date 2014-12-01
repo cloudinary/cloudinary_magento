@@ -17,10 +17,18 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     public function migrateImages()
     {
-        $images = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
-            ->findAllUnsynchronisedImages();
+        $baseMediaPath = Mage::getModel('catalog/product_media_config')->getBaseMediaPath();
+        $localMedia = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection');
 
-        $this->_imageManager->migrate($images);
+        $images = $localMedia->findAllUnsynchronisedImages();
+
+        foreach ($images as $image) {
+            $path = sprintf('%s%s', $baseMediaPath, $image->getValue());
+
+            if (file_exists($path)) {
+                $this->_imageManager->uploadImage($path);
+            }
+        }
 
         return $this ;
     }
