@@ -5,7 +5,7 @@ use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
 
-class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config implements Cloudinary_Cloudinary_Model_Enablable
+class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config
 {
     private $_config;
 
@@ -37,7 +37,7 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
         return $cloudinary->getUrlForImage(Image::fromPath($file));
     }
 
-    public function isEnabled()
+    private function isEnabled()
     {
         if(is_null($this->_config)) {
             $this->_config = Mage::helper('cloudinary_cloudinary/configuration');

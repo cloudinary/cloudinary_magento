@@ -1,6 +1,6 @@
 <?php
 
-class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract implements Cloudinary_Cloudinary_Model_Enablable
+class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 {
     const CLOUDINARY_EXTENSION_LIB_PATH = 'CloudinaryExtension';
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
@@ -117,7 +117,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract impl
         return $newImages;
     }
 
-    public function isEnabled()
+    private function isEnabled()
     {
         if(is_null($this->_config)) {
             $this->_config = Mage::helper('cloudinary_cloudinary/configuration');

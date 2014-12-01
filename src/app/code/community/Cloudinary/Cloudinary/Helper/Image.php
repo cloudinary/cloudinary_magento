@@ -6,7 +6,7 @@ use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\ImageManager;
 
-class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image implements Cloudinary_Cloudinary_Model_Enablable
+class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 {
     private $_imageManager;
     private $_dimensions;
@@ -70,7 +70,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image imple
         return $this->getImageFile() ?: $this->getProduct()->getData($this->_attributeName);
     }
 
-    public function isEnabled()
+    private function isEnabled()
     {
         if(is_null($this->_config)) {
             $this->_config = Mage::helper('cloudinary_cloudinary/configuration');

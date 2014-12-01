@@ -1,5 +1,5 @@
 <?php
- 
+
 class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstract
 {
 
