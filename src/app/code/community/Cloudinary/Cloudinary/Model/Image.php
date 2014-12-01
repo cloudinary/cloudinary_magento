@@ -26,7 +26,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     private function _imageFullPathFromImageDetails($imageDetails)
     {
-        return  Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath() . $this->_getImageDetailFromKey($imageDetails, 'file');
+        return  $this->_getMediaBasePath() . $this->_getImageDetailFromKey($imageDetails, 'file');
     }
 
     private function _getCredentials()
@@ -56,5 +56,10 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
             $this->configuration = Mage::helper('cloudinary_cloudinary/configuration');
         }
         return $this->configuration;
+    }
+
+    private function _getMediaBasePath()
+    {
+        return Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
     }
 }
