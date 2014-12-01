@@ -48,7 +48,7 @@
                     <cloudinary_cloudinary>
                         <type>singleton</type>
                         <class>cloudinary_cloudinary/observer</class>
-                        <method>uploadImageToCloudinary</method>
+                        <method>uploadImagesToCloudinary</method>
                     </cloudinary_cloudinary>
                 </observers>
             </catalog_product_save_after>

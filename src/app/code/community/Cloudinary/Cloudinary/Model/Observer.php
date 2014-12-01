@@ -20,18 +20,16 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $event;
     }
 
-    public function uploadImageToCloudinary(Varien_Event_Observer $event)
+    public function uploadImagesToCloudinary(Varien_Event_Observer $event)
     {
-        $this->_setNewImages($event->getProduct());
-        $newImages = $this->_getNewImages($event->getProduct());
-
         $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
-        foreach ($newImages as $image) {
+
+        foreach ($this->getImagesToUpload($event->getProduct()) as $image) {
             $cloudinaryImage->upload($image);
         }
     }
 
-    protected function _getUploadedImageDetails($event)
+    protected function getUploadedImageDetails($event)
     {
         return $event->getResult();
     }
@@ -99,7 +97,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return is_array($toFilter) && array_key_exists('file', $toFilter) && in_array($toFilter['file'], $this->newImages);
     }
 
-    private function _setNewImages(Mage_Catalog_Model_Product $product)
+    private function setNewImages(Mage_Catalog_Model_Product $product)
     {
         $this->newImages = array();
 
@@ -112,11 +110,18 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $product;
     }
 
-    private function _getNewImages($product)
+    private function getNewImages($product)
     {
         $product->load('media_gallery');
         $gallery = $product->getData('media_gallery');
         $newImages = array_filter($gallery['images'], array($this, '_isImageInArray'));
+        return $newImages;
+    }
+
+    private function getImagesToUpload(Mage_Catalog_Model_Product $product)
+    {
+        $this->setNewImages($product());
+        $newImages = $this->getNewImages($product());
         return $newImages;
     }
 }
