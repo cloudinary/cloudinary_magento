@@ -8,8 +8,6 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     private $originalAutoloaders;
 
-    private $newImages;
-
     public function loadCustomAutoloaders(Varien_Event_Observer $event)
     {
         $this->deregisterVarienAutoloaders();
@@ -92,36 +90,9 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         }
     }
 
-    public function _isImageInArray($toFilter)
-    {
-        return is_array($toFilter) && array_key_exists('file', $toFilter) && in_array($toFilter['file'], $this->newImages);
-    }
-
-    private function setNewImages(Mage_Catalog_Model_Product $product)
-    {
-        $this->newImages = array();
-
-        $gallery = $product->getData('media_gallery');
-        foreach ($gallery['images'] as $image) {
-            if (array_key_exists('new_file', $image)) {
-                $this->newImages[] = $image['new_file'];
-            }
-        }
-        return $product;
-    }
-
-    private function getNewImages($product)
-    {
-        $product->load('media_gallery');
-        $gallery = $product->getData('media_gallery');
-        $newImages = array_filter($gallery['images'], array($this, '_isImageInArray'));
-        return $newImages;
-    }
-
     private function getImagesToUpload(Mage_Catalog_Model_Product $product)
     {
-        $this->setNewImages($product());
-        $newImages = $this->getNewImages($product());
-        return $newImages;
+        $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
+        return $productMedia->newImagesForProduct($product);
     }
 }
