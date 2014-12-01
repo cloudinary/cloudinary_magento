@@ -1,12 +1,19 @@
 <?php
 
-class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
+class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract implements Cloudinary_Cloudinary_Model_Enablable
 {
     const CLOUDINARY_EXTENSION_LIB_PATH = 'CloudinaryExtension';
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
     private $_originalAutoloaders;
+    private $newImages;
+    private $_config;
+
+    public function __construct()
+    {
+        $this->_config = Mage::helper('cloudinary_cloudinary/configuration');
+    }
 
     public function loadCustomAutoloaders(Varien_Event_Observer $event)
     {
@@ -20,10 +27,14 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function uploadImagesToCloudinary(Varien_Event_Observer $event)
     {
-        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
+        if($this->isEnabled()) {
+            $this->_setNewImages($event->getProduct());
+            $newImages = $this->_getNewImages($event->getProduct());
 
-        foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
-            $cloudinaryImage->upload($image);
+            $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
+            foreach ($newImages as $image) {
+                $cloudinaryImage->upload($image);
+            }
         }
     }
 
@@ -61,16 +72,6 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         );
     }
 
-    private function _deleteLocalFile($image)
-    {
-        $mediaConfig = new Mage_Catalog_Model_Product_Media_Config();
-        $tmpPath = sprintf('%s%s', $mediaConfig->getBaseTmpMediaPath(), $image['file']);
-
-        if (file_exists($tmpPath)) {
-            unlink($tmpPath);
-        }
-    }
-
     private function deregisterVarienAutoloaders()
     {
         $this->_originalAutoloaders = array();
@@ -90,9 +91,38 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         }
     }
 
-    private function _getImagesToUpload(Mage_Catalog_Model_Product $product)
+    private function _isImageInArray($toFilter)
     {
-        $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
-        return $productMedia->newImagesForProduct($product);
+        return is_array($toFilter) && array_key_exists('file', $toFilter) && in_array($toFilter['file'], $this->newImages);
+    }
+
+    private function _setNewImages(Mage_Catalog_Model_Product $product)
+    {
+        $this->newImages = array();
+
+        $gallery = $product->getData('media_gallery');
+        foreach ($gallery['images'] as $image) {
+            if (array_key_exists('new_file', $image)) {
+                $this->newImages[] = $image['new_file'];
+            }
+        }
+        return $product;
+    }
+
+    private function _getNewImages($product)
+    {
+        $product->load('media_gallery');
+        $gallery = $product->getData('media_gallery');
+        $newImages = array_filter($gallery['images'], array($this, '_isImageInArray'));
+        return $newImages;
+    }
+
+    public function isEnabled()
+    {
+        if(is_null($this->_config)) {
+            $this->_config = Mage::helper('cloudinary_cloudinary/configuration');
+        }
+
+        return $this->_config->isEnabled();
     }
 }
