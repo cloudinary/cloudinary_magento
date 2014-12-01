@@ -22,22 +22,8 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function uploadImageToCloudinary(Varien_Event_Observer $event)
     {
-//        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
-//        $image = $this->_getUploadedImageDetails($event);
-//
-//        $cloudinaryImage->upload($image);
-//
-//        $this->_deleteLocalFile($image);
-//
-        return $event;
-    }
-
-    public function updateCloudinarySyncStatus(Varien_Event_Observer $event)
-    {
         $this->_setNewImages($event->getProduct());
         $newImages = $this->_getNewImages($event->getProduct());
-
-        error_log(var_export($newImages, true));
 
         $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
         foreach ($newImages as $image) {
