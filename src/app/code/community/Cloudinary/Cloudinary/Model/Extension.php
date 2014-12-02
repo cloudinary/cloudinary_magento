@@ -10,11 +10,11 @@ class Cloudinary_Cloudinary_Model_Extension extends Mage_Core_Model_Abstract
 
     public function isEnabled()
     {
-        return $this->getEnabled() === 1;
+        return (bool)$this->getEnabled();
     }
 
     public function migrationHasBeenTriggered()
     {
-        return $this->getMigrationTriggered() === 1;
+        return (bool) $this->getMigrationTriggered();
     }
 }

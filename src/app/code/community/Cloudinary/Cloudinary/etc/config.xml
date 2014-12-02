@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Cloudinary_Cloudinary>
     </modules>
     <global>
@@ -23,6 +23,9 @@
                     <synchronisation>
                         <table>cloudinary_synchronisation</table>
                     </synchronisation>
+                    <extension>
+                        <table>cloudinary_extension</table>
+                    </extension>
                 </entities>
             </cloudinary_resource>
         </models>
@@ -73,6 +76,9 @@
     <crontab>
         <jobs>
             <cloudinary_migrate>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
                 <run>
                     <model>cloudinary_cloudinary/cron::migrateImages</model>
                 </run>

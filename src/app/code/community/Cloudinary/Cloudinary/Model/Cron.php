@@ -17,28 +17,52 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     public function migrateImages()
     {
-        $cloudinary = Mage::getModel('cloudinary_cloudinary/extension');
+        $cloudinary = Mage::getModel('cloudinary_cloudinary/extension')->load(1);
+        $syncMediaCollection = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection');
 
-        if ($cloudinary->isEnabled() && $cloudinary->migrationHasBeenTriggerd()) {
-            $this->uploadImages();
+        if ($cloudinary->isEnabled() && $cloudinary->migrationHasBeenTriggered()) {
+
+            $images = $syncMediaCollection->findUnsynchronisedImages();
+
+            if (!$images) {
+                Mage::log('Cloudinary migration: complete');
+                $cloudinary->setMigrationTriggered(0);
+                $cloudinary->save();
+            } else {
+                $this->uploadImages($images);
+            }
         }
 
         return $this ;
     }
 
-    private function uploadImages()
+    private function uploadImages($images)
     {
         $baseMediaPath = Mage::getModel('catalog/product_media_config')->getBaseMediaPath();
-
-        $images = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
-            ->findUnsynchronisedImages();
+        $countMigrated = 0;
 
         foreach ($images as $image) {
             $path = sprintf('%s%s', $baseMediaPath, $image->getValue());
 
-            if (file_exists($path)) {
+            try {
                 $this->_imageManager->uploadImage($path);
+                $countMigrated++;
+                Mage::log(sprintf('Cloudinary migration: uploaded %s', $image->getValue()));
+            } catch(Exception $e) {
+                Mage::log(sprintf('Cloudinary migration: %s for %s', $e->getMessage(), $image->getValue()));
             }
+
+            $this->updateSyncronization($image);
         }
+
+        Mage::log(sprintf('Cloudinary migration: %s images migrated', $countMigrated));
+    }
+
+    private function updateSyncronization($image)
+    {
+        $synchronization = Mage::getModel('cloudinary_cloudinary/synchronisation');
+        $synchronization->setMediaGalleryId($image->getValueId());
+        $synchronization->setImageName(basename($image->getValue()));
+        $synchronization->save();
     }
 } 
