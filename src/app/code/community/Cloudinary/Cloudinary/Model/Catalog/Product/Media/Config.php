@@ -5,10 +5,9 @@ use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
 
-class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config implements Cloudinary_Cloudinary_Model_Enablable
+class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config
 {
-    private $_config;
-    private $_syncronisation;
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
     public function getMediaUrl($file)
     {
@@ -36,38 +35,5 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
         ));
 
         return $cloudinary->getUrlForImage(Image::fromPath($file));
-    }
-
-
-
-    private function _isEnabled()
-    {
-        return $this->_getConfigHelper()->isEnabled();
-    }
-
-    private function _isImageInCloudinary($imageName)
-    {
-        return $this->_getSynchronisationModel()->isImageInCloudinary($imageName);
-    }
-
-    private function _getConfigHelper()
-    {
-        if (is_null($this->_config)) {
-            $this->_config = Mage::helper('cloudinary_cloudinary/configuration');
-        }
-        return $this->_config;
-    }
-
-    private function _getSynchronisationModel()
-    {
-        if (is_null($this->_syncronisation)) {
-            $this->_syncronisation = Mage::getModel('cloudinary_cloudinary/synchronisation');
-        }
-        return $this->_syncronisation;
-    }
-
-    private function _imageShouldComeFromCloudinary($file)
-    {
-        return $this->_isEnabled() && $this->_isImageInCloudinary($file);
     }
 }

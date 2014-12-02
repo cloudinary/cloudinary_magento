@@ -11,7 +11,7 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
 
     public function getUrl()
     {
-        if($this->isEnabled()) {
+        if($this->_isEnabled()) {
             $cloudinary = new ImageManager(new CloudinaryImageProvider(
                 $this->getConfigHelper()->buildCredentials(),
                 Cloud::fromName($config->getCloudName())
@@ -23,7 +23,7 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
         return parent::getUrl();
     }
 
-    private function isEnabled()
+    private function _isEnabled()
     {
         return $this->getConfigHelper()->isEnabled();
     }
