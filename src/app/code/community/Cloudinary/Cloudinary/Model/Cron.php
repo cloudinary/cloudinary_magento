@@ -17,28 +17,28 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     public function migrateImages()
     {
-        $cloudinary = Mage::getModel('cloudinary_cloudinary/extension')->load(1);
+        $migration = Mage::getModel('cloudinary_cloudinary/migration')->load(1);
         $syncMediaCollection = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection');
 
-        if ($cloudinary->isEnabled() && $cloudinary->migrationHasBeenTriggered()) {
-
+        if ($this->_cloudinaryConfig->isEnabled() && $migration->hasStarted()) {
+            Mage::log('Cloudinary migration: processing');
             $images = $syncMediaCollection->findUnsynchronisedImages();
 
             if (!$images) {
                 Mage::log('Cloudinary migration: complete');
-                $cloudinary->setMigrationTriggered(0);
-                $cloudinary->save();
+                $migration->stop();
             } else {
-                $this->uploadImages($images);
+                $this->_uploadImages($images);
             }
         }
 
         return $this ;
     }
 
-    private function uploadImages($images)
+    private function _uploadImages($images)
     {
         $baseMediaPath = Mage::getModel('catalog/product_media_config')->getBaseMediaPath();
+        $synchronization = Mage::getModel('cloudinary_cloudinary/synchronisation');
         $countMigrated = 0;
 
         foreach ($images as $image) {
@@ -47,7 +47,10 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             try {
                 $this->_imageManager->uploadImage($path);
                 $countMigrated++;
-                $this->updateSynchronization($image);
+                $synchronization->tagImageAsBeingInCloudinary(array(
+                    'file' => basename($image->getValue()),
+                    'media_gallery_id' => $image->getValueId()
+                ));
                 Mage::log(sprintf('Cloudinary migration: uploaded %s', $image->getValue()));
             } catch(Exception $e) {
                 Mage::log(sprintf('Cloudinary migration: %s trying to upload %s', $e->getMessage(), $image->getValue()));
@@ -56,12 +59,4 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
         Mage::log(sprintf('Cloudinary migration: %s images migrated', $countMigrated));
     }
-
-    private function updateSynchronization($image)
-    {
-        $synchronization = Mage::getModel('cloudinary_cloudinary/synchronisation');
-        $synchronization->setMediaGalleryId($image->getValueId());
-        $synchronization->setImageName(basename($image->getValue()));
-        $synchronization->save();
-    }
-} 
+}

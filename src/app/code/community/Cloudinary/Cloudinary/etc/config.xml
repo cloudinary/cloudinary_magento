@@ -23,9 +23,9 @@
                     <synchronisation>
                         <table>cloudinary_synchronisation</table>
                     </synchronisation>
-                    <extension>
-                        <table>cloudinary_extension</table>
-                    </extension>
+                    <migration>
+                        <table>cloudinary_migration</table>
+                    </migration>
                 </entities>
             </cloudinary_resource>
         </models>
@@ -77,7 +77,7 @@
         <jobs>
             <cloudinary_migrate>
                 <schedule>
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>* * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>cloudinary_cloudinary/cron::migrateImages</model>
