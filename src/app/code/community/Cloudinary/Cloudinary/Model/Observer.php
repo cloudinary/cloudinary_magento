@@ -7,7 +7,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
     private $_originalAutoloaders;
-    private $newImages;
+    private $_newImages;
     private $_config;
 
     public function __construct()
@@ -93,17 +93,17 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     private function _isImageInArray($toFilter)
     {
-        return is_array($toFilter) && array_key_exists('file', $toFilter) && in_array($toFilter['file'], $this->newImages);
+        return is_array($toFilter) && array_key_exists('file', $toFilter) && in_array($toFilter['file'], $this->_newImages);
     }
 
     private function _setNewImages(Mage_Catalog_Model_Product $product)
     {
-        $this->newImages = array();
+        $this->_newImages = array();
 
         $gallery = $product->getData('media_gallery');
         foreach ($gallery['images'] as $image) {
             if (array_key_exists('new_file', $image)) {
-                $this->newImages[] = $image['new_file'];
+                $this->_newImages[] = $image['new_file'];
             }
         }
         return $product;
