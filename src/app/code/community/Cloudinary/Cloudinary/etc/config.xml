@@ -43,15 +43,15 @@
             </cloudinary_cloudinary>
         </helpers>
         <events>
-            <catalog_product_gallery_upload_image_after>
+            <catalog_product_save_after>
                 <observers>
                     <cloudinary_cloudinary>
                         <type>singleton</type>
                         <class>cloudinary_cloudinary/observer</class>
-                        <method>uploadImageToCloudinary</method>
+                        <method>uploadImagesToCloudinary</method>
                     </cloudinary_cloudinary>
                 </observers>
-            </catalog_product_gallery_upload_image_after>
+            </catalog_product_save_after>
             <controller_front_init_before>
                 <observers>
                     <cloudinary_cloudinary>
