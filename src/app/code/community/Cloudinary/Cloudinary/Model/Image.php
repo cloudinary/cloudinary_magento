@@ -11,7 +11,7 @@ use CloudinaryExtension\Image;
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
 
-    private $configuration;
+    private $_configuration;
 
     public function upload(array $imageDetails)
     {
@@ -52,10 +52,10 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     private function _getConfigurationHelper()
     {
-        if($this->configuration === null) {
-            $this->configuration = Mage::helper('cloudinary_cloudinary/configuration');
+        if($this->_configuration === null) {
+            $this->_configuration = Mage::helper('cloudinary_cloudinary/configuration');
         }
-        return $this->configuration;
+        return $this->_configuration;
     }
 
     private function _getMediaBasePath()

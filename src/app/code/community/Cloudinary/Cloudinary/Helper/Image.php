@@ -9,9 +9,7 @@ use CloudinaryExtension\ImageManager;
 class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 {
     private $_imageManager;
-
     private $_dimensions;
-
     private $_attributeName;
 
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
@@ -38,9 +36,9 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function __toString()
     {
-        $imageFile = $this->getRequestedImageFile();
+        $imageFile = $this->_getRequestedImageFile();
 
-        if ($this->isImageSpecified($imageFile)) {
+        if ($this->_isImageSpecified($imageFile)) {
             $image = Image::fromPath($imageFile);
 
             if ($this->_dimensions) {
@@ -55,7 +53,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         return Mage::getDesign()->getSkinUrl($this->getPlaceholder());
     }
 
-    private function isImageSpecified($imageFile)
+    private function _isImageSpecified($imageFile)
     {
         return $imageFile && $imageFile !== 'no_selection';
     }
@@ -63,7 +61,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
     /**
      * @return mixed
      */
-    private function getRequestedImageFile()
+    private function _getRequestedImageFile()
     {
         return $this->getImageFile() ?: $this->getProduct()->getData($this->_attributeName);
     }
