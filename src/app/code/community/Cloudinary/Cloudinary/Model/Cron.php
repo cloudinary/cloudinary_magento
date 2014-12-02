@@ -47,18 +47,17 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             try {
                 $this->_imageManager->uploadImage($path);
                 $countMigrated++;
+                $this->updateSynchronization($image);
                 Mage::log(sprintf('Cloudinary migration: uploaded %s', $image->getValue()));
             } catch(Exception $e) {
-                Mage::log(sprintf('Cloudinary migration: %s for %s', $e->getMessage(), $image->getValue()));
+                Mage::log(sprintf('Cloudinary migration: %s trying to upload %s', $e->getMessage(), $image->getValue()));
             }
-
-            $this->updateSyncronization($image);
         }
 
         Mage::log(sprintf('Cloudinary migration: %s images migrated', $countMigrated));
     }
 
-    private function updateSyncronization($image)
+    private function updateSynchronization($image)
     {
         $synchronization = Mage::getModel('cloudinary_cloudinary/synchronisation');
         $synchronization->setMediaGalleryId($image->getValueId());
