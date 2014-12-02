@@ -10,8 +10,7 @@ use CloudinaryExtension\Image;
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
-
-    private $_configuration;
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
     public function upload(array $imageDetails)
     {
@@ -48,14 +47,6 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     private function _getCloudName()
     {
         return Cloud::fromName($this->_getConfigurationHelper()->getCloudName());
-    }
-
-    private function _getConfigurationHelper()
-    {
-        if($this->_configuration === null) {
-            $this->_configuration = Mage::helper('cloudinary_cloudinary/configuration');
-        }
-        return $this->_configuration;
     }
 
     private function _getMediaBasePath()

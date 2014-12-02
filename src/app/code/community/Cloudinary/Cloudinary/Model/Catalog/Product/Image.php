@@ -7,11 +7,11 @@ use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Model_Product_Image
 {
-    private $_config;
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
     public function getUrl()
     {
-        if($this->_isEnabled()) {
+        if($this->_imageShouldComeFromCloudinary($this->_newFile)) {
             $cloudinary = new ImageManager(new CloudinaryImageProvider(
                 $this->getConfigHelper()->buildCredentials(),
                 Cloud::fromName($config->getCloudName())
@@ -21,18 +21,5 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
         }
 
         return parent::getUrl();
-    }
-
-    private function _isEnabled()
-    {
-        return $this->getConfigHelper()->isEnabled();
-    }
-
-    private function getConfigHelper()
-    {
-        if(is_null($this->_config)) {
-            $this->_config = Mage::helper('cloudinary_cloudinary/configuration');
-        }
-        return $this->_config;
     }
 }

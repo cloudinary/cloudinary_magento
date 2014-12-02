@@ -8,15 +8,15 @@ use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 {
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
+
     private $_imageManager;
     private $_dimensions;
     private $_attributeName;
 
-    private $_config;
-
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
     {
-        if($this->isEnabled()) {
+        if($this->_isEnabled()) {
             $this->_attributeName = $attributeName;
 
             $this->_imageManager = new ImageManager(new CloudinaryImageProvider(
@@ -30,7 +30,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function resize($width, $height = null)
     {
-        if($this->isEnabled()) {
+        if($this->_imageShouldComeFromCloudinary($this->getRequestedImageFile())) {
             $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height ?: $width);
             return $this;
         }
@@ -40,11 +40,10 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function __toString()
     {
+        $imageFile = $this->getRequestedImageFile();
+        if($this->_imageShouldComeFromCloudinary($imageFile)) {
 
-        if($this->isEnabled()) {
-            $imageFile = $this->getRequestedImageFile();
-
-            if ($this->isImageSpecified($imageFile)) {
+            if ($this->_isImageSpecified($imageFile)) {
                 $image = Image::fromPath($imageFile);
 
                 if ($this->_dimensions) {
@@ -68,13 +67,5 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
     private function getRequestedImageFile()
     {
         return $this->getImageFile() ?: $this->getProduct()->getData($this->_attributeName);
-    }
-
-    private function isEnabled()
-    {
-        if(is_null($this->_config)) {
-            $this->_config = Mage::helper('cloudinary_cloudinary/configuration');
-        }
-        return $this->_config->isEnabled();
     }
 }
