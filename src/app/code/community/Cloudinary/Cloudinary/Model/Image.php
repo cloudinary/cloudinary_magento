@@ -1,12 +1,6 @@
 <?php
 
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\CloudinaryImageProvider;
-use CloudinaryExtension\Credentials;
-use CloudinaryExtension\ImageManager;
 use CloudinaryExtension\ImageManagerFactory;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
@@ -31,5 +25,10 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
             throw new Cloudinary_Cloudinary_Model_Exception_BadFilePathException("Invalid image data structure. Missing " . $key);
         }
         return $imageDetails[$key];
+    }
+
+    private function _getMediaBasePath()
+    {
+        return Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
     }
 }
