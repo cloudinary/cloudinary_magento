@@ -9,15 +9,15 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
 {
     public function getMediaUrl($file)
     {
-        return $this->getUrlForImage($file);
+        return $this->_getUrlForImage($file);
     }
 
     public function getTmpMediaUrl($file)
     {
-        return $this->getUrlForImage($file);
+        return $this->_getUrlForImage($file);
     }
 
-    private function getUrlForImage($file)
+    private function _getUrlForImage($file)
     {
         $config = Mage::helper('cloudinary_cloudinary/configuration');
 

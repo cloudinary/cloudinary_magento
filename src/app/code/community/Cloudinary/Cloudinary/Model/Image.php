@@ -11,7 +11,7 @@ use CloudinaryExtension\Image;
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
 
-    private $configuration;
+    private $_configuration;
 
     public function upload(array $imageDetails)
     {
@@ -20,11 +20,13 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
         $cloudinary->uploadImage(
             $this->_imageFullPathFromImageDetails($imageDetails)
         );
+
+        Mage::getModel('cloudinary_cloudinary/synchronisation')->tagImageAsBeingInCloudinary($imageDetails);
     }
 
     private function _imageFullPathFromImageDetails($imageDetails)
     {
-        return  $this->_getImageDetailFromKey($imageDetails, 'path') . $this->_getImageDetailFromKey($imageDetails, 'file');
+        return  $this->_getMediaBasePath() . $this->_getImageDetailFromKey($imageDetails, 'file');
     }
 
     private function _getCredentials()
@@ -38,7 +40,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     private function _getImageDetailFromKey(array $imageDetails, $key)
     {
         if(!array_key_exists($key, $imageDetails)) {
-            throw new BadFilePathException("Invalid image data structure. Missing " . $key);
+            throw new Cloudinary_Cloudinary_Model_Exception_BadFilePathException("Invalid image data structure. Missing " . $key);
         }
         return $imageDetails[$key];
     }
@@ -50,9 +52,14 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     private function _getConfigurationHelper()
     {
-        if($this->configuration === null) {
-            $this->configuration = Mage::helper('cloudinary_cloudinary/configuration');
+        if($this->_configuration === null) {
+            $this->_configuration = Mage::helper('cloudinary_cloudinary/configuration');
         }
-        return $this->configuration;
+        return $this->_configuration;
+    }
+
+    private function _getMediaBasePath()
+    {
+        return Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
     }
 }

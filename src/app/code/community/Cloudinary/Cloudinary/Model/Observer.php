@@ -6,28 +6,25 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
-    private $originalAutoloaders;
+    private $_originalAutoloaders;
 
     public function loadCustomAutoloaders(Varien_Event_Observer $event)
     {
         $this->deregisterVarienAutoloaders();
-        $this->registerCloudinaryAutoloader();
-        $this->registerCloudinaryExtensionAutoloader();
-        $this->reregisterVarienAutoloaders();
+        $this->_registerCloudinaryAutoloader();
+        $this->_registerCloudinaryExtensionAutoloader();
+        $this->_reregisterVarienAutoloaders();
 
         return $event;
     }
 
-    public function uploadImageToCloudinary(Varien_Event_Observer $event)
+    public function uploadImagesToCloudinary(Varien_Event_Observer $event)
     {
         $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
-        $image = $this->_getUploadedImageDetails($event);
 
-        $cloudinaryImage->upload($image);
-
-        $this->_deleteLocalFile($image);
-
-        return $event;
+        foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
+            $cloudinaryImage->upload($image);
+        }
     }
 
     protected function _getUploadedImageDetails($event)
@@ -35,7 +32,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $event->getResult();
     }
 
-    protected function registerCloudinaryExtensionAutoloader()
+    protected function _registerCloudinaryExtensionAutoloader()
     {
         spl_autoload_register(
             function ($className) {
@@ -49,7 +46,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         );
     }
 
-    protected function registerCloudinaryAutoloader()
+    protected function _registerCloudinaryAutoloader()
     {
         $libFolder = Mage::getBaseDir('lib');
 
@@ -76,20 +73,26 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     private function deregisterVarienAutoloaders()
     {
-        $this->originalAutoloaders = array();
+        $this->_originalAutoloaders = array();
 
         foreach (spl_autoload_functions() as $callback) {
             if (is_array($callback) && $callback[0] instanceof Varien_Autoload) {
-                $this->originalAutoloaders[] = $callback;
+                $this->_originalAutoloaders[] = $callback;
                 spl_autoload_unregister($callback);
             }
         }
     }
 
-    private function reregisterVarienAutoloaders()
+    private function _reregisterVarienAutoloaders()
     {
-        foreach ($this->originalAutoloaders as $autoloader) {
+        foreach ($this->_originalAutoloaders as $autoloader) {
             spl_autoload_register($autoloader);
         }
+    }
+
+    private function _getImagesToUpload(Mage_Catalog_Model_Product $product)
+    {
+        $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
+        return $productMedia->newImagesForProduct($product);
     }
 }
