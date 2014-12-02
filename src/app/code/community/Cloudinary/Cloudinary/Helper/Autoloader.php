@@ -7,17 +7,17 @@ class Cloudinary_Cloudinary_Helper_Autoloader
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
-    private $originalAutoloaders;
+    private $_originalAutoloaders;
 
     public function register()
     {
-        $this->deregisterVarienAutoloaders();
-        $this->registerCloudinaryAutoloader();
-        $this->registerCloudinaryExtensionAutoloader();
-        $this->reregisterVarienAutoloaders();
+        $this->_deregisterVarienAutoloaders();
+        $this->_registerCloudinaryAutoloader();
+        $this->_registerCloudinaryExtensionAutoloader();
+        $this->_reregisterVarienAutoloaders();
     }
 
-    private function registerCloudinaryExtensionAutoloader()
+    private function _registerCloudinaryExtensionAutoloader()
     {
         spl_autoload_register(
             function ($className) {
@@ -33,7 +33,7 @@ class Cloudinary_Cloudinary_Helper_Autoloader
         return $this;
     }
 
-    private function registerCloudinaryAutoloader()
+    private function _registerCloudinaryAutoloader()
     {
         $libFolder = Mage::getBaseDir('lib');
 
@@ -50,21 +50,21 @@ class Cloudinary_Cloudinary_Helper_Autoloader
         return $this;
     }
 
-    private function deregisterVarienAutoloaders()
+    private function _deregisterVarienAutoloaders()
     {
-        $this->originalAutoloaders = array();
+        $this->_originalAutoloaders = array();
 
         foreach (spl_autoload_functions() as $callback) {
             if (is_array($callback) && $callback[0] instanceof Varien_Autoload) {
-                $this->originalAutoloaders[] = $callback;
+                $this->_originalAutoloaders[] = $callback;
                 spl_autoload_unregister($callback);
             }
         }
     }
 
-    private function reregisterVarienAutoloaders()
+    private function _reregisterVarienAutoloaders()
     {
-        foreach ($this->originalAutoloaders as $autoloader) {
+        foreach ($this->_originalAutoloaders as $autoloader) {
             spl_autoload_register($autoloader);
         }
     }

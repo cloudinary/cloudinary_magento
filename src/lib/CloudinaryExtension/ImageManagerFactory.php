@@ -11,4 +11,4 @@ class ImageManagerFactory
             Cloud::fromName($config->getCloudName())
         ));
     }
-} 
+}
