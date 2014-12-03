@@ -13,7 +13,7 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
     {
         if($this->_imageShouldComeFromCloudinary($this->_newFile)) {
             $cloudinary = new ImageManager(new CloudinaryImageProvider(
-                $this->getConfigHelper()->buildCredentials(),
+                $this->_getConfigHelper()->buildCredentials(),
                 Cloud::fromName($config->getCloudName())
             ));
 

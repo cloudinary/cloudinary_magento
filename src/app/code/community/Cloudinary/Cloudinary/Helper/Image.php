@@ -20,8 +20,8 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
             $this->_attributeName = $attributeName;
 
             $this->_imageManager = new ImageManager(new CloudinaryImageProvider(
-                $config->buildCredentials(),
-                Cloud::fromName($config->getCloudName())
+                $this->_getConfigHelper()->buildCredentials(),
+                Cloud::fromName($this->_getConfigHelper()->getCloudName())
             ));
         }
 
@@ -42,26 +42,17 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
     {
         $imageFile = $this->getRequestedImageFile();
         if($this->_imageShouldComeFromCloudinary($imageFile)) {
+            $image = Image::fromPath($imageFile);
 
-            if ($this->_isImageSpecified($imageFile)) {
-                $image = Image::fromPath($imageFile);
-
-                if ($this->_dimensions) {
-                    $transformation = Image\Transformation::toDimensions($this->_dimensions);
-                    return $this->_imageManager->getUrlForImageWithTransformation($image, $transformation);
-                } else {
-                    return $this->_imageManager->getUrlForImage($image);
-                }
+            if ($this->_dimensions) {
+                $transformation = Image\Transformation::toDimensions($this->_dimensions);
+                return $this->_imageManager->getUrlForImageWithTransformation($image, $transformation);
+            } else {
+                return $this->_imageManager->getUrlForImage($image);
             }
-            return Mage::getDesign()->getSkinUrl($this->getPlaceholder());
         }
 
         return parent::__toString();
-    }
-
-    private function _isImageSpecified($imageFile)
-    {
-        return $imageFile && $imageFile !== 'no_selection';
     }
 
     private function getRequestedImageFile()

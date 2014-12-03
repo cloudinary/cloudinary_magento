@@ -30,8 +30,8 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     private function _getCredentials()
     {
-        $key = Key::fromString($this->_getConfigurationHelper()->getApiKey());
-        $secret = Secret::fromString($this->_getConfigurationHelper()->getApiSecret());
+        $key = Key::fromString($this->_getConfigHelper()->getApiKey());
+        $secret = Secret::fromString($this->_getConfigHelper()->getApiSecret());
 
         return new Credentials($key, $secret);
     }
@@ -46,7 +46,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     private function _getCloudName()
     {
-        return Cloud::fromName($this->_getConfigurationHelper()->getCloudName());
+        return Cloud::fromName($this->_getConfigHelper()->getCloudName());
     }
 
     private function _getMediaBasePath()
