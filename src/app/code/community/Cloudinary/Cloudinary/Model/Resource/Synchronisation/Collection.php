@@ -26,4 +26,15 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection extends Ma
 
         return $resource->getMainTable();
     }
+
+    public function findUnsynchronisedImages($limit=200)
+    {
+        $this->getSelect()
+             ->joinRight('catalog_product_entity_media_gallery', 'value_id=media_gallery_id', '*')
+             ->where('cloudinary_synchronisation_id is null')
+             ->limit($limit)
+        ;
+
+        return $this->getItems();
+    }
 }
