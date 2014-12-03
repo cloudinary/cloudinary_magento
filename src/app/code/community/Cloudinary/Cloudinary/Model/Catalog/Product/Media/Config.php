@@ -20,7 +20,9 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
 
     private function _getUrlForImage($file)
     {
-        $imageManager = ImageManagerFactory::fromConfiguration(Mage::helper('cloudinary_cloudinary/configuration'));
+        $imageManager = ImageManagerFactory::buildFromConfiguration(
+            Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
+        );
 
         return $imageManager->getUrlForImage(Image::fromPath($file));
     }
