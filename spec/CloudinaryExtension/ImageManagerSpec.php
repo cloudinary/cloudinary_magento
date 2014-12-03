@@ -11,7 +11,7 @@ use Prophecy\Argument;
 
 class ImageManagerSpec extends ObjectBehavior
 {
-    const IMAGE_PATH = 'image_to_upload.png';
+    const IMAGE_PATH = 'example_image.png';
     const IMAGE_PROVIDER_URL = "http://image.url.on.provider";
 
     function let(ImageProvider $imageProvider)
@@ -39,5 +39,13 @@ class ImageManagerSpec extends ObjectBehavior
         $imageProvider->transformImage($image, $transformation)->willReturn(self::IMAGE_PROVIDER_URL);
 
         $this->getUrlForImageWithTransformation($image, $transformation)->shouldReturn(self::IMAGE_PROVIDER_URL);
+    }
+
+    function it_deletes_an_image(ImageProvider $imageProvider)
+    {
+        $image = Image::fromPath(self::IMAGE_PATH);
+        $imageProvider->deleteImage($image)->shouldBeCalled();
+
+        $this->deleteImage($image);
     }
 }
