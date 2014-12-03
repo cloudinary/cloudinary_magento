@@ -2,6 +2,8 @@
 
 class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 {
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
+
     const CLOUDINARY_EXTENSION_LIB_PATH = 'CloudinaryExtension';
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
@@ -20,10 +22,12 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function uploadImagesToCloudinary(Varien_Event_Observer $event)
     {
-        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
+        if($this->_isEnabled()) {
+            $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
 
-        foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
-            $cloudinaryImage->upload($image);
+            foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
+                $cloudinaryImage->upload($image);
+            }
         }
     }
 
@@ -61,16 +65,6 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         );
     }
 
-    private function _deleteLocalFile($image)
-    {
-        $mediaConfig = new Mage_Catalog_Model_Product_Media_Config();
-        $tmpPath = sprintf('%s%s', $mediaConfig->getBaseTmpMediaPath(), $image['file']);
-
-        if (file_exists($tmpPath)) {
-            unlink($tmpPath);
-        }
-    }
-
     private function deregisterVarienAutoloaders()
     {
         $this->_originalAutoloaders = array();
@@ -92,7 +86,6 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     private function _getImagesToUpload(Mage_Catalog_Model_Product $product)
     {
-        $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
-        return $productMedia->newImagesForProduct($product);
+        return Mage::getModel('cloudinary_cloudinary/catalog_product_media')->newImagesForProduct($product);
     }
 }

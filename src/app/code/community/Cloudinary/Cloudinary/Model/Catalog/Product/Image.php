@@ -7,15 +7,19 @@ use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Model_Product_Image
 {
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
+
     public function getUrl()
     {
-        $config = Mage::helper('cloudinary_cloudinary/configuration');
+        if($this->_imageShouldComeFromCloudinary($this->_newFile)) {
+            $cloudinary = new ImageManager(new CloudinaryImageProvider(
+                $this->_getConfigHelper()->buildCredentials(),
+                Cloud::fromName($config->getCloudName())
+            ));
 
-        $cloudinary = new ImageManager(new CloudinaryImageProvider(
-            $config->buildCredentials(),
-            Cloud::fromName($config->getCloudName())
-        ));
+            return $cloudinary->getUrlForImage(Image::fromPath($this->_newFile));
+        }
 
-        return $cloudinary->getUrlForImage(Image::fromPath($this->_newFile));
+        return parent::getUrl();
     }
 }
