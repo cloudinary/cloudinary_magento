@@ -33,6 +33,6 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function isEnabled()
     {
-        return $this->_isExtensionEnabled ?: (boolean)Mage::getStoreConfig('cloudinary/cloud/cloudinary_enabled');
+        return (boolean)Mage::getStoreConfig('cloudinary/cloud/cloudinary_enabled');
     }
 }
