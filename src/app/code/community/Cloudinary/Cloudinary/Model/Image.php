@@ -5,9 +5,13 @@ use CloudinaryExtension\Image;
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
+
     public function upload(array $imageDetails)
     {
-        $imageManager = ImageManagerFactory::fromConfiguration(Mage::helper('cloudinary_cloudinary/configuration'));
+        $imageManager = ImageManagerFactory::buildFromConfiguration(
+            Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
+        );
 
         $imageManager->uploadImage($this->_imageFullPathFromImageDetails($imageDetails));
 

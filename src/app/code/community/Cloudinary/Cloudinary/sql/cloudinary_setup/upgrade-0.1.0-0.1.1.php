@@ -6,12 +6,12 @@ $installer->startSetup();
 
 $table = $installer->getConnection()
     ->newTable($installer->getTable('cloudinary_cloudinary/migration'))
-    ->addColumn('cloudinary_extension_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
-        'identity'  => true,
+    ->addColumn('cloudinary_migration_id', Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,
         'primary'   => true,
-    ), 'Cloudinary Extension ID')
+        'default'   => Cloudinary_Cloudinary_Model_Cron::CLOUDINARY_MIGRATION_ID
+    ), 'Cloudinary Migration ID')
     ->addColumn('started', Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,

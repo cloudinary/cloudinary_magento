@@ -4,11 +4,11 @@ namespace CloudinaryExtension;
 
 class ImageManagerFactory
 {
-    public static function fromConfiguration($config)
+    public static function buildFromConfiguration(Configuration $configuration)
     {
         return new ImageManager(new CloudinaryImageProvider(
-            $config->buildCredentials(),
-            Cloud::fromName($config->getCloudName())
+            $configuration->getCredentials(),
+            $configuration->getCloud()
         ));
     }
 }

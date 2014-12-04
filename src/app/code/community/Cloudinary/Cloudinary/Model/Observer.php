@@ -13,16 +13,17 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function uploadImagesToCloudinary(Varien_Event_Observer $event)
     {
-        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
+        if($this->_isEnabled()) {
+            $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
 
-        foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
-            $cloudinaryImage->upload($image);
+            foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
+                $cloudinaryImage->upload($image);
+            }
         }
     }
 
     private function _getImagesToUpload(Mage_Catalog_Model_Product $product)
     {
-        $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
-        return $productMedia->newImagesForProduct($product);
+        return Mage::getModel('cloudinary_cloudinary/catalog_product_media')->newImagesForProduct($product);
     }
 }
