@@ -36,6 +36,20 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         return (boolean)Mage::getStoreConfig('cloudinary/cloud/cloudinary_enabled');
     }
 
+    public function enable()
+    {
+        $config = new Mage_Core_Model_Config();
+        $config->saveConfig('cloudinary/cloud/cloudinary_enabled', 1);
+        Mage::app()->getCacheInstance()->cleanType('config');
+    }
+
+    public function disable()
+    {
+        $config = new Mage_Core_Model_Config();
+        $config->saveConfig('cloudinary/cloud/cloudinary_enabled', 0);
+        Mage::app()->getCacheInstance()->cleanType('config');
+    }
+
     public function buildConfiguration()
     {
         return Configuration::fromCloudAndCredentials(

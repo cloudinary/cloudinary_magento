@@ -9,14 +9,12 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     private $_imageManager;
 
-    /** @var Cloudinary_Cloudinary_Helper_Configuration */
-    private $_cloudinaryConfig;
-
     public function __construct()
     {
         Mage::helper('cloudinary_cloudinary/autoloader')->register();
-        $this->_cloudinaryConfig = Mage::helper('cloudinary_cloudinary/configuration');
-        $this->_imageManager = ImageManagerFactory::buildFromConfiguration($this->_cloudinaryConfig->buildConfiguration());
+        $this->_imageManager = ImageManagerFactory::buildFromConfiguration(
+            Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
+        );
     }
 
     public function migrateImages()
@@ -24,7 +22,7 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
         $migration = Mage::getModel('cloudinary_cloudinary/migration')->load(self::CLOUDINARY_MIGRATION_ID);
         $syncMediaCollection = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection');
 
-        if ($this->_cloudinaryConfig->isEnabled() && $migration->hasStarted()) {
+        if ($migration->hasStarted()) {
             Mage::log('Cloudinary migration: processing');
             $images = $syncMediaCollection->findUnsynchronisedImages();
 
