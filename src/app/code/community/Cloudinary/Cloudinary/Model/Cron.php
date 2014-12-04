@@ -1,6 +1,5 @@
 <?php
 
-use CloudinaryExtension\Configuration;
 use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
@@ -65,7 +64,7 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
         $this->_imageManager->uploadImage($path);
 
         $synchronization->tagImageAsBeingInCloudinary(array(
-            'file' => basename($image->getValue()),
+            'image_name' => basename($image->getValue()),
             'media_gallery_id' => $image->getValueId()
         ));
     }

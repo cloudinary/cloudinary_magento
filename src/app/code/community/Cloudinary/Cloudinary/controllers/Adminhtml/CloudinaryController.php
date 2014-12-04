@@ -16,18 +16,21 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function indexAction()
     {
-        $configBlock = $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_manage');
-        $progressBlock = $this->getLayout()->createBlock('core/text')->setText('Progress: %0....');
+        $totalImageCount = Mage::getResourceModel('cloudinary_cloudinary/media_collection')->getSize();
+        $totalSynchronizedImageCount = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')->getSize();
+        $totalUnsynchronizedImageCount = $totalImageCount - $totalSynchronizedImageCount;
 
-        $configBlock
-            ->setMigrationStarted($this->_migrationTask->hasStarted())
-            ->setExtensionEnabled($this->_cloudinaryConfig->isEnabled())
-            ->build();
+        $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
+        $configBlock = $this->_buildConfigBlock($totalUnsynchronizedImageCount);
 
-        $this->loadLayout()
-            ->_addContent($configBlock)
-            ->_addContent($progressBlock)
-            ->renderLayout();
+        $layout = $this->loadLayout();
+        $layout->_addContent($configBlock);
+
+        if ($this->_migrationTask->hasStarted()) {
+            $layout->_addContent($progressBlock);
+        }
+
+        $this->renderLayout();
     }
 
     public function startMigrationAction()
@@ -56,5 +59,30 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         $this->_cloudinaryConfig->disable();
 
         $this->_redirect('*/cloudinary');
+    }
+
+    private function _buildConfigBlock($totalUnsynchronizedImageCount)
+    {
+        $configBlock = $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_manage');
+        $configBlock
+            ->setMigrationStarted($this->_migrationTask->hasStarted())
+            ->setExtensionEnabled($this->_cloudinaryConfig->isEnabled())
+            ->setTotalUnsychronizedCount($totalUnsynchronizedImageCount)
+            ->build();
+
+        return $configBlock;
+    }
+
+    private function _buildProgressBlock($totalSynchronizedImageCount, $totalImageCount)
+    {
+        $percentComplete = number_format($totalSynchronizedImageCount * 100 / $totalImageCount, 2);
+
+        $progressBlock = $this->getLayout()
+            ->createBlock('core/text')
+            ->setText(
+                '<p>Progress: ' . $percentComplete . '%</p>' .
+                '<p>' . $totalSynchronizedImageCount . ' of ' . $totalImageCount . ' images migrated.</p>'
+            );
+        return $progressBlock;
     }
 }
