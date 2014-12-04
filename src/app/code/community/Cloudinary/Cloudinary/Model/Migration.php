@@ -2,6 +2,7 @@
  
 class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract
 {
+    const CLOUDINARY_MIGRATION_ID = 1;
 
     protected function _construct()
     {
