@@ -33,4 +33,19 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media extends Mage_Core_Model_
     {
         return is_array($toFilter) && array_key_exists('file', $toFilter) && in_array($toFilter['file'], $this->_newImages);
     }
+
+    public function removedImagesForProduct(Mage_Catalog_Model_Product $product)
+    {
+        return $this->_getRemovedImages($product->getMediaGallery());
+    }
+
+    private function _getRemovedImages(array $mediaGallery)
+    {
+        return array_filter(json_decode($mediaGallery['images'], true), array($this, '_isImageRemoved'));
+    }
+
+    private function _isImageRemoved($toFilter)
+    {
+        return is_array($toFilter) && array_key_exists('removed', $toFilter) && $toFilter['removed'] === 1;
+    }
 }

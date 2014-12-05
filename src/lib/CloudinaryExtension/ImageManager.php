@@ -11,8 +11,6 @@ class ImageManager
 {
     private $imageProvider;
 
-    private $dimension;
-
     public function __construct(ImageProvider $imageProvider)
     {
         $this->imageProvider = $imageProvider;
@@ -35,5 +33,10 @@ class ImageManager
 
 
         return (string)$image;
+    }
+
+    public function deleteImage(Image $image)
+    {
+        $this->imageProvider->deleteImage($image);
     }
 }

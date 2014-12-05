@@ -25,4 +25,8 @@ class TransformingImageProvider implements ImageProvider
             (string)$image
         );
     }
+
+    public function deleteImage(Image $image)
+    {
+    }
 }
