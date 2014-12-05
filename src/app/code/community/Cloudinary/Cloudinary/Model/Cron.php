@@ -65,7 +65,7 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
         $path = sprintf('%s%s', $baseMediaPath, $image->getValue());
 
-//        $this->_imageManager->uploadImage($path);
+        $this->_imageManager->uploadImage($path);
 
         $synchronization->tagImageAsBeingInCloudinary($image);
     }
