@@ -10,11 +10,6 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         $this->_init('cloudinary_cloudinary/synchronisation');
     }
 
-    protected function _hasModelChanged()
-    {
-        return true;
-    }
-
     public function tagAsSynchronized()
     {
         $this->setData('image_name', basename($this['value']));
