@@ -10,7 +10,7 @@ $table = $installer->getConnection()
         'unsigned'  => true,
         'nullable'  => false,
         'primary'   => true,
-        'default'   => Cloudinary_Cloudinary_Model_Cron::CLOUDINARY_MIGRATION_ID
+        'default'   => Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID
     ), 'Cloudinary Migration ID')
     ->addColumn('started', Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
         'unsigned'  => true,
