@@ -43,7 +43,7 @@ class FakeImageProvider implements ImageProvider {
     public function getImageUrlByName($imageName, $options = array())
     {
         if($this->areCredentialsCorrect() && $this->isCloudCorrect()) {
-            return $this->uploadedImageUrl[$imageName];
+            return array_key_exists($imageName, $this->uploadedImageUrl) ? $this->uploadedImageUrl[$imageName] : '';
         }
         return '';
     }
@@ -60,5 +60,10 @@ class FakeImageProvider implements ImageProvider {
 
     public function transformImage(Image $image, \CloudinaryExtension\Image\Transformation $transformation)
     {
+    }
+
+    public function deleteImage(Image $image)
+    {
+        unset($this->uploadedImageUrl[(string)$image]);
     }
 }

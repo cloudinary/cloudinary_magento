@@ -51,20 +51,29 @@
         <events>
             <catalog_product_save_after>
                 <observers>
-                    <cloudinary_cloudinary>
+                    <upload_images_to_cloudinary>
                         <type>singleton</type>
                         <class>cloudinary_cloudinary/observer</class>
                         <method>uploadImagesToCloudinary</method>
-                    </cloudinary_cloudinary>
+                    </upload_images_to_cloudinary>
                 </observers>
             </catalog_product_save_after>
+            <catalog_product_save_before>
+                <observers>
+                    <delete_images_from_cloudinary>
+                        <type>singleton</type>
+                        <class>cloudinary_cloudinary/observer</class>
+                        <method>deleteImagesFromCloudinary</method>
+                    </delete_images_from_cloudinary>
+                </observers>
+            </catalog_product_save_before>
             <controller_front_init_before>
                 <observers>
-                    <cloudinary_cloudinary>
+                    <load_custom_autoloaders>
                         <type>singleton</type>
                         <class>cloudinary_cloudinary/observer</class>
                         <method>loadCustomAutoloaders</method>
-                    </cloudinary_cloudinary>
+                    </load_custom_autoloaders>
                 </observers>
             </controller_front_init_before>
         </events>
