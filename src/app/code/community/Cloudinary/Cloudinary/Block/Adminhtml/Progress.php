@@ -12,15 +12,15 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Progress extends Mage_Adminhtml_Bloc
 
     public function build()
     {
-        $percentComplete = number_format(
-            $this->getSynchronizedImageCount() * 100 / $this->getImageCount(), 2
-        );
+        $percentComplete = $this->getSynchronizedImageCount() * 100 / $this->getImageCount();
 
         return $this->getLayout()
             ->createBlock('core/text')
-            ->setText(
-                '<p>Progress: ' . $percentComplete . '%</p>' .
-                '<p>' . $this->getSynchronizedImageCount() . ' of ' . $this->getImageCount() . ' images migrated.</p>'
-            );
+            ->setText(sprintf(
+                '<p>Progress: %d%%</p><p>%d of %d image migrated</p>',
+                $percentComplete,
+                $this->getSynchronizedImageCount(),
+                $this->getImageCount()
+            ));
     }
 } 
