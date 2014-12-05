@@ -15,8 +15,8 @@ class QueueSpec extends ObjectBehavior
     function let(
         Task $migrationTask,
         SynchronizedMediaRepository $synchronizedMediaRepository,
-        Logger $logger,
-        BatchUploader $batchUploader
+        BatchUploader $batchUploader,
+        Logger $logger
     ) {
         $this->beConstructedWith($migrationTask, $synchronizedMediaRepository, $batchUploader, $logger);
     }
@@ -24,9 +24,7 @@ class QueueSpec extends ObjectBehavior
     function it_does_not_process_the_migration_queue_if_task_has_not_been_started(
         Task $migrationTask,
         SynchronizedMediaRepository $synchronizedMediaRepository,
-        Logger $logger,
-        BatchUploader $batchUploader
-
+        Logger $logger
     ) {
         $migrationTask->hasStarted()->willReturn(false);
 

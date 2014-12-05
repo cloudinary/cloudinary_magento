@@ -1,6 +1,8 @@
 <?php
 
-class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstract
+use CloudinaryExtension\Image\Synchronizable;
+
+class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstract implements Synchronizable
 {
 
     protected function _construct()
@@ -8,10 +10,17 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         $this->_init('cloudinary_cloudinary/synchronisation');
     }
 
-    public function tagImageAsBeingInCloudinary($imageDetails)
+    protected function _hasModelChanged()
     {
-        $this->setData('image_name', $imageDetails['file']);
-        $this->setData('media_gallery_id', $imageDetails['value_id']);
+        return true;
+    }
+
+    public function tagAsSynchronized()
+    {
+        $this->setData('image_name', basename($this['value']));
+        $this->setData('media_gallery_id', $this['value_id']);
+        $this->unsetData('value_id');
+
         $this->save();
     }
 
@@ -21,8 +30,8 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         return !is_null($this->getMediaGalleryId());
     }
 
-    public function getFile()
+    public function getFilename()
     {
-        return basename($this->getValue());
+        return $this->getValue();
     }
 }

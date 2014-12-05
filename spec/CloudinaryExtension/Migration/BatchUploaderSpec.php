@@ -2,14 +2,80 @@
 
 namespace spec\CloudinaryExtension\Migration;
 
+use CloudinaryExtension\Image\Synchronizable;
+use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\Migration\BatchUploader;
+use CloudinaryExtension\Migration\Logger;
+use CloudinaryExtension\Migration\MediaResolver;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class BatchUploaderSpec extends ObjectBehavior
 {
-    function it_uploads_and_synchronizes_collection_of_images()
+    function let(
+        ImageManager $imageManager,
+        Logger $logger,
+        Synchronizable $image1,
+        Synchronizable $image2)
     {
-        $images = array('images1', 'image')
-        $this->uploadImages()
+        $this->beConstructedWith($imageManager, $logger, '/catalog/media');
+
+        $image1->getFilename()->willReturn('/z/b/image1.jpg');
+        $image1->tagAsSynchronized()->willReturn();
+
+        $image2->getFilename()->willReturn('/r/b/image2.jpg');
+        $image2->tagAsSynchronized()->willReturn();
     }
+
+    function it_uploads_and_synchronizes_a_collection_of_images(
+        ImageManager $imageManager,
+        Logger $logger,
+        Synchronizable $image1,
+        Synchronizable $image2
+    ) {
+        $images = array($image1, $image2);
+
+        $this->uploadImages($images);
+
+        $imageManager->uploadImage('/catalog/media/z/b/image1.jpg')->shouldHaveBeenCalled();
+        $imageManager->uploadImage('/catalog/media/r/b/image2.jpg')->shouldHaveBeenCalled();
+
+        $image1->tagAsSynchronized()->shouldHaveBeenCalled();
+        $image2->tagAsSynchronized()->shouldHaveBeenCalled();
+
+        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/z/b/image1.jpg'))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/r/b/image2.jpg'))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 2))->shouldHaveBeenCalled();
+
+    }
+
+    function it_log_an_error_if_any_of_the_image_uploads_fails(
+        ImageManager $imageManager,
+        Logger $logger,
+        Synchronizable $image1,
+        Synchronizable $image2
+    ) {
+
+        $image2->getFilename()->willReturn('/invalid');
+
+        $exception = new \Exception('Invalid file');
+
+        $images = array($image1, $image2);
+
+        $imageManager->uploadImage('/catalog/media/invalid')->willThrow($exception);
+
+        $imageManager->uploadImage('/catalog/media/z/b/image1.jpg')->shouldBeCalled();
+
+        $this->uploadImages($images);
+
+        $logger->error(
+            sprintf(BatchUploader::MESSAGE_UPLOAD_ERROR, $exception->getMessage(), '/invalid')
+        )->shouldHaveBeenCalled();
+
+        $image1->tagAsSynchronized()->shouldHaveBeenCalled();
+        $image2->tagAsSynchronized()->shouldNotHaveBeenCalled();
+
+        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 1))->shouldHaveBeenCalled();
+    }
+
 }
