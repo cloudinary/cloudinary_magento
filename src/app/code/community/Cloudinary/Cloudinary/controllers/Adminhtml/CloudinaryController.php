@@ -18,10 +18,9 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $totalImageCount = Mage::getResourceModel('cloudinary_cloudinary/media_collection')->getSize();
         $totalSynchronizedImageCount = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')->getSize();
-        $totalUnsynchronizedImageCount = $totalImageCount - $totalSynchronizedImageCount;
 
         $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
-        $configBlock = $this->_buildConfigBlock($totalUnsynchronizedImageCount);
+        $configBlock = $this->_buildConfigBlock($totalSynchronizedImageCount, $totalImageCount);
 
         $layout = $this->loadLayout();
         $layout->_addContent($configBlock);
@@ -61,13 +60,14 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         $this->redirect();
     }
 
-    private function _buildConfigBlock($totalUnsynchronizedImageCount)
+    private function _buildConfigBlock($totalSynchronizedImageCount, $totalImageCount)
     {
+
         $configBlock = $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_manage');
-        $configBlock
-            ->setMigrationStarted($this->_migrationTask->hasStarted())
+        $configBlock->setMigrationStarted($this->_migrationTask->hasStarted())
             ->setExtensionEnabled($this->_cloudinaryConfig->isEnabled())
-            ->setTotalUnsychronizedCount($totalUnsynchronizedImageCount)
+            ->setImageCount($totalImageCount)
+            ->setSynchronizedImageCount($totalSynchronizedImageCount)
             ->build();
 
         return $configBlock;
@@ -75,20 +75,12 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     private function _buildProgressBlock($totalSynchronizedImageCount, $totalImageCount)
     {
-        $percentComplete = number_format($totalSynchronizedImageCount * 100 / $totalImageCount, 2);
-
-        $progressBlock = $this->getLayout()
-            ->createBlock('core/text')
-            ->setText(
-                '<p>Progress: ' . $percentComplete . '%</p>' .
-                '<p>' . $totalSynchronizedImageCount . ' of ' . $totalImageCount . ' images migrated.</p>'
-            );
-        return $progressBlock;
+        return $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_progress')
+            ->setImageCount($totalImageCount)
+            ->setSynchronizedImageCount($totalSynchronizedImageCount)
+            ->build();
     }
 
-    /**
-     * @return mixed
-     */
     private function redirect()
     {
         return $this->_redirect('*/cloudinary');
