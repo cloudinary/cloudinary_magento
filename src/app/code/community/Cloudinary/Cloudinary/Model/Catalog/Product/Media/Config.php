@@ -4,6 +4,7 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config
 {
@@ -11,7 +12,7 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
 
     public function getMediaUrl($file)
     {
-        if($this->_imageShouldComeFromCloudinary($file)) {
+        if ($this->_imageShouldComeFromCloudinary($file)) {
             return $this->_getUrlForImage($file);
         }
 
@@ -20,7 +21,7 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
 
     public function getTmpMediaUrl($file)
     {
-        if($this->_imageShouldComeFromCloudinary($file)) {
+        if ($this->_imageShouldComeFromCloudinary($file)) {
             return $this->_getUrlForImage($file);
         }
 
@@ -29,11 +30,10 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
 
     private function _getUrlForImage($file)
     {
-        $cloudinary = new ImageManager(new CloudinaryImageProvider(
-            $this->_config->buildCredentials(),
-            Cloud::fromName($this->_config->getCloudName())
-        ));
+        $imageManager = ImageManagerFactory::buildFromConfiguration(
+            Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
+        );
 
-        return $cloudinary->getUrlForImage(Image::fromPath($file));
+        return $imageManager->getUrlForImage(Image::fromPath($file));
     }
 }

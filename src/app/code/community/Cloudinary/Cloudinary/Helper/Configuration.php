@@ -1,13 +1,13 @@
 <?php
 
+use CloudinaryExtension\Cloud;
+use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
-class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstract {
-
-    private $_isExtensionEnabled;
-
+class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstract
+{
     public function getApiKey()
     {
         return Mage::helper('core')->decrypt(Mage::getStoreConfig('cloudinary/credentials/cloudinary_api_key'));
@@ -33,10 +33,14 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function isEnabled()
     {
-        if (is_null($this->_isExtensionEnabled)) {
-            $this->_isExtensionEnabled = (boolean)1;
-        }
+        return (boolean)Mage::getStoreConfig('cloudinary/cloud/cloudinary_enabled');
+    }
 
-        return $this->_isExtensionEnabled;
+    public function buildConfiguration()
+    {
+        return Configuration::fromCloudAndCredentials(
+            $this->buildCredentials(),
+            Cloud::fromName($this->getCloudName())
+        );
     }
 }

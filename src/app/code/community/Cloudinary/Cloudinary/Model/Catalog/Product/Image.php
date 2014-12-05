@@ -1,9 +1,7 @@
 <?php
 
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Model_Product_Image
 {
@@ -11,15 +9,15 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
 
     public function getUrl()
     {
-        if($this->_imageShouldComeFromCloudinary($this->_newFile)) {
-            $cloudinary = new ImageManager(new CloudinaryImageProvider(
-                $this->_getConfigHelper()->buildCredentials(),
-                Cloud::fromName($config->getCloudName())
-            ));
+        if ($this->_imageShouldComeFromCloudinary($this->_newFile)) {
 
-            return $cloudinary->getUrlForImage(Image::fromPath($this->_newFile));
+            $imageManager = ImageManagerFactory::buildFromConfiguration(
+                Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
+            );
+
+            return $imageManager->getUrlForImage(Image::fromPath($this->_newFile));
         }
-
+        
         return parent::getUrl();
     }
 }
