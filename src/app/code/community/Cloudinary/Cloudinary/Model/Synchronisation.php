@@ -10,8 +10,8 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
 
     public function tagImageAsBeingInCloudinary($imageDetails)
     {
-        $this->setData('image_name', $imageDetails['image_name']);
-        $this->setData('media_gallery_id', $imageDetails['media_gallery_id']);
+        $this->setData('image_name', $imageDetails['file']);
+        $this->setData('media_gallery_id', $imageDetails['value_id']);
         $this->save();
     }
 
@@ -19,5 +19,10 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
     {
         $this->load($imageName, 'image_name');
         return !is_null($this->getMediaGalleryId());
+    }
+
+    public function getFile()
+    {
+        return basename($this->getValue());
     }
 }

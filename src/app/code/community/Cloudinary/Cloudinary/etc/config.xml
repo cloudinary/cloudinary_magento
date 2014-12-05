@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Cloudinary_Cloudinary>
     </modules>
     <global>
@@ -33,9 +33,6 @@
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Block</class>
             </cloudinary_cloudinary>
-            <cloudinary_cloudinary_adminhtml>
-                <class>Cloudinary_Cloudinary_Block_Adminhtml</class>
-            </cloudinary_cloudinary_adminhtml>
         </blocks>
         <helpers>
             <catalog>
@@ -85,7 +82,6 @@
             </cloudinary_setup>
         </resources>
     </global>
-
     <admin>
         <routers>
             <adminhtml>
@@ -97,7 +93,6 @@
             </adminhtml>
         </routers>
     </admin>
-    
     <crontab>
         <jobs>
             <cloudinary_migrate>
