@@ -64,4 +64,9 @@ class CloudinaryImageProvider implements ImageProvider
         );
     }
 
+    public function deleteImage(Image $image)
+    {
+        $this->setCloudinaryCredentialsAndCloudName();
+        Uploader::destroy($this->getImageId($image));
+    }
 }
