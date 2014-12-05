@@ -82,6 +82,17 @@
             </cloudinary_setup>
         </resources>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Cloudinary_Cloudinary_Adminhtml</module>
+                    <frontName>cloudinary</frontName>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <crontab>
         <jobs>
             <cloudinary_migrate>
