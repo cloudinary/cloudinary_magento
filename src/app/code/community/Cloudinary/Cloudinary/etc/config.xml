@@ -85,10 +85,10 @@
     <admin>
         <routers>
             <adminhtml>
-                <use>admin</use>
                 <args>
-                    <module>Cloudinary_Cloudinary_Adminhtml</module>
-                    <frontName>cloudinary</frontName>
+                    <modules>
+                        <cloudinary_cloudinary before="Mage_Adminhtml">Cloudinary_Cloudinary_Adminhtml</cloudinary_cloudinary>
+                    </modules>
                 </args>
             </adminhtml>
         </routers>
