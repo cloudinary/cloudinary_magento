@@ -19,4 +19,10 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract
         $this->setStarted(0);
         $this->save();
     }
+
+    public function start()
+    {
+        $this->setStarted(1);
+        $this->save();
+    }
 }

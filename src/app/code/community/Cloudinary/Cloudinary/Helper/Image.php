@@ -41,6 +41,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
     public function __toString()
     {
         $imageFile = $this->getRequestedImageFile();
+
         if($this->_imageShouldComeFromCloudinary($imageFile)) {
             $image = Image::fromPath($imageFile);
 

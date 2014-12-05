@@ -82,6 +82,17 @@
             </cloudinary_setup>
         </resources>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <cloudinary_cloudinary before="Mage_Adminhtml">Cloudinary_Cloudinary_Adminhtml</cloudinary_cloudinary>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <crontab>
         <jobs>
             <cloudinary_migrate>

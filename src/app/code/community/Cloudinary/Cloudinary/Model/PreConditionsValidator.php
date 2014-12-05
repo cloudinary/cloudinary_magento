@@ -20,7 +20,7 @@ trait  Cloudinary_Cloudinary_Model_PreConditionsValidator
 
     private function _imageShouldComeFromCloudinary($file)
     {
-        return $this->_isEnabled() && $this->_isImageInCloudinary($file);
+        return $this->_isEnabled() && $this->_isImageInCloudinary(basename($file));
     }
 }
  

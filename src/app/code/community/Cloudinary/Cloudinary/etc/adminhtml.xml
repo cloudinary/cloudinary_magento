@@ -1,5 +1,17 @@
 <?xml version="1.0"?>
 <config>
+    <menu>
+        <cloudinary_cloudinary module="cloudinary_cloudinary">
+            <title>Clodinary</title>
+            <sort_order>75</sort_order>
+            <children>
+                <cloudinary module="cloudinary_cloudinary">
+                    <title>Manage</title>
+                    <action>adminhtml/cloudinary</action>
+                </cloudinary>
+            </children>
+        </cloudinary_cloudinary>
+    </menu>
     <acl>
         <resources>
             <all>
@@ -7,6 +19,14 @@
             </all>
             <admin>
                 <children>
+                    <cloudinary_cloudinary module="cloudinary_cloudinary">
+                        <title>Clodinary</title>
+                        <children>
+                            <cloudinary module="cloudinary_cloudinary">
+                                <title>Manage</title>
+                            </cloudinary>
+                        </children>
+                    </cloudinary_cloudinary>
                     <system>
                         <children>
                             <config>

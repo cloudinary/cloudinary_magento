@@ -55,16 +55,18 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     private function _synchronize($image)
     {
-        $synchronization = Mage::getModel('cloudinary_cloudinary/synchronisation');
+        $synchronization = Mage::getModel('cloudinary_cloudinary/synchronisation')
+            ->setData(array(
+                'file' => basename($image->getValue()),
+                'value_id' => $image->getValueId()
+            ));
+
         $baseMediaPath = Mage::getModel('catalog/product_media_config')->getBaseMediaPath();
 
         $path = sprintf('%s%s', $baseMediaPath, $image->getValue());
 
         $this->_imageManager->uploadImage($path);
 
-        $synchronization->tagImageAsBeingInCloudinary(array(
-            'file' => basename($image->getValue()),
-            'media_gallery_id' => $image->getValueId()
-        ));
+        $synchronization->tagImageAsBeingInCloudinary($image);
     }
 }

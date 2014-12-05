@@ -20,4 +20,9 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         $this->load($imageName, 'image_name');
         return !is_null($this->getMediaGalleryId());
     }
+
+    public function getFile()
+    {
+        return basename($this->getValue());
+    }
 }
