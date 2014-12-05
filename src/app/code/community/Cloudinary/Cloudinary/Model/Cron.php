@@ -4,7 +4,6 @@ use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 {
-    const CLOUDINARY_MIGRATION_ID = 1;
 
     private $_imageManager;
 
@@ -18,7 +17,7 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     public function migrateImages()
     {
-        $migration = Mage::getModel('cloudinary_cloudinary/migration')->load(self::CLOUDINARY_MIGRATION_ID);
+        $migration = Mage::getModel('cloudinary_cloudinary/migration')->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
         $syncMediaCollection = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection');
 
         if ($migration->hasStarted()) {
