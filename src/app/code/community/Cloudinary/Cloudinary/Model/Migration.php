@@ -1,6 +1,8 @@
 <?php
- 
-class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract
+
+use CloudinaryExtension\Migration\Task;
+
+class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract implements Task
 {
     const CLOUDINARY_MIGRATION_ID = 1;
 

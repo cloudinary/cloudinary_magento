@@ -17,20 +17,16 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
     public function migrateImages()
     {
-        $migration = Mage::getModel('cloudinary_cloudinary/migration')->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
-        $syncMediaCollection = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection');
+        $batchUploader = new \CloudinaryExtension\Migration\BatchUploader();
 
-        if ($migration->hasStarted()) {
-            Mage::log('Cloudinary migration: processing');
-            $images = $syncMediaCollection->findUnsynchronisedImages();
+        $migrationQueue = new \CloudinaryExtension\Migration\Queue(
+            Mage::getModel('cloudinary_cloudinary/migration')->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID),
+            Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
+            Mage::getModel('cloudinary_cloudinary/logger'),
+            $batchUploader
+        );
 
-            if (!$images) {
-                Mage::log('Cloudinary migration: complete');
-                $migration->stop();
-            } else {
-                $this->_uploadImages($images);
-            }
-        }
+        $migrationQueue->process();
 
         return $this ;
     }
