@@ -37,28 +37,28 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $this->_migrationTask->start();
 
-        $this->_redirect('*/cloudinary');
+        $this->redirect();
     }
 
     public function stopMigrationAction()
     {
         $this->_migrationTask->stop();
 
-        $this->_redirect('*/cloudinary');
+        $this->redirect();
     }
 
     public function enableCloudinaryAction()
     {
         $this->_cloudinaryConfig->enable();
 
-        $this->_redirect('*/cloudinary');
+        $this->redirect();
     }
 
     public function disableCloudinaryAction()
     {
         $this->_cloudinaryConfig->disable();
 
-        $this->_redirect('*/cloudinary');
+        $this->redirect();
     }
 
     private function _buildConfigBlock($totalUnsynchronizedImageCount)
@@ -84,5 +84,13 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
                 '<p>' . $totalSynchronizedImageCount . ' of ' . $totalImageCount . ' images migrated.</p>'
             );
         return $progressBlock;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function redirect()
+    {
+        return $this->_redirect('*/cloudinary');
     }
 }
