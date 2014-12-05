@@ -20,10 +20,7 @@ class BatchUploaderSpec extends ObjectBehavior
     {
         $this->beConstructedWith($imageManager, $logger, '/catalog/media');
 
-        $image1->getFilename()->willReturn('/z/b/image1.jpg');
         $image1->tagAsSynchronized()->willReturn();
-
-        $image2->getFilename()->willReturn('/r/b/image2.jpg');
         $image2->tagAsSynchronized()->willReturn();
     }
 
@@ -33,6 +30,9 @@ class BatchUploaderSpec extends ObjectBehavior
         Synchronizable $image1,
         Synchronizable $image2
     ) {
+        $image1->getFilename()->willReturn('/z/b/image1.jpg');
+        $image2->getFilename()->willReturn('/r/b/image2.jpg');
+
         $images = array($image1, $image2);
 
         $this->uploadImages($images);
@@ -45,17 +45,17 @@ class BatchUploaderSpec extends ObjectBehavior
 
         $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/z/b/image1.jpg'))->shouldHaveBeenCalled();
         $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/r/b/image2.jpg'))->shouldHaveBeenCalled();
-        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 2))->shouldHaveBeenCalled();
 
+        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 2))->shouldHaveBeenCalled();
     }
 
-    function it_log_an_error_if_any_of_the_image_uploads_fails(
+    function it_logs_an_error_if_any_of_the_image_uploads_fails(
         ImageManager $imageManager,
         Logger $logger,
         Synchronizable $image1,
         Synchronizable $image2
     ) {
-
+        $image1->getFilename()->willReturn('/z/b/image1.jpg');
         $image2->getFilename()->willReturn('/invalid');
 
         $exception = new \Exception('Invalid file');
@@ -68,14 +68,14 @@ class BatchUploaderSpec extends ObjectBehavior
 
         $this->uploadImages($images);
 
+        $image1->tagAsSynchronized()->shouldHaveBeenCalled();
+        $image2->tagAsSynchronized()->shouldNotHaveBeenCalled();
+
         $logger->error(
             sprintf(BatchUploader::MESSAGE_UPLOAD_ERROR, $exception->getMessage(), '/invalid')
         )->shouldHaveBeenCalled();
 
-        $image1->tagAsSynchronized()->shouldHaveBeenCalled();
-        $image2->tagAsSynchronized()->shouldNotHaveBeenCalled();
-
         $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 1))->shouldHaveBeenCalled();
     }
-
 }
+

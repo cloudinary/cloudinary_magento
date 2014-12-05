@@ -9,4 +9,4 @@ interface Task
     public function stop();
 
     public function start();
-} 
+}
