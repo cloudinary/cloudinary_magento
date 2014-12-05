@@ -27,7 +27,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
             $enableAction = 'enableCloudinary';
         }
 
-        $noImagesToSync = (0 === $this->getSynchrnoizedImageCount() - $this->getImageCount());
+        $noImagesToSync = (0 === $this->getSynchronizedImageCount() - $this->getImageCount());
 
         $this->_addButton('cloudinary_migration_start', array(
             'label' => $this->__('Start Migration'),
