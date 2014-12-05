@@ -8,7 +8,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function preDispatch()
     {
-        $this->_migrationTask = Mage::getModel('cloudinary_cloudinary/migration')->load(Cloudinary_Cloudinary_Model_Cron::CLOUDINARY_MIGRATION_ID);
+        $this->_migrationTask = Mage::getModel('cloudinary_cloudinary/migration')->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
         $this->_cloudinaryConfig = Mage::helper('cloudinary_cloudinary/configuration');
 
         parent::preDispatch();
