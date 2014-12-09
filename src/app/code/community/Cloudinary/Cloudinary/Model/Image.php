@@ -21,7 +21,10 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
         $imageManager->uploadImage($this->_imageFullPathFromImageDetails($imageDetails));
 
-        Mage::getModel('cloudinary_cloudinary/synchronisation')->tagImageAsBeingInCloudinary($imageDetails);
+        Mage::getModel('cloudinary_cloudinary/synchronisation')
+            ->setValueId($imageDetails['value_id'])
+            ->setValue($imageDetails['file'])
+            ->tagAsSynchronized();
     }
 
     private function _imageFullPathFromImageDetails($imageDetails)
