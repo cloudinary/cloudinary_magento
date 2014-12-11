@@ -2,7 +2,7 @@
 <config>
     <menu>
         <cloudinary_cloudinary module="cloudinary_cloudinary">
-            <title>Clodinary</title>
+            <title>Cloudinary</title>
             <sort_order>75</sort_order>
             <children>
                 <cloudinary module="cloudinary_cloudinary">
