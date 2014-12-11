@@ -67,5 +67,11 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         $config = new Mage_Core_Model_Config();
         $config->saveConfig($configPath, $value);
         Mage::app()->getCacheInstance()->cleanType('config');
+
+        if (Mage::getEdition() === 'Enterprise') {
+            Enterprise_PageCache_Model_Cache::getCacheInstance()->clean(Enterprise_PageCache_Model_Processor::CACHE_TAG);
+        } else {
+            Mage::app()->cleanCache();
+        }
     }
 }
