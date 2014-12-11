@@ -20,7 +20,7 @@
             <admin>
                 <children>
                     <cloudinary_cloudinary module="cloudinary_cloudinary">
-                        <title>Clodinary</title>
+                        <title>Cloudinary</title>
                         <children>
                             <cloudinary module="cloudinary_cloudinary">
                                 <title>Manage</title>
