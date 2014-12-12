@@ -27,12 +27,20 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
             $enableAction = 'enableCloudinary';
         }
 
+        if ($this->getMigrationStarted()) {
+            $startLabel = 'Stop Migration';
+            $startAction = 'stopMigration';
+        } else {
+            $startLabel = 'Start Migration';
+            $startAction = 'startMigration';
+        }
+
         $noImagesToSync = (0 === $this->getSynchronizedImageCount() - $this->getImageCount());
 
         $this->_addButton('cloudinary_migration_start', array(
-            'label' => $this->__('Start Migration'),
-            'disabled' => $this->getMigrationStarted() || $noImagesToSync,
-            'onclick' => "setLocation('{$this->getUrl('*/cloudinary/startMigration')}')",
+            'label' => $this->__($startLabel),
+            'disabled' => $noImagesToSync,
+            'onclick' => "setLocation('{$this->getUrl(sprintf('*/cloudinary/%s', $startAction))}')",
         ));
 
         $this->_addButton('cloudinary_toggle_enable', array(

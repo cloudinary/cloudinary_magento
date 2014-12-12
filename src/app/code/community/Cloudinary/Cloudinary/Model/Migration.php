@@ -16,6 +16,13 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract imp
         return (bool) $this->getStarted();
     }
 
+    public function hasBeenStopped()
+    {
+        $this->load($this->getId());
+
+        return (bool) $this->getStarted() == 0;
+    }
+
     public function stop()
     {
         $this->setStarted(0);

@@ -6,21 +6,24 @@ use CloudinaryExtension\ImageManager;
 
 class BatchUploader
 {
-    private $imageManager;
-
-    private $baseMediaPath;
-
-    private $logger;
-
     const MESSAGE_STATUS = 'Cloudinary migration: %s images migrated';
 
     const MESSAGE_UPLOADED = 'Cloudinary migration: uploaded %s';
 
     const MESSAGE_UPLOAD_ERROR = 'Cloudinary migration: %s trying to upload %s';
 
-    public function __construct(ImageManager $imageManager, Logger $logger, $baseMediaPath)
+    private $imageManager;
+
+    private $baseMediaPath;
+
+    private $logger;
+
+    private $migrationTask;
+
+    public function __construct(ImageManager $imageManager, Task $migrationTask, Logger $logger, $baseMediaPath)
     {
         $this->imageManager = $imageManager;
+        $this->migrationTask = $migrationTask;
         $this->baseMediaPath = $baseMediaPath;
         $this->logger = $logger;
     }
@@ -30,6 +33,10 @@ class BatchUploader
         $countMigrated = 0;
 
         foreach ($images as $image) {
+
+            if ($this->migrationTask->hasBeenStopped()) {
+                break;
+            }
 
             try {
                 $this->imageManager->uploadImage($this->getAbsolutePath($image));
