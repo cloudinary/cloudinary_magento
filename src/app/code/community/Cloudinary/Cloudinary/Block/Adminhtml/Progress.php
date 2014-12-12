@@ -17,7 +17,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Progress extends Mage_Adminhtml_Bloc
         return $this->getLayout()
             ->createBlock('core/text')
             ->setText(sprintf(
-                '<p>Progress: %d%%</p><p>%d of %d image migrated</p>',
+                '<p>Progress: %d%%</p><p>%d of %d images migrated</p>',
                 $percentComplete,
                 $this->getSynchronizedImageCount(),
                 $this->getImageCount()

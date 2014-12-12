@@ -7,8 +7,6 @@ use Cloudinary;
 use Cloudinary\Uploader;
 use CloudinaryExtension\Image\Transformation;
 
-include_once(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'Cloudinary', 'src', 'Helpers.php')));
-
 class CloudinaryImageProvider implements ImageProvider
 {
 
