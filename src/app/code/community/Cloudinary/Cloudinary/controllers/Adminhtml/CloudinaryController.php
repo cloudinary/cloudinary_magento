@@ -22,11 +22,16 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
         $configBlock = $this->_buildConfigBlock($totalSynchronizedImageCount, $totalImageCount);
 
+        if ($totalImageCount === $totalSynchronizedImageCount) {
+            Mage::getSingleton('core/session')->addNotice('All images have been successfully migrated to Cloudinary');
+        }
+
         $layout = $this->loadLayout();
         $layout->_addContent($configBlock);
 
         if ($this->_migrationTask->hasStarted()) {
             $layout->_addContent($progressBlock);
+            $layout->_addContent($this->_buildMetaRefreshBlock());
         }
 
         $this->renderLayout();
@@ -84,5 +89,10 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     private function redirect()
     {
         return $this->_redirect('*/cloudinary');
+    }
+
+    private function _buildMetaRefreshBlock()
+    {
+        return $this->getLayout()->createBlock('core/text')->setText('<meta http-equiv="refresh" content="5">');
     }
 }
