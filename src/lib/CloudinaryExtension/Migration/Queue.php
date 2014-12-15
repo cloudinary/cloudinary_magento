@@ -30,7 +30,7 @@ class Queue
 
     public function process()
     {
-        if (!$this->migrationTask->hasStarted()) {
+        if ($this->migrationTask->hasBeenStopped()) {
             return;
         }
 

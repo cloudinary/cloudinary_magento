@@ -21,12 +21,12 @@ class QueueSpec extends ObjectBehavior
         $this->beConstructedWith($migrationTask, $synchronizedMediaRepository, $batchUploader, $logger);
     }
 
-    function it_does_not_process_the_migration_queue_if_task_has_not_been_started(
+    function it_does_not_process_the_migration_queue_if_task_has_been_stopped(
         Task $migrationTask,
         SynchronizedMediaRepository $synchronizedMediaRepository,
         Logger $logger
     ) {
-        $migrationTask->hasStarted()->willReturn(false);
+        $migrationTask->hasBeenStopped()->willReturn(true);
 
         $synchronizedMediaRepository->findUnsynchronisedImages()->shouldNotBeCalled();
         $logger->notice(Argument::any())->shouldNotBeCalled();
@@ -41,7 +41,7 @@ class QueueSpec extends ObjectBehavior
         Logger $logger,
         BatchUploader $batchUploader
     ) {
-        $migrationTask->hasStarted()->willReturn(true);
+        $migrationTask->hasBeenStopped()->willReturn(false);
         $migrationTask->stop()->willReturn();
 
         $logger->notice(Queue::MESSAGE_PROCESSING)->shouldBeCalled();
@@ -58,7 +58,7 @@ class QueueSpec extends ObjectBehavior
         Logger $logger,
         BatchUploader $batchUploader
     ) {
-        $migrationTask->hasStarted()->willReturn(true);
+        $migrationTask->hasBeenStopped()->willReturn(false);
         $synchronizedMediaRepository->findUnsynchronisedImages()->willReturn(array());
 
         $logger->notice(Queue::MESSAGE_COMPLETE)->shouldBeCalled();
