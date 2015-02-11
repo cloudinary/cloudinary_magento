@@ -1,7 +1,6 @@
 <?php
 
 use CloudinaryExtension\Image;
-use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_Template_Filter
 {
@@ -13,18 +12,10 @@ class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_
             $imagePath = $this->_getImagePath($construction[2]);
 
             if ($this->_imageShouldComeFromCloudinary($imagePath)) {
-                $image = Image::fromPath($imagePath);
-                return $this->_buildImageManager()->getUrlForImage($image);
+                return Mage::getModel('cloudinary_cloudinary/image')->getUrl($imagePath);
             }
         }
         return parent::mediaDirective($construction);
-    }
-
-    private function _buildImageManager()
-    {
-        return ImageManagerFactory::buildFromConfiguration(
-            $this->_getConfigHelper()->buildConfiguration()
-        );
     }
 
     private function _getImagePath($directiveParams)
