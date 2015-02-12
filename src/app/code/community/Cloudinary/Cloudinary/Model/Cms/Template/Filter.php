@@ -1,9 +1,7 @@
 <?php
 
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_Template_Filter
 {
@@ -26,10 +24,9 @@ class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_
 
     private function _buildImageManager()
     {
-        return new ImageManager(new CloudinaryImageProvider(
-            $this->_getConfigHelper()->buildCredentials(),
-            Cloud::fromName($this->_getConfigHelper()->getCloudName())
-        ));
+        return ImageManagerFactory::buildFromConfiguration(
+            $this->_getConfigHelper()->buildConfiguration()
+        );
     }
 
 }
