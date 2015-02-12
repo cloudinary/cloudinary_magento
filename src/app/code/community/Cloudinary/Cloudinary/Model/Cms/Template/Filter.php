@@ -11,7 +11,9 @@ class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_
     {
         if ($this->_isEnabled()) {
             $imageManager = $this->_buildImageManager();
-            $params = $this->_getIncludeParameters($construction[2]);
+            $directiveParams = $construction[2];
+            $params = $this->_getIncludeParameters($directiveParams);
+
             $imagePath = $params['url'];
 
             if ($this->_imageShouldComeFromCloudinary($imagePath)) {
