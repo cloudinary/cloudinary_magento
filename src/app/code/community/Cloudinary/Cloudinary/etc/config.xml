@@ -17,6 +17,11 @@
                     <product_media_config>Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config</product_media_config>
                 </rewrite>
             </catalog>
+            <cms>
+                <rewrite>
+                    <wysiwyg_images_storage>Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage</wysiwyg_images_storage>
+                </rewrite>
+            </cms>
             <cloudinary_resource>
                 <class>Cloudinary_Cloudinary_Model_Resource</class>
                 <entities>
