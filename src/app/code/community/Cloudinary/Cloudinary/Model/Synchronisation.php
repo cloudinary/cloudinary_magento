@@ -22,7 +22,7 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
     public function isImageInCloudinary($imageName)
     {
         $this->load($imageName, 'image_name');
-        return !is_null($this->getMediaGalleryId());
+        return !is_null($this->getId());
     }
 
     public function getFilename()
