@@ -11,6 +11,11 @@
                 <class>Cloudinary_Cloudinary_Model</class>
                 <resourceModel>cloudinary_resource</resourceModel>
             </cloudinary_cloudinary>
+            <cms>
+                <rewrite>
+                    <adminhtml_template_filter>Cloudinary_Cloudinary_Model_Cms_Adminhtml_Template_Filter</adminhtml_template_filter>
+                </rewrite>
+            </cms>
             <catalog>
                 <rewrite>
                     <product_image>Cloudinary_Cloudinary_Model_Catalog_Product_Image</product_image>
