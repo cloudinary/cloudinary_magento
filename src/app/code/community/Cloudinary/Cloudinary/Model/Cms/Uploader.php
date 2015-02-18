@@ -16,6 +16,10 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
             );
 
             $imageManager->uploadImage($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
+
+            Mage::getModel('cloudinary_cloudinary/cms_synchronisation')
+                ->setValue($result['file'])
+                ->tagAsSynchronized();
         }
 
         return $this;
