@@ -16,7 +16,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function indexAction()
     {
-        $totalImageCount = Mage::getResourceModel('cloudinary_cloudinary/media_collection')->getSize();
+        $totalImageCount = $this->_sumOfCatalogAndCmsImages();
         $totalSynchronizedImageCount = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')->getSize();
 
         $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
@@ -94,5 +94,11 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     private function _buildMetaRefreshBlock()
     {
         return $this->getLayout()->createBlock('core/text')->setText('<meta http-equiv="refresh" content="5">');
+    }
+
+    private function _sumOfCatalogAndCmsImages()
+    {
+        return Mage::getResourceModel('cloudinary_cloudinary/media_collection')->getSize()
+        + Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')->getSize();
     }
 }
