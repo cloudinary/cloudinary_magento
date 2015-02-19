@@ -39,6 +39,14 @@
                 <class>Cloudinary_Cloudinary_Block</class>
             </cloudinary_cloudinary>
         </blocks>
+        <cms>
+            <page>
+                <tempate_filter>cloudinary_cloudinary/cms_template_filter</tempate_filter>
+            </page>
+            <block>
+                <tempate_filter>cloudinary_cloudinary/cms_template_filter</tempate_filter>
+            </block>
+        </cms>
         <helpers>
             <catalog>
                 <rewrite>
