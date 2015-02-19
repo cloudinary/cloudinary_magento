@@ -22,6 +22,11 @@
                     <wysiwyg_images_storage>Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage</wysiwyg_images_storage>
                 </rewrite>
             </cms>
+            <core>
+                <rewrite>
+                    <file_uploader>Cloudinary_Cloudinary_Model_Cms_Uploader</file_uploader>
+                </rewrite>
+            </core>
             <cloudinary_resource>
                 <class>Cloudinary_Cloudinary_Model_Resource</class>
                 <entities>
