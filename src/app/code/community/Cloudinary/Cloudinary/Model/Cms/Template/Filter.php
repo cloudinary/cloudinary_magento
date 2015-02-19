@@ -10,15 +10,11 @@ class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_
     public function mediaDirective($construction)
     {
         if ($this->_isEnabled()) {
-            $imageManager = $this->_buildImageManager();
-            $directiveParams = $construction[2];
-            $params = $this->_getIncludeParameters($directiveParams);
-
-            $imagePath = $params['url'];
+            $imagePath = $this->_getImagePath($construction[2]);
 
             if ($this->_imageShouldComeFromCloudinary($imagePath)) {
                 $image = Image::fromPath($imagePath);
-                return $imageManager->getUrlForImage($image);
+                return $this->_buildImageManager()->getUrlForImage($image);
             }
         }
         return parent::mediaDirective($construction);
@@ -29,6 +25,12 @@ class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_
         return ImageManagerFactory::buildFromConfiguration(
             $this->_getConfigHelper()->buildConfiguration()
         );
+    }
+
+    private function _getImagePath($directiveParams)
+    {
+        $params = $this->_getIncludeParameters($directiveParams);
+        return $params['url'];
     }
 
 }
