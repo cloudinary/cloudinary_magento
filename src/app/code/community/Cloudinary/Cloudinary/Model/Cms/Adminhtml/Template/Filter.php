@@ -20,23 +20,14 @@ class Cloudinary_Cloudinary_Model_Cms_Adminhtml_Template_Filter
         $allowRemoteFileOpen = ini_get('allow_url_fopen');
 
         if ($this->_isEnabled() && $allowRemoteFileOpen) {
-            $imageManager = $this->_buildImageManager();
 
             $imagePath = $params['url'];
 
             if ($this->_imageShouldComeFromCloudinary($imagePath)) {
-                $image = Image::fromPath($imagePath);
-                return $imageManager->getUrlForImage($image);
+                return Mage::getModel('cloudinary_cloudinary/image')->getUrl($imagePath);
             }
         }
 
         return parent::mediaDirective($construction);
-    }
-
-    private function _buildImageManager()
-    {
-        return ImageManagerFactory::buildFromConfiguration(
-            $this->_getConfigHelper()->buildConfiguration()
-        );
     }
 }
