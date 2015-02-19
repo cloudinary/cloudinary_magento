@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "c3119afa4ab61253205b4304d4a5290f",
+    "hash": "1ecb4d663e1630649aa402b550f749a1",
     "packages": [
         {
             "name": "eloquent/composer-config-reader",
@@ -3579,8 +3580,10 @@
         "covex-nn/phpcb": 20,
         "bossa/phpspec2-expect": 20
     },
+    "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.0"
+        "php": ">=5.4.0"
     },
     "platform-dev": []
 }
