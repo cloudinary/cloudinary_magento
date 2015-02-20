@@ -1,6 +1,7 @@
 <?php
 
 use CloudinaryExtension\ImageManagerFactory;
+use CloudinaryExtension\Migration\SynchronizedMediaRepositoryRepository;
 
 class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 {
@@ -21,23 +22,21 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             null
         );
 
-        $catalogMigrationQueue = new \CloudinaryExtension\Migration\Queue(
+        $combinedMediaRepository = new SynchronizedMediaRepositoryRepository(
+            array(
+                Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
+                Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')
+            )
+        );
+
+        $migrationQueue = new \CloudinaryExtension\Migration\Queue(
             $migrationTask,
-            Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
+            $combinedMediaRepository,
             $batchUploader,
             Mage::getModel('cloudinary_cloudinary/logger')
         );
 
-        $catalogMigrationQueue->process();
-
-        $cmsMigrationQueue = new \CloudinaryExtension\Migration\Queue(
-            $migrationTask,
-            Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'),
-            $batchUploader,
-            Mage::getModel('cloudinary_cloudinary/logger')
-        );
-
-        $cmsMigrationQueue->process();
+        $migrationQueue->process();
 
         return $this;
     }
