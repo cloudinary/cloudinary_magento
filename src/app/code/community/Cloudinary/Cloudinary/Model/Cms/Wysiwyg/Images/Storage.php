@@ -44,4 +44,32 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
         return Mage::getModel('cloudinary_cloudinary/synchronisation')->isImageInCloudinary(basename($imageName));
     }
 
+    public function uploadFile($targetPath, $type = null)
+    {
+        $uploader = new Cloudinary_Cloudinary_Model_Cms_Uploader('image');
+        if ($allowed = $this->getAllowedExtensions($type)) {
+            $uploader->setAllowedExtensions($allowed);
+        }
+        $uploader->setAllowRenameFiles(true);
+        $uploader->setFilesDispersion(false);
+        $result = $uploader->save($targetPath);
+
+        if (!$result) {
+            Mage::throwException( Mage::helper('cms')->__('Cannot upload file.') );
+        }
+
+        // create thumbnail
+        $this->resizeFile($targetPath . DS . $uploader->getUploadedFileName(), true);
+
+        $result['cookie'] = array(
+            'name'     => session_name(),
+            'value'    => $this->getSession()->getSessionId(),
+            'lifetime' => $this->getSession()->getCookieLifetime(),
+            'path'     => $this->getSession()->getCookiePath(),
+            'domain'   => $this->getSession()->getCookieDomain()
+        );
+
+        return $result;
+    }
+
 }
