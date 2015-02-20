@@ -98,7 +98,8 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     private function _sumOfCatalogAndCmsImages()
     {
-        return Mage::getResourceModel('cloudinary_cloudinary/media_collection')->getSize()
-        + Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')->getSize();
+        $catalogImagesCount = Mage::getResourceModel('cloudinary_cloudinary/media_collection')->getSize();
+        $cmsImagesCount = Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')->getSize();
+        return $catalogImagesCount + $cmsImagesCount;
     }
 }
