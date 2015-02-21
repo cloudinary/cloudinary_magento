@@ -1,4 +1,4 @@
-a<?php
+<?php
 
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
