@@ -1,8 +1,8 @@
 <?php
 
-namespace CloudinaryExtension\Migration;
+use CloudinaryExtension\Migration\SynchronizedMediaRepository;
 
-class SynchronizedMediaRepositoryRepository implements SynchronizedMediaRepository
+class Cloudinary_Cloudinary_Model_SynchronisedMediaUnifier implements SynchronizedMediaRepository
 {
 
     private $synchronisedMediaRepositories;

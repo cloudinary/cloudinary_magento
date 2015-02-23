@@ -1,7 +1,6 @@
 <?php
 
 use CloudinaryExtension\ImageManagerFactory;
-use CloudinaryExtension\Migration\SynchronizedMediaRepositoryRepository;
 
 class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 {
@@ -22,7 +21,7 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             null
         );
 
-        $combinedMediaRepository = new SynchronizedMediaRepositoryRepository(
+        $combinedMediaRepository = new Cloudinary_Cloudinary_Model_SynchronisedMediaUnifier(
             array(
                 Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
                 Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')

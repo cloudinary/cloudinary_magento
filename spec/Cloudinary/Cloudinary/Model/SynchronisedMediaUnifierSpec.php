@@ -1,13 +1,13 @@
 <?php
 
-namespace spec\CloudinaryExtension\Migration;
+namespace spec;
 
 use CloudinaryExtension\Image\Synchronizable;
 use CloudinaryExtension\Migration\SynchronizedMediaRepository;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class SynchronizedMediaRepositoryRepositorySpec extends ObjectBehavior
+class Cloudinary_Cloudinary_Model_SynchronisedMediaUnifierSpec extends ObjectBehavior
 {
 
     function let(
@@ -54,17 +54,16 @@ class SynchronizedMediaRepositoryRepositorySpec extends ObjectBehavior
             )
         );
     }
-    
+
     function it_should_return_no_items_if_all_repositories_have_been_synchronised(
         $repositoryOne,
         $repositoryTwo
     )
     {
-        $repositoryOne->findUnsynchronisedImages()->willReturn(array());   
+        $repositoryOne->findUnsynchronisedImages()->willReturn(array());
         $repositoryTwo->findUnsynchronisedImages()->willReturn(array());
 
         $this->findUnsynchronisedImages()->shouldReturn(array());
     }
-    
 
 }
