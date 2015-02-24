@@ -5,23 +5,23 @@ use CloudinaryExtension\Migration\SynchronizedMediaRepository;
 class Cloudinary_Cloudinary_Model_SynchronisedMediaUnifier implements SynchronizedMediaRepository
 {
 
-    private $synchronisedMediaRepositories;
-    private $unsychronisedImages = array();
+    private $_synchronisedMediaRepositories;
+    private $_unsychronisedImages = array();
 
     public function __construct(array $synchronisedMediaRepositories)
     {
-        $this->synchronisedMediaRepositories = $synchronisedMediaRepositories;
+        $this->_synchronisedMediaRepositories = $synchronisedMediaRepositories;
     }
 
     public function findUnsynchronisedImages($limit = 200)
     {
-        foreach ($this->synchronisedMediaRepositories as $synchronisedMediaRepository) {
-            $this->unsychronisedImages = array_merge(
-                $this->unsychronisedImages,
+        foreach ($this->_synchronisedMediaRepositories as $synchronisedMediaRepository) {
+            $this->_unsychronisedImages = array_merge(
+                $this->_unsychronisedImages,
                 $synchronisedMediaRepository->findUnsynchronisedImages()
             );
         }
-        return array_slice($this->unsychronisedImages, 0, $limit);
+        return array_slice($this->_unsychronisedImages, 0, $limit);
     }
 
 }
