@@ -2,7 +2,9 @@
 
 use CloudinaryExtension\Migration\SynchronizedMediaRepository;
 
-class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract implements SynchronizedMediaRepository
+class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
+    extends Mage_Core_Model_Resource_Db_Collection_Abstract
+    implements SynchronizedMediaRepository, Cloudinary_Cloudinary_Model_Resource_Media_Collection_Interface
 {
 
     protected function _construct()
