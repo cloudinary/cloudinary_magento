@@ -18,18 +18,25 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             ImageManagerFactory::buildFromConfiguration(Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()),
             $migrationTask,
             Mage::getModel('cloudinary_cloudinary/logger'),
-            Mage::getModel('catalog/product_media_config')->getBaseMediaPath()
+            null
+        );
+
+        $combinedMediaRepository = new Cloudinary_Cloudinary_Model_SynchronisedMediaUnifier(
+            array(
+                Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
+                Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')
+            )
         );
 
         $migrationQueue = new \CloudinaryExtension\Migration\Queue(
             $migrationTask,
-            Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
+            $combinedMediaRepository,
             $batchUploader,
             Mage::getModel('cloudinary_cloudinary/logger')
         );
 
         $migrationQueue->process();
 
-        return $this ;
+        return $this;
     }
 }
