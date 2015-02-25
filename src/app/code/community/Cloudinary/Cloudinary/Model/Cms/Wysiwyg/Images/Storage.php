@@ -46,7 +46,11 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
 
     public function uploadFile($targetPath, $type = null)
     {
-        $uploader = new Cloudinary_Cloudinary_Model_Cms_Uploader('image');
+
+        if(!$this->_getConfigHelper()->isEnabled()) {
+           return parent::uploadFile($targetPath, $type);
+        }
+
         if ($allowed = $this->getAllowedExtensions($type)) {
             $uploader->setAllowedExtensions($allowed);
         }
