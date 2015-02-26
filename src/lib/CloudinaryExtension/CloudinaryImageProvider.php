@@ -49,6 +49,11 @@ class CloudinaryImageProvider implements ImageProvider
         if (!array_key_exists('fetch_format', $options)) {
             $options['fetch_format'] = 'auto';
         }
+
+        if (!array_key_exists('quality', $options)) {
+            $options['quality'] = '80';
+        }
+
         return $options;
     }
 
