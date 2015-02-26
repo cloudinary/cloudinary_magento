@@ -17,6 +17,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
     {
         if($this->_isEnabled()) {
+            $this->_dimensions = null;
             $this->_attributeName = $attributeName;
 
             $this->_imageManager = new ImageManager(new CloudinaryImageProvider(

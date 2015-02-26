@@ -1,4 +1,4 @@
-a<?php
+<?php
 
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
@@ -15,10 +15,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function upload(array $imageDetails)
     {
-        $imageManager = ImageManagerFactory::buildFromConfiguration(
-            Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
-        );
-
+        $imageManager = $this->_getImageManager();
         $imageManager->uploadImage($this->_imageFullPathFromImageDetails($imageDetails));
 
         Mage::getModel('cloudinary_cloudinary/synchronisation')
@@ -62,5 +59,18 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     private function _getCloudName()
     {
         return Cloud::fromName($this->_getConfigHelper()->getCloudName());
+    }
+
+    public function getUrl($imagePath)
+    {
+        $imageManager = $this->_getImageManager();
+        return $imageManager->getUrlForImage(Image::fromPath($imagePath));
+    }
+
+    private function _getImageManager()
+    {
+        return ImageManagerFactory::buildFromConfiguration(
+            $this->_getConfigHelper()->buildConfiguration()
+        );
     }
 }

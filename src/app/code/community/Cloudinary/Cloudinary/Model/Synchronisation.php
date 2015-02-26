@@ -22,11 +22,19 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
     public function isImageInCloudinary($imageName)
     {
         $this->load($imageName, 'image_name');
-        return !is_null($this->getMediaGalleryId());
+        return !is_null($this->getId());
     }
 
     public function getFilename()
     {
-        return $this->getValue();
+        if (!$this->getValue()) {
+            return null;
+        }
+        return $this->_baseMediaPath() . $this->getValue();
+    }
+
+    private function _baseMediaPath()
+    {
+        return Mage::getModel('catalog/product_media_config')->getBaseMediaPath();
     }
 }

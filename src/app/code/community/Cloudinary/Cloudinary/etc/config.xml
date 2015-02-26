@@ -11,12 +11,27 @@
                 <class>Cloudinary_Cloudinary_Model</class>
                 <resourceModel>cloudinary_resource</resourceModel>
             </cloudinary_cloudinary>
+            <cms>
+                <rewrite>
+                    <adminhtml_template_filter>Cloudinary_Cloudinary_Model_Cms_Adminhtml_Template_Filter</adminhtml_template_filter>
+                </rewrite>
+            </cms>
             <catalog>
                 <rewrite>
                     <product_image>Cloudinary_Cloudinary_Model_Catalog_Product_Image</product_image>
                     <product_media_config>Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config</product_media_config>
                 </rewrite>
             </catalog>
+            <cms>
+                <rewrite>
+                    <wysiwyg_images_storage>Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage</wysiwyg_images_storage>
+                </rewrite>
+            </cms>
+            <core>
+                <rewrite>
+                    <file_uploader>Cloudinary_Cloudinary_Model_Cms_Uploader</file_uploader>
+                </rewrite>
+            </core>
             <cloudinary_resource>
                 <class>Cloudinary_Cloudinary_Model_Resource</class>
                 <entities>
@@ -34,6 +49,14 @@
                 <class>Cloudinary_Cloudinary_Block</class>
             </cloudinary_cloudinary>
         </blocks>
+        <cms>
+            <page>
+                <tempate_filter>cloudinary_cloudinary/cms_template_filter</tempate_filter>
+            </page>
+            <block>
+                <tempate_filter>cloudinary_cloudinary/cms_template_filter</tempate_filter>
+            </block>
+        </cms>
         <helpers>
             <catalog>
                 <rewrite>
