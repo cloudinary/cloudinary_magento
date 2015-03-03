@@ -1,5 +1,7 @@
 <?php
 
+namespace Domain;
+
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -11,6 +13,7 @@ use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
+use ImageProviders\FakeImageProvider;
 
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
