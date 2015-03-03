@@ -4,11 +4,14 @@ default:
       filters: { tags: '@critical' }
       contexts:
         - AdminCredentialsContext
+        - AdminConfigurationContext
     domain:
       filters: { tags: '~@not-automated' }
       contexts:
         - DomainContext
         - DeleteImageDomainContext
+        - AdminConfigurationDomainContext
+
 
   extensions:
     MageTest\MagentoExtension\Extension: ~

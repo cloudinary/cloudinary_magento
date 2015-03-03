@@ -3,6 +3,8 @@
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Image\Gravity;
+use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
@@ -11,6 +13,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     const CONFIG_PATH_ENABLED = 'cloudinary/cloud/cloudinary_enabled';
 
     const CONFIG_PATH_CLOUD_NAME = 'cloudinary/cloud/cloudinary_cloud_name';
+
+    const CONFIG_DEFAULT_GRAVITY = 'cloudinary/gravity';
 
     const STATUS_ENABLED = 1;
 
@@ -56,10 +60,18 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function buildConfiguration()
     {
-        return Configuration::fromCloudAndCredentials(
+        $config = Configuration::fromCloudAndCredentials(
             $this->buildCredentials(),
             Cloud::fromName($this->getCloudName())
         );
+
+        $transformation = new Transformation();
+
+        $config->setDefaultTransformation(
+            $transformation->withGravity(Gravity::fromString($this->getDefaultGravityConfig()))
+        );
+
+        return $config;
     }
 
     private function _setStoreConfig($configPath, $value)
@@ -73,5 +85,10 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         } else {
             Mage::app()->cleanCache();
         }
+    }
+
+    public function getDefaultGravityConfig()
+    {
+        return (string)Mage::getStoreConfig(self::CONFIG_DEFAULT_GRAVITY);
     }
 }

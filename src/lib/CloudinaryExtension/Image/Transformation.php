@@ -4,18 +4,24 @@ namespace CloudinaryExtension\Image;
 
 class Transformation
 {
+    private $gravity;
+
     private $dimensions;
 
     private $crop = 'pad';
 
-    private function __construct(Dimensions $dimensions)
+    public function withGravity($gravity)
     {
-        $this->dimensions = $dimensions;
+        $this->gravity = $gravity;
+
+        return $this;
     }
 
-    public static function toDimensions(Dimensions $dimensions)
+    public function withDimensions(Dimensions $dimensions)
     {
-        return new Transformation($dimensions);
+        $this->dimensions = $dimensions;
+
+        return $this;
     }
 
     public function getDimensions()
@@ -28,4 +34,8 @@ class Transformation
         return $this->crop;
     }
 
+    public function getGravity()
+    {
+        return $this->gravity;
+    }
 }

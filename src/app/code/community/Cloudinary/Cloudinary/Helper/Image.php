@@ -47,7 +47,8 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
             $image = Image::fromPath($imageFile);
 
             if ($this->_dimensions) {
-                $transformation = Image\Transformation::toDimensions($this->_dimensions);
+                $transformation = new Image\Transformation();
+                $transformation->withDimensions($this->_dimensions);
                 return $this->_imageManager->getUrlForImageWithTransformation($image, $transformation);
             } else {
                 return $this->_imageManager->getUrlForImage($image);

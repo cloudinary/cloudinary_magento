@@ -3,23 +3,28 @@
 namespace spec\CloudinaryExtension\Image;
 
 use CloudinaryExtension\Image\Dimensions;
+use CloudinaryExtension\Image\Gravity;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class TransformationSpec extends ObjectBehavior
 {
-    function let()
+    function it_has_no_gravity_value_by_default()
     {
-        $this->beConstructedThrough('toDimensions', [Dimensions::fromWidthAndHeight(10, 10)]);
+        $this->getGravity()->shouldBe(null);
     }
 
-    function it_should_be_a_transformation()
+    function it_can_have_dimensions()
     {
-        $this->shouldHaveType('CloudinaryExtension\Image\Transformation');
-    }
+        $this->withDimensions(Dimensions::fromWidthAndHeight(10, 10));
 
-    function it_has_dimensions()
-    {
         $this->getDimensions()->shouldBeLike(Dimensions::fromWidthAndHeight(10, 10));
+    }
+
+    function it_can_have_gravity()
+    {
+        $this->withGravity(Gravity::fromString('center'));
+
+        $this->getGravity()->shouldBeLike(Gravity::fromString('center'));
     }
 }

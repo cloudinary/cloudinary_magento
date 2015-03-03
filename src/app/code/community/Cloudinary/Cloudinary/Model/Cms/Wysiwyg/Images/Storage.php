@@ -36,7 +36,9 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
             $this->getConfigData('resize_width'),
             $this->getConfigData('resize_height')
         );
-        return Transformation::toDimensions($dimensions);
+        $transformation = new Transformation();
+
+        return $transformation->withDimensions($dimensions);
     }
 
     private function _isImageInCloudinary($imageName)

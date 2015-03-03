@@ -2,11 +2,16 @@
 
 namespace CloudinaryExtension;
 
+use CloudinaryExtension\Image\Gravity;
+use CloudinaryExtension\Image\Transformation;
+
 class Configuration
 {
     private $credentials;
 
     private $cloud;
+
+    private $defaultTransformation;
 
     private function __construct(Credentials $credentials, Cloud $cloud)
     {
@@ -28,4 +33,17 @@ class Configuration
     {
         return $this->credentials;
     }
+
+    public function getDefaultTransformation()
+    {
+        $transformation = new Transformation();
+
+        return $this->defaultTransformation ?: $transformation->withGravity(Gravity::fromString(null));
+    }
+
+    public function setDefaultTransformation(Transformation $transformation)
+    {
+        $this->defaultTransformation = $transformation;
+    }
+
 } 
