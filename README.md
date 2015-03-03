@@ -50,3 +50,17 @@ When extension is *disabled*
 ## Known Issues
 
 - When the migration is started, all existing media will gradually be uploaded to cloudinary. If the extension cannot upload an image (e.g. its missing, corrupted or is rejected by the remote service) it will *not* mark the image as having been migrated (syncrhonized) and will log an error message to system.log, the said image will thus not be removed from the queue of images to migrate and the migration will never complete. It is up to the *Integrator* to be aware of images that could not be uploaded and to decide if they should be deleted from the local database. The migration will only be marked as completed when all of the images in the media gallery have been successfully uploaded.
+
+## Running Gherkin Features
+- Start phantomjs on the VM: 
+```
+phantomjs --webdriver 4444 --load-images=no &
+```
+- Make sure you are in the cloudinary directory:
+```
+cd /vagrant/vendor/inviqa/cloudinary
+```
+- Run Behat
+```
+bin/behat -fprogress
+```
