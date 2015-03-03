@@ -1,5 +1,7 @@
 <?php
 
+namespace ImageProviders;
+
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\ImageProvider;
