@@ -3,12 +3,12 @@ default:
     ui:
       filters: { tags: '@critical' }
       contexts:
-        - AdminCredentialsContext
+        - Ui\AdminCredentialsContext
     domain:
       filters: { tags: '~@not-automated' }
       contexts:
-        - DomainContext
-        - DeleteImageDomainContext
+        - Domain\DomainContext
+        - Domain\DeleteImageDomainContext
 
   extensions:
     MageTest\MagentoExtension\Extension: ~

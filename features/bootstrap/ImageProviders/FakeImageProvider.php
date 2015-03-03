@@ -1,5 +1,6 @@
 <?php
 
+namespace ImageProviders;
 
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
