@@ -1,3 +1,4 @@
+@not-automated
 Feature: Product image migration
   In order to easily install and use the Cloudinary module
   As an integrator

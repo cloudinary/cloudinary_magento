@@ -1,3 +1,4 @@
+@not-automated
 Feature: Migration is disabled when module is disabled
 
   Scenario: Cloudinary module is disabled
