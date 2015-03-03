@@ -1,5 +1,6 @@
 <?php
 
+namespace Domain;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;

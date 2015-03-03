@@ -1,5 +1,7 @@
 <?php
 
+namespace Ui;
+
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
@@ -10,6 +12,7 @@ use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
+use ImageProviders\FakeImageProvider;
 use MageTest\Manager\FixtureManager;
 use MageTest\Manager\Attributes\Provider\YamlProvider;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
@@ -28,7 +31,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     public function beforeScenario()
     {
       $this->_fixtureManager = new FixtureManager(new YamlProvider());
-      $this->_fixtureManager->loadFixture('admin/user', __DIR__ . DS . 'Fixtures/Admin.yaml');
+      $this->_fixtureManager->loadFixture('admin/user', __DIR__ . DS . '../Fixtures/Admin.yaml');
     }
 
     /**
@@ -86,7 +89,7 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
     {
         $this->saveCredentialsAndCloudToMagentoConfiguration($aKey, $aSecret, $aCloud);
 
-        $configuration = Mage::helper('cloudinary_cloudinary/configuration');
+        $configuration = \Mage::helper('cloudinary_cloudinary/configuration');
         $apiKey = Key::fromString($configuration->getApiKey());
         $apiSecret = Secret::fromString($configuration->getApiSecret());
         $cloudName = Cloud::fromName($configuration->getCloudName());
