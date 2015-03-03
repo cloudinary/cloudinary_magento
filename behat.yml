@@ -1,9 +1,11 @@
 default:
   suites:
     ui:
+      filters: { tags: '@critical' }
       contexts:
         - AdminCredentialsContext
     domain:
+      filters: { tags: '~@not-automated' }
       contexts:
         - DomainContext
         - DeleteImageDomainContext
@@ -22,7 +24,7 @@ default:
           ssl.certificate_authority: false
       selenium2:
         wd_host: http://localhost:4444/wd/hub
-        browser: firefox
+        browser: phantomjs
 #   command to open the failing html pages:
       show_cmd: echo '%s'
       show_tmp_dir: /vagrant

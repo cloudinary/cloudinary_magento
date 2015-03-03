@@ -1,6 +1,8 @@
+@not-automated
 Feature: Enabling and disabling the Cloudinary extension
 
   As an Integrator
+
 
   Scenario: Integrator enables the extension but image has not been migrated
     Given the cloudinary media gallery contains the image "lolcat.png"
