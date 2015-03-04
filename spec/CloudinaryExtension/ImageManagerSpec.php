@@ -4,6 +4,7 @@ namespace spec\CloudinaryExtension;
 
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Dimensions;
+use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\Configuration;
 use PhpSpec\ObjectBehavior;
@@ -34,8 +35,7 @@ class ImageManagerSpec extends ObjectBehavior
     function it_builds_an_image_url_given_specific_dimensions(ImageProvider $imageProvider)
     {
         $image = Image::fromPath(self::IMAGE_PATH);
-        $transformation = new Image\Transformation();
-        $transformation->withDimensions(Dimensions::fromWidthAndHeight(10, 10));
+        $transformation = Transformation::build()->withDimensions(Dimensions::fromWidthAndHeight(10, 10));
 
         $imageProvider->transformImage($image, $transformation)->willReturn(self::IMAGE_PROVIDER_URL);
 
