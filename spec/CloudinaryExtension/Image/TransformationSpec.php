@@ -9,6 +9,11 @@ use Prophecy\Argument;
 
 class TransformationSpec extends ObjectBehavior
 {
+    function it_creates_new_transformation_builders()
+    {
+        self::build()->shouldBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
+    }
+
     function it_builds_with_dimensions()
     {
         $transformation = $this->withDimensions(Dimensions::fromWidthAndHeight(10, 10));
