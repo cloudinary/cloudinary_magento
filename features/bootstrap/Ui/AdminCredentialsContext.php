@@ -4,26 +4,39 @@ namespace Ui;
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
 use ImageProviders\FakeImageProvider;
+use MageTest\MagentoExtension\Context\RawMagentoContext;
 use MageTest\Manager\FixtureManager;
 use MageTest\Manager\Attributes\Provider\YamlProvider;
-use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
+use Page\AdminLogin;
+use Page\CloudinaryAdminSystemConfiguration;
 
-
-class AdminCredentialsContext extends PageObjectContext implements Context, SnippetAcceptingContext
+class AdminCredentialsContext extends RawMagentoContext implements Context
 {
     private $imageProvider;
     private $_fixtureManager;
     private $image;
 
+    /**
+     * @var CloudinaryAdminSystemConfiguration
+     */
+    private $adminConfigPage;
+
+    /**
+     * @var AdminLogin
+     */
+    private $adminLoginPage;
+
+    public function __construct(CloudinaryAdminSystemConfiguration $adminSystemConfiguration, AdminLogin $adminLoginPage)
+    {
+        $this->adminConfigPage = $adminSystemConfiguration;
+        $this->adminLoginPage = $adminLoginPage;
+    }
 
     /**
      * @BeforeScenario
@@ -124,14 +137,13 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
 
     private function saveCredentialsAndCloudToMagentoConfiguration($key, $secret, $cloud)
     {
-        $loginPage = $this->getPage('AdminLogin');
-        $loginPage->open();
-        $loginPage->login('testadmin', 'testadmin123');
+        $this->adminLoginPage->sessionLogin('testadmin', 'testadmin123', $this->getSessionService());
 
-        $cloudinarySystemConfigurationPage = $this->getPage('CloudinaryAdminSystemConfiguration');
-        $cloudinarySystemConfigurationPage->open();
-        $cloudinarySystemConfigurationPage->enterCredentials($key, $secret);
-        $cloudinarySystemConfigurationPage->enterCloudName($cloud);
-        $cloudinarySystemConfigurationPage->saveCloudinaryConfiguration();
+        $this->adminConfigPage->open();
+
+        $this->adminConfigPage->enterCredentials($key, $secret);
+        $this->adminConfigPage->enterCloudName($cloud);
+        $this->adminConfigPage->saveCloudinaryConfiguration();
     }
+
 }
