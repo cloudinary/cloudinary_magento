@@ -11,7 +11,7 @@ class Gravity
         $this->value = $value;
     }
 
-    public function getValue()
+    public function __toString()
     {
         return $this->value;
     }

@@ -23,8 +23,11 @@ class AdminLogin extends Page
 
     public function sessionLogin($username, $password, $mageSession)
     {
-        $this->open()
-            ->getSession()
+        if (!$this->isOpen()) {
+            $this->open();
+        }
+
+        $this->getSession()
             ->setCookie(
                 'adminhtml',
                 $mageSession->adminLogin($username, $password)

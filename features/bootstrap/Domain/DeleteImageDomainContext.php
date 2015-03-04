@@ -8,6 +8,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Cloud;
+use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\ImageManager;
@@ -52,7 +53,7 @@ class DeleteImageDomainContext implements Context
         $provider->setMockCredentials($key, $secret);
         $provider->setMockCloud($cloud);
 
-        $this->extension = new ImageManager($provider);
+        $this->extension = new ImageManager($provider, new Image\Transformation());
         $this->extension->uploadImage((string)$anImage);
     }
 

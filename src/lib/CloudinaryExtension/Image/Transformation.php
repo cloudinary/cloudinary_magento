@@ -10,9 +10,10 @@ class Transformation
 
     private $crop = 'pad';
 
-    public function withGravity($gravity)
+    public function withGravity(Gravity $gravity)
     {
         $this->gravity = $gravity;
+        $this->crop = $gravity->__toString() ? 'crop' : 'pad';
 
         return $this;
     }

@@ -34,11 +34,13 @@ class CloudinaryImageProvider implements ImageProvider
     public function transformImage(Image $image, Transformation $transformation)
     {
         $this->setCloudinaryCredentialsAndCloudName();
+        $dimensions = $transformation->getDimensions();
 
         $options = array(
-            'width' => $transformation->getDimensions()->getWidth(),
-            'height' => $transformation->getDimensions()->getHeight(),
-            'crop' => $transformation->getCrop()
+            'width' => $dimensions ? $dimensions->getWidth() : null,
+            'height' => $dimensions ? $dimensions->getHeight() : null,
+            'crop' => $transformation->getCrop(),
+            'gravity' => $transformation->getGravity()
         );
 
         return Image::fromPath(\cloudinary_url($this->getImageId((string)$image), $this->getConsolidatedOptions($options)));
