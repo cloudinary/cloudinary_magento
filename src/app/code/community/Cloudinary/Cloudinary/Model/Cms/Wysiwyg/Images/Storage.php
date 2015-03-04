@@ -12,8 +12,11 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
     {
         if ($this->_getConfigHelper()->isEnabled() && $this->_isImageInCloudinary($filePath)) {
             $imageManager = $this->_buildImageManager();
-            $image = Image::fromPath($filePath);
-            return $imageManager->getUrlForImageWithTransformation($image, $this->_buildResizeTransformation());
+
+            return $imageManager->getUrlForImageWithTransformation(
+                Image::fromPath($filePath),
+                $this->_buildResizeTransformation($imageManager->getDefaultTransformation())
+            );
         }
         return parent::getThumbnailUrl($filePath, $checkFile);
     }
@@ -30,14 +33,14 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
         );
     }
 
-    private function _buildResizeTransformation()
+    private function _buildResizeTransformation($defaultTransformation)
     {
         $dimensions = Dimensions::fromWidthAndHeight(
             $this->getConfigData('resize_width'),
             $this->getConfigData('resize_height')
         );
 
-        return Transformation::build()->withDimensions($dimensions);
+        return $defaultTransformation->withDimensions($dimensions);
     }
 
     private function _isImageInCloudinary($imageName)
