@@ -16,6 +16,7 @@ use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\ImageManager;
+use ImageProviders\FakeImageProvider;
 use ImageProviders\TransformingImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
@@ -141,13 +142,10 @@ class DomainContext implements Context, SnippetAcceptingContext
      */
     public function iRequestTheImageProvideForTransformedTo($imageName, Dimensions $dimensions)
     {
-        $transformation = new Transformation();
-
         $this->receivedUrl = $this->extension->getUrlForImageWithTransformation(
             Image::fromPath($imageName),
-            $transformation->withDimensions($dimensions)
+            Transformation::build()->withDimensions($dimensions)
         );
-
     }
 
     /**
