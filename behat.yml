@@ -8,6 +8,7 @@ default:
       filters: { tags: '~@not-automated' }
       contexts:
         - Domain\DomainContext
+        - Domain\TransformationContext
         - Domain\DeleteImageDomainContext
 
   extensions:
