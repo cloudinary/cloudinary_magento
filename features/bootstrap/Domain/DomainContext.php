@@ -142,7 +142,7 @@ class DomainContext implements Context, SnippetAcceptingContext
     public function iRequestTheImageProvideForTransformedTo($imageName, Dimensions $dimensions)
     {
         $transformation = new Transformation();
-        
+
         $this->receivedUrl = $this->extension->getUrlForImageWithTransformation(
             Image::fromPath($imageName),
             $transformation->withDimensions($dimensions)

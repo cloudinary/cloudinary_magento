@@ -17,6 +17,7 @@ class Configuration
     {
         $this->credentials = $credentials;
         $this->cloud = $cloud;
+        $this->defaultTransformation = Transformation::build()->withGravity(Gravity::null());
     }
 
     public static function fromCloudAndCredentials(Credentials $credentials, Cloud $cloud)
@@ -36,14 +37,11 @@ class Configuration
 
     public function getDefaultTransformation()
     {
-        $transformation = new Transformation();
-
-        return $this->defaultTransformation ?: $transformation->withGravity(Gravity::fromString(null));
+        return $this->defaultTransformation;
     }
 
     public function setDefaultTransformation(Transformation $transformation)
     {
         $this->defaultTransformation = $transformation;
     }
-
-} 
+}

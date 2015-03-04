@@ -20,4 +20,11 @@ class Gravity
     {
         return new Gravity($value);
     }
+
+    public static function null()
+    {
+        return new Gravity(null);
+    }
 }
+
+

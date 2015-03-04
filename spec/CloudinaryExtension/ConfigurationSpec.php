@@ -25,14 +25,12 @@ class ConfigurationSpec extends ObjectBehavior
         $transformation = $this->getDefaultTransformation();
 
         $transformation->shouldBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
-        $transformation->getGravity()->shouldBeLike(Gravity::fromString(null));
+        $transformation->getGravity()->shouldBeLike(Gravity::null());
     }
 
     function it_exposes_its_default_image_transformation()
     {
-        $transformation = new Transformation();
-
-        $this->setDefaultTransformation($transformation->withGravity(Gravity::fromString('g')));
+        $this->setDefaultTransformation(Transformation::build()->withGravity(Gravity::fromString('g')));
 
         $transformation = $this->getDefaultTransformation();
 

@@ -38,4 +38,9 @@ class Transformation
     {
         return $this->gravity;
     }
+
+    public static function build()
+    {
+        return new Transformation();
+    }
 }

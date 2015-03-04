@@ -17,7 +17,8 @@ class AdminConfigurationContext extends PageObjectContext implements Context
      */
     public function iHaveNotSetADefaultImageGravity()
     {
-        throw new PendingException();
+        $mageConfig = \Mage::helper('cloudinary_cloudinary/configuration');
+        $mageConfig->setDefaultGravity('');
     }
 
     /**
@@ -37,11 +38,12 @@ class AdminConfigurationContext extends PageObjectContext implements Context
     }
 
     /**
-     * @Given I have set a the default image gravity to :arg1
+     * @Given I have set a the default image gravity to :gravity
      */
-    public function iHaveSetATheDefaultImageGravityTo($arg1)
+    public function iHaveSetATheDefaultImageGravityTo($gravity)
     {
-        throw new PendingException();
+        $mageConfig = \Mage::helper('cloudinary_cloudinary/configuration');
+        $mageConfig->setDefaultGravity($gravity);
     }
 
     /**

@@ -43,6 +43,16 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         return (string)Mage::getStoreConfig(self::CONFIG_PATH_CLOUD_NAME);
     }
 
+    public function getDefaultGravity()
+    {
+        return (string)Mage::getStoreConfig(self::CONFIG_DEFAULT_GRAVITY);
+    }
+
+    public function setDefaultGravity($value)
+    {
+        $this->_setStoreConfig(self::CONFIG_DEFAULT_GRAVITY, $value);
+    }
+
     public function isEnabled()
     {
         return (boolean)Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
@@ -65,10 +75,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
             Cloud::fromName($this->getCloudName())
         );
 
-        $transformation = new Transformation();
-
         $config->setDefaultTransformation(
-            $transformation->withGravity(Gravity::fromString($this->getDefaultGravityConfig()))
+            Transformation::build()->withGravity(Gravity::fromString($this->getDefaultGravity()))
         );
 
         return $config;
@@ -87,8 +95,4 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         }
     }
 
-    public function getDefaultGravityConfig()
-    {
-        return (string)Mage::getStoreConfig(self::CONFIG_DEFAULT_GRAVITY);
-    }
 }

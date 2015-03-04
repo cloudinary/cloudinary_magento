@@ -20,11 +20,26 @@ class AdminConfigurationDomainContext implements Context
     private $config;
 
     /**
+     * @Transform :gravity
+     */
+    public function transformStringToGravity($string)
+    {
+        return Gravity::fromString($string);
+    }
+
+    /**
+     * @beforeScenario
+     */
+    public function setup()
+    {
+        $this->config = $this->buildConfig();
+    }
+
+    /**
      * @Given I have not set a default image gravity
      */
     public function iHaveNotSetADefaultImageGravity()
     {
-        $this->config = $this->buildConfig();
     }
 
     /**
@@ -51,30 +66,24 @@ class AdminConfigurationDomainContext implements Context
     /**
      * @Given I have set a the default image gravity to :gravity
      */
-    public function iHaveSetATheDefaultImageGravityTo($gravity)
+    public function iHaveSetATheDefaultImageGravityTo(Gravity $gravity)
     {
-        $this->config = $this->buildConfig();
-
-        $transformation = new Transformation();
-
         $this->config->setDefaultTransformation(
-            $transformation->withGravity(Gravity::fromString($gravity))
+            Transformation::build()->withGravity($gravity)
         );
     }
 
     /**
      * @Then the default gravity should be set to :gravity
      */
-    public function theDefaultGravityShouldBeSetTo($gravityValue)
+    public function theDefaultGravityShouldBeSetTo(Gravity $gravity)
     {
         $defaultTransformation =  $this->config->getDefaultTransformation();
         expect($defaultTransformation)->toBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
 
-        $gravity = $defaultTransformation->getGravity();
+        $transformationGravity = $defaultTransformation->getGravity();
 
-        expect($gravity)->toBeAnInstanceOf('CloudinaryExtension\Image\Gravity');
-        expect($gravity->getValue())->toBe($gravityValue);
-
+        expect($transformationGravity)->toBeLike($gravity);
     }
 
     private function buildConfig()
