@@ -14,7 +14,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     const CONFIG_PATH_CLOUD_NAME = 'cloudinary/cloud/cloudinary_cloud_name';
 
-    const CONFIG_DEFAULT_GRAVITY = 'cloudinary/gravity';
+    const CONFIG_DEFAULT_GRAVITY = 'cloudinary/transformations/cloudinary_gravity';
 
     const STATUS_ENABLED = 1;
 

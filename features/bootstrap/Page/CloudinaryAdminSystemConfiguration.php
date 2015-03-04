@@ -14,7 +14,9 @@ class CloudinaryAdminSystemConfiguration extends Page
         'API Secret' => array('xpath' => '//*[@id="cloudinary_credentials_cloudinary_api_secret"]'),
         'Cloud Header' => array('xpath' => '//*[@id="cloudinary_cloud-head"]'),
         'Cloud Name' => array('xpath' => '//*[@id="cloudinary_cloud_cloudinary_cloud_name"]'),
-        'Save Config' => array('xpath' => '//*[@title="Save Config"]')
+        'Save Config' => array('xpath' => '//*[@title="Save Config"]'),
+        'Image Transformations Header' => array('xpath' => '//*[@id="cloudinary_transformations-head"]'),
+        'Default Gravity for Images' => array('css' => "#cloudinary_transformations_cloudinary_gravity option[selected='selected']"),
     );
 
     public function enterCredentials($aKey, $aSecret)
@@ -33,5 +35,10 @@ class CloudinaryAdminSystemConfiguration extends Page
     public function saveCloudinaryConfiguration()
     {
         $this->getElement('Save Config')->click();
+    }
+
+    public function getSelectedGravity()
+    {
+        return $this->getElement('Default Gravity for Images')->getHtml();
     }
 }
