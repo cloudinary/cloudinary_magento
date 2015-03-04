@@ -13,12 +13,14 @@ use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
 use ImageProviders\FakeImageProvider;
+use MageTest\MagentoExtension\Context\RawMagentoContext;
 use MageTest\Manager\FixtureManager;
 use MageTest\Manager\Attributes\Provider\YamlProvider;
-use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
+use SensioLabs\Behat\PageObjectExtension\Context\PageObjectAware;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Factory as PageObjectFactory;
 
 
-class AdminCredentialsContext extends PageObjectContext implements Context, SnippetAcceptingContext
+class AdminCredentialsContext extends RawMagentoContext implements Context
 {
     private $imageProvider;
     private $_fixtureManager;
@@ -124,14 +126,13 @@ class AdminCredentialsContext extends PageObjectContext implements Context, Snip
 
     private function saveCredentialsAndCloudToMagentoConfiguration($key, $secret, $cloud)
     {
-        $loginPage = $this->getPage('AdminLogin');
-        $loginPage->open();
-        $loginPage->login('testadmin', 'testadmin123');
+          $this->getSessionService()->adminLogin('testadmin', 'testadmin123');
 
         $cloudinarySystemConfigurationPage = $this->getPage('CloudinaryAdminSystemConfiguration');
-        $cloudinarySystemConfigurationPage->open();
-        $cloudinarySystemConfigurationPage->enterCredentials($key, $secret);
-        $cloudinarySystemConfigurationPage->enterCloudName($cloud);
-        $cloudinarySystemConfigurationPage->saveCloudinaryConfiguration();
+//        $cloudinarySystemConfigurationPage->open();
+//        $cloudinarySystemConfigurationPage->enterCredentials($key, $secret);
+//        $cloudinarySystemConfigurationPage->enterCloudName($cloud);
+//        $cloudinarySystemConfigurationPage->saveCloudinaryConfiguration();
     }
+
 }

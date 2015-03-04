@@ -24,7 +24,8 @@
         "theseer/fxsl": "1.0.*@dev",
         "phpunit/phpunit": "3.7.*",
         "covex-nn/phpcb": "1.0.*@dev",
-        "bossa/phpspec2-expect": "dev-master"
+        "bossa/phpspec2-expect": "dev-master",
+        "ocramius/proxy-manager": "~0.5"
     },
     "config": {
         "bin-dir": "bin"
