@@ -1,5 +1,6 @@
 <?php
 
+
 namespace CloudinaryExtension;
 
 use Cloudinary;
@@ -32,6 +33,11 @@ class CloudinaryImageProvider implements ImageProvider
             $transformation = $this->configuration->getDefaultTransformation();
         }
         return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
+    }
+
+    public function validateCredentials()
+    {
+
     }
 
     public function deleteImage(Image $image)

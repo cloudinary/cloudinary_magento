@@ -50,6 +50,11 @@ class FakeImageProvider implements ImageProvider {
         return '';
     }
 
+    public function validateCredentials()
+    {
+        return $this->areCredentialsCorrect();
+    }
+
     private function areCredentialsCorrect()
     {
         return (string)$this->credentials->getKey() === (string)$this->key && (string)$this->credentials->getSecret() === (string)$this->secret;
