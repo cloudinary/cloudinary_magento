@@ -11,6 +11,7 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Image\Transformation\Quality;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use ImageProviders\TransformingImageProvider;
@@ -41,6 +42,14 @@ class TransformationContext implements Context
     }
 
     /**
+     * @Transform :aQuality
+     */
+    public function transformStringToQuality($string)
+    {
+        return Quality::fromString($string);
+    }
+
+    /**
      * @Given there's an image :anImage in the image provider
      */
     public function thereSAnImageInTheImageProvider(Image $anImage)
@@ -62,7 +71,7 @@ class TransformationContext implements Context
      */
     public function iShouldGetAnOptimisedImageFromTheImageProvider()
     {
-        expect($this->urlIsOptimised($this->imageUrl))->toBe(true);
+        expect($this->urlIsOptimised())->toBe(true);
     }
 
     /**
@@ -78,28 +87,34 @@ class TransformationContext implements Context
      */
     public function iShouldGetTheOriginalImageFromTheImageProvider()
     {
-        $imageUrl = $this->imageProvider->transformImage($this->image, $this->transformation);
-        expect($this->urlIsOptimised($imageUrl))->toBe(false);
+        $this->imageUrl = $this->imageProvider->transformImage($this->image, $this->transformation);
+
+        expect($this->urlIsOptimised())->toBe(false);
     }
 
     /**
-     * @Then I should get an image with :arg1 percent quality from the image provider
+     * @Then I should get an image with :aQuality percent quality from the image provider
      */
-    public function iShouldGetAnImageWithPercentQualityFromTheImageProvider($arg1)
+    public function iShouldGetAnImageWithPercentQualityFromTheImageProvider(Quality $aQuality)
     {
-        throw new PendingException();
+        expect($this->isPercentageQuality((string)$aQuality));
     }
 
     /**
-     * @Given I transform the image to have :arg1 percent quality
+     * @Given I transform the image to have :aQuality percent quality
      */
-    public function iTransformTheImageToHavePercentQuality($arg1)
+    public function iTransformTheImageToHavePercentQuality(Quality $aQuality)
     {
-        throw new PendingException();
+        $this->transformation = Transformation::builder()->withQuality($aQuality);
     }
 
-    private function urlIsOptimised($imageUrl)
+    private function urlIsOptimised()
     {
-        return strpos($imageUrl, 'fetch_format=auto') !== false;
+        return strpos($this->imageUrl, 'fetch_format=auto') !== false;
+    }
+
+    private function isPercentageQuality($percentage)
+    {
+        return strpos($this->imageUrl, "quality=$percentage") !== false;
     }
 }
