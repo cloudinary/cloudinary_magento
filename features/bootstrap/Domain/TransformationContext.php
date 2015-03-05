@@ -13,7 +13,7 @@ use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
-use ImageProviders\FakeImageProvider;
+use ImageProviders\TransformingImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
@@ -28,10 +28,16 @@ class TransformationContext implements Context
 
     private $imageUrl;
 
+    private $transformation;
+
     public function __construct()
     {
+        $cloud = Cloud::fromName("aCloudName");
         $credentials = new Credentials(Key::fromString("aKey"), Secret::fromString("aSecret"));
-        $this->imageProvider = new FakeImageProvider($credentials, Cloud::fromName("aCloudName"));
+
+        $this->imageProvider = new TransformingImageProvider($credentials, $cloud);
+
+
     }
 
     /**
@@ -48,7 +54,7 @@ class TransformationContext implements Context
      */
     public function iRequestTheImageFromTheImageProvider()
     {
-        $this->imageUrl = $this->imageProvider->getImageUrlByName((string)$this->image);
+        $this->imageUrl = $this->imageProvider->transformImage($this->image, Transformation::builder());
     }
 
     /**
@@ -56,7 +62,7 @@ class TransformationContext implements Context
      */
     public function iShouldGetAnOptimisedImageFromTheImageProvider()
     {
-        expect($this->urlIsOptimised())->toBe(true);
+        expect($this->urlIsOptimised($this->imageUrl))->toBe(true);
     }
 
     /**
@@ -64,7 +70,7 @@ class TransformationContext implements Context
      */
     public function imageOptimisationIsDisabled()
     {
-        //$transformation = Transformation::build()->withOptimisationEnabled();
+        $this->transformation = Transformation::builder()->withOptimisationDisabled();
     }
 
     /**
@@ -72,14 +78,28 @@ class TransformationContext implements Context
      */
     public function iShouldGetTheOriginalImageFromTheImageProvider()
     {
+        $imageUrl = $this->imageProvider->transformImage($this->image, $this->transformation);
+        expect($this->urlIsOptimised($imageUrl))->toBe(false);
+    }
+
+    /**
+     * @Then I should get an image with :arg1 percent quality from the image provider
+     */
+    public function iShouldGetAnImageWithPercentQualityFromTheImageProvider($arg1)
+    {
         throw new PendingException();
     }
 
     /**
-     * @return bool
+     * @Given I transform the image to have :arg1 percent quality
      */
-    private function urlIsOptimised()
+    public function iTransformTheImageToHavePercentQuality($arg1)
     {
-        return strpos($this->imageUrl, 'f_auto') !== -1;
+        throw new PendingException();
+    }
+
+    private function urlIsOptimised($imageUrl)
+    {
+        return strpos($imageUrl, 'fetch_format=auto') !== false;
     }
 }

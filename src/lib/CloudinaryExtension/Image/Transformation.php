@@ -69,6 +69,12 @@ class Transformation
         return $this;
     }
 
+    public function withOptimisationDisabled()
+    {
+        $this->withFormat(Format::fromString(''));
+        return $this;
+    }
+
     public static function builder()
     {
         return new Transformation();

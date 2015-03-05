@@ -116,7 +116,6 @@ class TransformationSpec extends ObjectBehavior
         $transformationArray->offsetGet('format')->shouldBe('png');
     }
 
-
     function it_builds_with_jpeg_format_when_original_extension_is_not_valid()
     {
         $transformationArray = self::builder()
@@ -124,5 +123,19 @@ class TransformationSpec extends ObjectBehavior
             ->build();
 
         $transformationArray->offsetGet('format')->shouldBe('jpg');
+    }
+
+    function it_builds_with_image_optimisation_enabled()
+    {
+        $transformationArray = self::builder()->build();
+
+        $transformationArray->offsetGet('fetch_format')->shouldBe('auto');
+    }
+
+    function it_builds_with_image_optimisation_disabled()
+    {
+        $transformationArray = self::builder()->withOptimisationDisabled()->build();
+
+        $transformationArray->offsetGet('fetch_format')->shouldBe('');
     }
 }
