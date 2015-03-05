@@ -81,4 +81,21 @@ class TransformationSpec extends ObjectBehavior
 
         $transformationArray->offsetGet('gravity')->shouldBe('center');
     }
+
+    function it_builds_with_crop_set_to_crop_when_gravity_is_set()
+    {
+        $transformationArray = self::builder()
+            ->withGravity(Gravity::fromString('center'))
+            ->build();
+
+        $transformationArray->offsetGet('crop')->shouldBe('crop');
+    }
+
+
+    function it_builds_with_crop_set_to_pad_when_gravity_is_not_set()
+    {
+        $transformationArray = self::builder()->build();
+
+        $transformationArray->offsetGet('crop')->shouldBe('pad');
+    }
 }
