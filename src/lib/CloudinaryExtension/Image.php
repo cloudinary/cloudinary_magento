@@ -31,4 +31,11 @@ class Image
     {
         return $this->dimensions;
     }
+
+    public function getId()
+    {
+        $pathParts = pathinfo(basename($this->imagePath));
+
+        return $pathParts['filename'];
+    }
 }

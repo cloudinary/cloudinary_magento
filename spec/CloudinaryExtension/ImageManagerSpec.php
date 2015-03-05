@@ -25,7 +25,6 @@ class ImageManagerSpec extends ObjectBehavior
         $image = Image::fromPath(self::IMAGE_PATH);
 
         $imageProvider->upload($image, Argument::any())->shouldBeCalled();
-        $imageProvider->getImageUrlByName(self::IMAGE_PATH)->willReturn(self::IMAGE_PROVIDER_URL);
         $imageProvider->transformImage($image, $defaultTransformation)->shouldBeCalled()->willReturn(self::IMAGE_PROVIDER_URL);
 
         $this->uploadImage(self::IMAGE_PATH, 'some key', 'some secret');

@@ -11,6 +11,8 @@ class CloudinaryImageProviderSpec extends ObjectBehavior
 {
     function let(Credentials $credentials, Cloud $cloud)
     {
+        $cloud->__toString()->willReturn('');
+
         $this->beConstructedWith($credentials, $cloud);
     }
 
