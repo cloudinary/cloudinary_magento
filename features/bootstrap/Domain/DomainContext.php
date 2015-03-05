@@ -9,7 +9,6 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Credentials;
-use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
@@ -17,7 +16,6 @@ use CloudinaryExtension\Image;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\ImageManager;
 use ImageProviders\FakeImageProvider;
-use ImageProviders\TransformingImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
@@ -29,7 +27,6 @@ class DomainContext implements Context, SnippetAcceptingContext
     private $provider;
     private $image;
     private $extension;
-    private $receivedUrl;
     private $imageName;
 
 
@@ -63,16 +60,6 @@ class DomainContext implements Context, SnippetAcceptingContext
     public function transformStringToACloud($string)
     {
         return Cloud::fromName($string);
-    }
-
-    /**
-     * @Transform :dimensions
-     */
-    public function transformStringToDimensions($string)
-    {
-        $dimensions = explode('x', $string);
-
-        return Dimensions::fromWidthAndHeight($dimensions[0], $dimensions[1]);
     }
 
     /**
@@ -123,42 +110,5 @@ class DomainContext implements Context, SnippetAcceptingContext
     {
         $imagePath = explode(DS, $this->image);
         return $imagePath[count($imagePath) - 1];
-    }
-
-    /**
-     * @Given my image provider has an image :anImageName
-     */
-    public function myImageProviderHasAnImage($anImageName)
-    {
-        $this->imageName = $anImageName;
-        $this->provider = new TransformingImageProvider();
-
-        $this->extension = new ImageManager($this->provider, new Transformation());
-        $this->extension->uploadImage($anImageName);
-    }
-
-    /**
-     * @When I ask the image provider for :imageName transformed to :dimensions
-     */
-    public function iRequestTheImageProvideForTransformedTo($imageName, Dimensions $dimensions)
-    {
-        $this->receivedUrl = $this->extension->getUrlForImageWithTransformation(
-            Image::fromPath($imageName),
-            Transformation::builder()->withDimensions($dimensions)
-        );
-    }
-
-    /**
-     * @Then I should receive that image with the dimensions :dimensions
-     */
-    public function iShouldReceiveThatImageWithTheDimensions(Dimensions $dimensions)
-    {
-        expect($this->receivedUrl)->toBe(
-            sprintf('https://res.cloudinary.com/demo/image/upload/h_%s,w_%s/%s',
-                $dimensions->getHeight(),
-                $dimensions->getWidth(),
-                $this->imageName
-            )
-        );
     }
 }

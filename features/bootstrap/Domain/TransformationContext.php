@@ -10,6 +10,7 @@ use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
+use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Quality;
 use CloudinaryExtension\Security\Key;
@@ -47,6 +48,16 @@ class TransformationContext implements Context
     public function transformStringToQuality($string)
     {
         return Quality::fromString($string);
+    }
+
+    /**
+     * @Transform :aDimension
+     */
+    public function transformStringToDimensions($string)
+    {
+        $dimensions = explode('x', $string);
+
+        return Dimensions::fromWidthAndHeight($dimensions[0], $dimensions[1]);
     }
 
     /**
@@ -108,6 +119,25 @@ class TransformationContext implements Context
         $this->transformation = Transformation::builder()->withQuality($aQuality);
     }
 
+    /**
+     * @When I ask the image provider for :imageName transformed to :aDimension
+     */
+    public function iRequestTheImageProvideForTransformedTo($imageName, Dimensions $aDimension)
+    {
+        $this->receivedUrl = $this->imageProvider->transformImage(
+            Image::fromPath($imageName),
+            Transformation::builder()->withDimensions($aDimension)
+        );
+    }
+
+    /**
+     * @Then I should receive that image with the dimensions :aDimension
+     */
+    public function iShouldReceiveThatImageWithTheDimensions(Dimensions $aDimension)
+    {
+        expect($this->hasDimensions($aDimension));
+    }
+
     private function urlIsOptimised()
     {
         return strpos($this->imageUrl, 'fetch_format=auto') !== false;
@@ -116,5 +146,12 @@ class TransformationContext implements Context
     private function isPercentageQuality($percentage)
     {
         return strpos($this->imageUrl, "quality=$percentage") !== false;
+    }
+
+    private function hasDimensions(Dimensions $dimension)
+    {
+        $hasWidth = strpos($this->imageUrl, "width={$dimension->getWidth()}") !== false;
+        $hasHeight = strpos($this->imageUrl, "height={$dimension->getHeight()}") !== false;
+        return $hasWidth && $hasHeight;
     }
 }
