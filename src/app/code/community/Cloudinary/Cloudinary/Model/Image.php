@@ -1,13 +1,8 @@
 <?php
 
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\CloudinaryImageProvider;
-use CloudinaryExtension\Credentials;
-use CloudinaryExtension\ImageManager;
 use CloudinaryExtension\ImageManagerFactory;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
+
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
