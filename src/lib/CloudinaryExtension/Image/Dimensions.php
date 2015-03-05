@@ -28,4 +28,9 @@ class Dimensions
     {
         return new Dimensions($width, $height);
     }
+
+    public static function null()
+    {
+        return new Dimensions(null, null);
+    }
 }
