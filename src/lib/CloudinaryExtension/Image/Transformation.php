@@ -27,7 +27,7 @@ class Transformation
     public function withGravity(Gravity $gravity)
     {
         $this->gravity = $gravity;
-        $this->crop = $gravity->__toString() ? 'crop' : 'pad';
+        $this->crop = ((string) $gravity) ? 'crop' : 'pad';
 
         return $this;
     }
