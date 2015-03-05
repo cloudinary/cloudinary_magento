@@ -22,8 +22,8 @@ class Transformation
         $this->quality = Quality::fromString('80');
         $this->fetchFormat = Format::fromString('auto');
         $this->crop = 'pad';
-
     }
+
     public function withGravity(Gravity $gravity)
     {
         $this->gravity = $gravity;
