@@ -6,9 +6,9 @@ class ImageManagerFactory
 {
     public static function buildFromConfiguration(Configuration $configuration)
     {
-        return new ImageManager(new CloudinaryImageProvider(
-            $configuration->getCredentials(),
-            $configuration->getCloud()
-        ));
+        return new ImageManager(
+            new CloudinaryImageProvider($configuration->getCredentials(), $configuration->getCloud()),
+            $configuration->getDefaultTransformation()
+        );
     }
 }

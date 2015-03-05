@@ -58,6 +58,25 @@
                         </cloudinary_api_secret>
                     </fields>
                 </credentials>
+                <transformations translate="label">
+                    <label>Default Transformations</label>
+                    <show_in_default>1</show_in_default>
+                    <sort_order>3</sort_order>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <cloudinary_gravity translate="label comment">
+                            <label>Image Gravity</label>
+                            <comment>Default Image Gravity</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>cloudinary_cloudinary/system_config_source_dropdown_values</source_model>
+                        </cloudinary_gravity>
+                    </fields>
+                </transformations>
             </groups>
         </cloudinary>
     </sections>

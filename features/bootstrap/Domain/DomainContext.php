@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Domain;
 
 use Behat\Behat\Tester\Exception\PendingException;
@@ -90,7 +91,7 @@ class DomainContext implements Context, SnippetAcceptingContext
         $credentials = new Credentials($aKey, $aSecret);
         $this->provider = new FakeImageProvider($credentials, $aCloud);
 
-        $this->extension = new ImageManager($this->provider);
+        $this->extension = new ImageManager($this->provider, new Transformation());
         $this->extension->uploadImage($anImageName);
     }
 
@@ -132,7 +133,7 @@ class DomainContext implements Context, SnippetAcceptingContext
         $this->imageName = $anImageName;
         $this->provider = new TransformingImageProvider();
 
-        $this->extension = new ImageManager($this->provider);
+        $this->extension = new ImageManager($this->provider, new Transformation());
         $this->extension->uploadImage($anImageName);
     }
 
@@ -143,9 +144,8 @@ class DomainContext implements Context, SnippetAcceptingContext
     {
         $this->receivedUrl = $this->extension->getUrlForImageWithTransformation(
             Image::fromPath($imageName),
-            Transformation::toDimensions($dimensions)
+            Transformation::builder()->withDimensions($dimensions)
         );
-
     }
 
     /**

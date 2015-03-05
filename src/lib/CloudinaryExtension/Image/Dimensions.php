@@ -4,8 +4,8 @@ namespace CloudinaryExtension\Image;
 
 class Dimensions
 {
-
     private $width;
+
     private $height;
 
     private function __construct($width, $height)
@@ -27,5 +27,10 @@ class Dimensions
     public static function fromWidthAndHeight($width, $height)
     {
         return new Dimensions($width, $height);
+    }
+
+    public static function null()
+    {
+        return new Dimensions(null, null);
     }
 }

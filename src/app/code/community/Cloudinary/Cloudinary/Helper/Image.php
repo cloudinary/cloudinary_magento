@@ -16,14 +16,17 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
     {
-        if($this->_isEnabled()) {
-            $this->_dimensions = null;
+        if ($this->_isEnabled()) {
+            $this->_dimensions = Dimensions::null();
             $this->_attributeName = $attributeName;
 
-            $this->_imageManager = new ImageManager(new CloudinaryImageProvider(
-                $this->_getConfigHelper()->buildCredentials(),
-                Cloud::fromName($this->_getConfigHelper()->getCloudName())
-            ));
+            $this->_imageManager = new ImageManager(
+                new CloudinaryImageProvider(
+                    $this->_getConfigHelper()->buildCredentials(),
+                    Cloud::fromName($this->_getConfigHelper()->getCloudName())
+                ),
+                $this->_getConfigHelper()->buildConfiguration()->getDefaultTransformation()
+            );
         }
 
         return parent::init($product, $attributeName, $imageFile);
@@ -46,12 +49,11 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         if($this->_imageShouldComeFromCloudinary($imageFile)) {
             $image = Image::fromPath($imageFile);
 
-            if ($this->_dimensions) {
-                $transformation = Image\Transformation::toDimensions($this->_dimensions);
-                return $this->_imageManager->getUrlForImageWithTransformation($image, $transformation);
-            } else {
-                return $this->_imageManager->getUrlForImage($image);
-            }
+            $transformation = $this->_imageManager
+                ->getDefaultTransformation()
+                ->withDimensions($this->_dimensions);
+
+            return $this->_imageManager->getUrlForImageWithTransformation($image, $transformation);
         }
 
         return parent::__toString();

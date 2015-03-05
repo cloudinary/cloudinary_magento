@@ -11,9 +11,15 @@ class ImageManager
 {
     private $imageProvider;
 
-    public function __construct(ImageProvider $imageProvider)
+    /**
+     * @var Transformation
+     */
+    private $defaultTransformation;
+
+    public function __construct(ImageProvider $imageProvider, Transformation $defaultTransformation)
     {
         $this->imageProvider = $imageProvider;
+        $this->defaultTransformation = $defaultTransformation;
     }
 
     public function uploadImage($imagePath)
@@ -24,13 +30,12 @@ class ImageManager
 
     public function getUrlForImage(Image $image)
     {
-        return $this->imageProvider->getImageUrlByName((string)$image);
+        return $this->getUrlForImageWithTransformation($image, $this->defaultTransformation);
     }
 
     public function getUrlForImageWithTransformation(Image $image, Transformation $transformation)
     {
         $image = $this->imageProvider->transformImage($image, $transformation);
-
 
         return (string)$image;
     }
@@ -38,5 +43,10 @@ class ImageManager
     public function deleteImage(Image $image)
     {
         $this->imageProvider->deleteImage($image);
+    }
+
+    public function getDefaultTransformation()
+    {
+        return $this->defaultTransformation;
     }
 }
