@@ -24,8 +24,7 @@ class Transformation
 
     public function __construct()
     {
-        $this->quality = Quality::fromString('80');
-        $this->fetchFormat = FetchFormat::fromString('auto');
+        $this->fetchFormat = FetchFormat::fromString(Format::FETCH_FORMAT_AUTO);
         $this->crop = 'pad';
         $this->format = Format::fromExtension('jpg');
         $this->validFormats = array('gif', 'jpg', 'png', 'svg');
@@ -71,7 +70,7 @@ class Transformation
 
     public function withOptimisationDisabled()
     {
-        $this->withFormat(Format::fromString(''));
+        $this->withFetchFormat(FetchFormat::fromString(''));
         return $this;
     }
 

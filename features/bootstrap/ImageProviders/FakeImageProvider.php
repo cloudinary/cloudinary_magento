@@ -41,8 +41,9 @@ class FakeImageProvider implements ImageProvider {
         $this->uploadedImageUrl[(string)$image] = 'uploaded image URL';
     }
 
-    public function getImageUrlByName($imageName, $options = array())
+    public function getImageUrlByName($image, $options = array())
     {
+        $imageName = (string)$image;
         if($this->areCredentialsCorrect() && $this->isCloudCorrect()) {
             return array_key_exists($imageName, $this->uploadedImageUrl) ? $this->uploadedImageUrl[$imageName] : '';
         }

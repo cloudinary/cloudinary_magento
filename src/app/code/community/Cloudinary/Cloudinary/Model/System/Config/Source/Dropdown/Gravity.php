@@ -1,6 +1,6 @@
 <?php
 
-class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Values
+class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Gravity
 {
     public function toOptionArray()
     {
