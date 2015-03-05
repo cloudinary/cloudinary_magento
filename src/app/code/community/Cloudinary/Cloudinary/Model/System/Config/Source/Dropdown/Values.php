@@ -7,7 +7,7 @@ class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Values
         return array(
             array(
                 'value' => '',
-                'label' => 'Select gravity',
+                'label' => 'None',
             ),
             array(
                 'value' => 'face',
