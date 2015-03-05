@@ -28,7 +28,7 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function transformImage(Image $image, Transformation $transformation)
     {
-        return Image::fromPath(\cloudinary_url($this->getImageId((string)$image), $transformation->build()));
+        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
     }
 
     public function deleteImage(Image $image)
