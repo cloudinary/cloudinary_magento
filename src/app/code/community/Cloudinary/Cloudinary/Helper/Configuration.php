@@ -75,9 +75,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
             Cloud::fromName($this->getCloudName())
         );
 
-        $config->setDefaultTransformation(
-            Transformation::build()->withGravity(Gravity::fromString($this->getDefaultGravity()))
-        );
+        $config->getDefaultTransformation()->withGravity(Gravity::fromString($this->getDefaultGravity()));
 
         return $config;
     }

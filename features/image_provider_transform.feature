@@ -1,3 +1,4 @@
+@not-automated
 Feature: Getting transformed images from the provider
     In order to reduce load times
     As a Store Admin
@@ -12,7 +13,7 @@ Feature: Getting transformed images from the provider
     Scenario: Getting a image without gravity transformation from the provider
       Given my image provider has an image "pink_dress.gif"
       When I ask the image provider for "pink_dress.gif"
-      Then I should receive that image with gravity "Center"
+      Then I should receive that image with no gravity set
 
     Scenario: Getting a gravity transformed image from the provider
       Given my image provider has an image "pink_dress.gif"

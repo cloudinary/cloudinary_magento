@@ -20,21 +20,10 @@ class ConfigurationSpec extends ObjectBehavior
         $this->beConstructedThrough('fromCloudAndCredentials', array($credentials, $cloud));
     }
 
-    function it_has_a_null_gravity_transformation_by_default()
+    function it_has_a_default_transformation()
     {
         $transformation = $this->getDefaultTransformation();
 
         $transformation->shouldBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
-        $transformation->getGravity()->shouldBeLike(Gravity::null());
-    }
-
-    function it_exposes_its_default_image_transformation()
-    {
-        $this->setDefaultTransformation(Transformation::build()->withGravity(Gravity::fromString('g')));
-
-        $transformation = $this->getDefaultTransformation();
-
-        $transformation->shouldBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
-        $transformation->getGravity()->shouldBeLike(Gravity::fromString('g'));
     }
 }

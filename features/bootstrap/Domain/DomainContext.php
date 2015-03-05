@@ -144,7 +144,7 @@ class DomainContext implements Context, SnippetAcceptingContext
     {
         $this->receivedUrl = $this->extension->getUrlForImageWithTransformation(
             Image::fromPath($imageName),
-            Transformation::build()->withDimensions($dimensions)
+            Transformation::builder()->withDimensions($dimensions)
         );
     }
 
