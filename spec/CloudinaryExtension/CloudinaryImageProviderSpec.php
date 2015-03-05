@@ -2,6 +2,8 @@
 
 namespace spec\CloudinaryExtension;
 
+require_once ('src/lib/Cloudinary/src/Cloudinary.php');
+
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use PhpSpec\ObjectBehavior;

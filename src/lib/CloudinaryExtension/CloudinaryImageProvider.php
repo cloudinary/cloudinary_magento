@@ -2,8 +2,6 @@
 
 namespace CloudinaryExtension;
 
-require_once ('src/lib/Cloudinary/src/Cloudinary.php');
-
 use Cloudinary;
 use Cloudinary\Uploader;
 use CloudinaryExtension\Image\Transformation;
