@@ -1,6 +1,6 @@
 <?php
 
-namespace CloudinaryExtension\Image;
+namespace CloudinaryExtension\Image\Transformation;
 
 class Gravity
 {

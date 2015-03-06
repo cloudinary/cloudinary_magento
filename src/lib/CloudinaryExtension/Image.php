@@ -6,15 +6,17 @@ use CloudinaryExtension\Image\Dimensions;
 
 class Image
 {
-
     private $imagePath;
 
     private $dimensions;
+
+    private $pathParts;
 
     private function __construct($imagePath, Dimensions $dimensions = null)
     {
         $this->imagePath = $imagePath;
         $this->dimensions = $dimensions;
+        $this->pathParts = pathinfo(basename($this->imagePath));
     }
 
     public static function fromPath($anImagePath)
@@ -34,8 +36,11 @@ class Image
 
     public function getId()
     {
-        $pathParts = pathinfo(basename($this->imagePath));
+        return $this->pathParts['filename'];
+    }
 
-        return $pathParts['filename'];
+    public function getExtension()
+    {
+        return $this->pathParts['extension'];
     }
 }

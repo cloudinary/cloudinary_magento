@@ -2,8 +2,9 @@
 
 namespace spec\CloudinaryExtension\Image;
 
-use CloudinaryExtension\Image\Dimensions;
-use CloudinaryExtension\Image\Gravity;
+use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\Gravity;
+use CloudinaryExtension\Image\Transformation\FetchFormat;
 use CloudinaryExtension\Image\Transformation\Format;
 use CloudinaryExtension\Image\Transformation\Quality;
 use PhpSpec\ObjectBehavior;
@@ -26,7 +27,7 @@ class TransformationSpec extends ObjectBehavior
     function it_overrides_fetch_format_if_provided()
     {
         $transformationArray = self::builder()
-            ->withFormat(Format::fromString(''))
+            ->withFetchFormat(FetchFormat::fromString(''))
             ->build();
 
         $transformationArray->offsetGet('fetch_format')->shouldBe('');
@@ -97,5 +98,31 @@ class TransformationSpec extends ObjectBehavior
         $transformationArray = self::builder()->build();
 
         $transformationArray->offsetGet('crop')->shouldBe('pad');
+    }
+
+    function it_builds_with_jpeg_format_by_default()
+    {
+        $transformationArray = self::builder()->build();
+
+        $transformationArray->offsetGet('format')->shouldBe('jpg');
+    }
+
+    function it_builds_with_format_from_original_extension_when_extension_is_valid()
+    {
+        $transformationArray = self::builder()
+            ->withFormat(Format::fromExtension('png'))
+            ->build();
+
+        $transformationArray->offsetGet('format')->shouldBe('png');
+    }
+
+
+    function it_builds_with_jpeg_format_when_original_extension_is_not_valid()
+    {
+        $transformationArray = self::builder()
+            ->withFormat(Format::fromExtension('xpm'))
+            ->build();
+
+        $transformationArray->offsetGet('format')->shouldBe('jpg');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CloudinaryExtension\Image\Transformation;
 
-class Format
+class FetchFormat
 {
     private $value;
 
@@ -11,9 +11,9 @@ class Format
         $this->value = $value;
     }
 
-    public static function fromExtension($value)
+    public static function fromString($value)
     {
-        return new Format($value);
+        return new FetchFormat($value);
     }
 
     public function __toString()

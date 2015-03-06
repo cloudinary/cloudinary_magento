@@ -3,8 +3,8 @@
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
-use CloudinaryExtension\Image\Gravity;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Image\Transformation\Gravity;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
