@@ -2,6 +2,8 @@
 
 namespace spec\CloudinaryExtension;
 
+require_once ('src/lib/Cloudinary/src/Cloudinary.php');
+
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
 use PhpSpec\ObjectBehavior;
@@ -11,6 +13,8 @@ class CloudinaryImageProviderSpec extends ObjectBehavior
 {
     function let(Credentials $credentials, Cloud $cloud)
     {
+        $cloud->__toString()->willReturn('');
+
         $this->beConstructedWith($credentials, $cloud);
     }
 

@@ -13,10 +13,6 @@ class TransformingImageProvider implements ImageProvider
     {
     }
 
-    public function getImageUrlByName($imageName, $options = array())
-    {
-    }
-
     public function transformImage(Image $image, Transformation $transformation)
     {
         $dimensions = $transformation->getDimensions();

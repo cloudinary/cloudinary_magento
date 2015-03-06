@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CloudinaryExtension;
 
 use Cloudinary;
@@ -9,55 +8,38 @@ use CloudinaryExtension\Image\Transformation;
 
 class CloudinaryImageProvider implements ImageProvider
 {
-
     private $credentials;
+
     private $cloud;
 
     public function __construct(Credentials $credentials, Cloud $cloud)
     {
         $this->credentials = $credentials;
         $this->cloud = $cloud;
+        $this->authorise();
     }
 
     public function upload(Image $image)
     {
-        $this->setCloudinaryCredentialsAndCloudName();
-        Uploader::upload((string)$image, array("public_id" => $this->getImageId($image)));
-    }
-
-    public function getImageUrlByName($imageName, $options = array())
-    {
-        $this->setCloudinaryCredentialsAndCloudName();
-        return \cloudinary_url($this->getImageId($imageName), Transformation::builder()->build());
+        Uploader::upload((string)$image, array("public_id" => $image->getId()));
     }
 
     public function transformImage(Image $image, Transformation $transformation)
     {
-        $this->setCloudinaryCredentialsAndCloudName();
-        return Image::fromPath(\cloudinary_url($this->getImageId((string)$image), $transformation->build()));
-    }
-
-    private function getImageId($image)
-    {
-        $imagePath = explode(DIRECTORY_SEPARATOR, $image);
-        $imageName = explode(".", $imagePath[count($imagePath) - 1]);
-        return $imageName[0];
-    }
-
-    private function setCloudinaryCredentialsAndCloudName()
-    {
-        Cloudinary::config(
-            array(
-                "cloud_name" => (string)$this->cloud,
-                "api_key" => (string)$this->credentials->getKey(),
-                "api_secret" => (string)$this->credentials->getSecret()
-            )
-        );
+        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
     }
 
     public function deleteImage(Image $image)
     {
-        $this->setCloudinaryCredentialsAndCloudName();
-        Uploader::destroy($this->getImageId($image));
+        Uploader::destroy($image->getId());
+    }
+
+    private function authorise()
+    {
+        Cloudinary::config(array(
+            "cloud_name" => (string)$this->cloud,
+            "api_key"    => (string)$this->credentials->getKey(),
+            "api_secret" => (string)$this->credentials->getSecret()
+        ));
     }
 }
