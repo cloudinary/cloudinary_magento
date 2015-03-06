@@ -14,7 +14,6 @@ use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Cloud;
-use CloudinaryExtension\ImageManager;
 use ImageProviders\FakeImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
@@ -71,15 +70,14 @@ class DomainContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * @When I upload the image :anImageName to the :aCloud cloud using the credentials with the API key :aKey and the secret :aSecret
+     * @When I upload the image :anImage to the :aCloud cloud using the credentials with the API key :aKey and the secret :aSecret
      */
-    public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret($anImageName, Cloud $aCloud, Key $aKey, Secret $aSecret)
+    public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret(Image $anImage, Cloud $aCloud, Key $aKey, Secret $aSecret)
     {
         $credentials = new Credentials($aKey, $aSecret);
         $this->provider = new FakeImageProvider($credentials, $aCloud);
 
-        $this->extension = new ImageManager($this->provider, new Transformation());
-        $this->extension->uploadImage($anImageName);
+        $this->provider->upload($anImage);
     }
 
     /**

@@ -11,7 +11,7 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\ImageManager;
+use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use ImageProviders\FakeImageProvider;
@@ -28,7 +28,7 @@ class DeleteImageDomainContext implements Context
     const IMAGE_PROVIDER_SECRET = 'some secret';
     const IMAGE_PROVIDER_CLOUD = 'some cloud';
 
-    private $extension;
+    private $imageProvider;
 
     /**
      * @Transform :anImage
@@ -48,13 +48,12 @@ class DeleteImageDomainContext implements Context
         $secret = Secret::fromString(self::IMAGE_PROVIDER_SECRET);
 
         $credentials = new Credentials($key, $secret);
-        $provider = new FakeImageProvider($credentials, $cloud);
+        $this->imageProvider = new FakeImageProvider($credentials, $cloud);
 
-        $provider->setMockCredentials($key, $secret);
-        $provider->setMockCloud($cloud);
+        $this->imageProvider->setMockCredentials($key, $secret);
+        $this->imageProvider->setMockCloud($cloud);
 
-        $this->extension = new ImageManager($provider, new Image\Transformation());
-        $this->extension->uploadImage((string)$anImage);
+        $this->imageProvider->upload($anImage);
     }
 
     /**
@@ -62,7 +61,7 @@ class DeleteImageDomainContext implements Context
      */
     public function iDeleteTheImage($anImage)
     {
-        $this->extension->deleteImage($anImage);
+        $this->imageProvider->deleteImage($anImage);
     }
 
     /**
@@ -70,7 +69,7 @@ class DeleteImageDomainContext implements Context
      */
     public function theImageShouldNoLongerBeAvailableInTheImageProvider($anImage)
     {
-        expect($this->extension->getUrlForImage($anImage))->toBe('');
+        expect($this->imageProvider->transformImage($anImage, Transformation::builder()))->toBe('');
     }
 
 }
