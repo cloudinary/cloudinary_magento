@@ -15,13 +15,7 @@ class TransformingImageProvider implements ImageProvider
 
     public function transformImage(Image $image, Transformation $transformation)
     {
-        $dimensions = $transformation->getDimensions();
-
-        return sprintf('https://res.cloudinary.com/demo/image/upload/h_%s,w_%s/%s',
-            $dimensions->getHeight(),
-            $dimensions->getWidth(),
-            (string)$image
-        );
+        return http_build_query($transformation->build());
     }
 
     public function deleteImage(Image $image)

@@ -2,7 +2,6 @@
 
 namespace CloudinaryExtension;
 
-use CloudinaryExtension\Image\Gravity;
 use CloudinaryExtension\Image\Transformation;
 
 class Configuration

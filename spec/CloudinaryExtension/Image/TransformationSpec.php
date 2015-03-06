@@ -17,13 +17,6 @@ class TransformationSpec extends ObjectBehavior
         self::builder()->shouldBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
     }
 
-    function it_builds_with_fetch_format_auto_by_default()
-    {
-        $transformationArray = self::builder()->build();
-
-        $transformationArray->offsetGet('fetch_format')->shouldBe('auto');
-    }
-
     function it_overrides_fetch_format_if_provided()
     {
         $transformationArray = self::builder()
@@ -31,13 +24,6 @@ class TransformationSpec extends ObjectBehavior
             ->build();
 
         $transformationArray->offsetGet('fetch_format')->shouldBe('');
-    }
-
-    function it_builds_with_default_quality()
-    {
-        $transformationArray = self::builder()->build();
-
-        $transformationArray->offsetGet('quality')->shouldBe('80');
     }
 
     function it_overrides_quality_if_provided()
@@ -91,8 +77,7 @@ class TransformationSpec extends ObjectBehavior
 
         $transformationArray->offsetGet('crop')->shouldBe('crop');
     }
-
-
+    
     function it_builds_with_crop_set_to_pad_when_gravity_is_not_set()
     {
         $transformationArray = self::builder()->build();
@@ -116,7 +101,6 @@ class TransformationSpec extends ObjectBehavior
         $transformationArray->offsetGet('format')->shouldBe('png');
     }
 
-
     function it_builds_with_jpeg_format_when_original_extension_is_not_valid()
     {
         $transformationArray = self::builder()
@@ -124,5 +108,25 @@ class TransformationSpec extends ObjectBehavior
             ->build();
 
         $transformationArray->offsetGet('format')->shouldBe('jpg');
+    }
+
+    function it_builds_with_image_optimisation_enabled()
+    {
+        $transformationArray = self::builder()->build();
+
+        $transformationArray->offsetGet('fetch_format')->shouldBe('auto');
+    }
+
+    function it_builds_with_image_optimisation_disabled()
+    {
+        $transformationArray = self::builder()->withOptimisationDisabled()->build();
+
+        $transformationArray->offsetGet('fetch_format')->shouldBe('');
+    }
+
+    function it_builds_with_fetch_format_auto_by_default()
+    {
+        $transformationArray = self::builder()->build();
+        $transformationArray->offsetGet('fetch_format')->shouldBe('auto');
     }
 }

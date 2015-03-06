@@ -5,6 +5,8 @@ use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Gravity;
+use CloudinaryExtension\Image\Transformation\Format;
+use CloudinaryExtension\Image\Transformation\Quality;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
@@ -15,6 +17,10 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     const CONFIG_PATH_CLOUD_NAME = 'cloudinary/cloud/cloudinary_cloud_name';
 
     const CONFIG_DEFAULT_GRAVITY = 'cloudinary/transformations/cloudinary_gravity';
+
+    const CONFIG_DEFAULT_QUALITY = 'cloudinary/transformations/cloudinary_image_quality';
+
+    const CONFIG_DEFAULT_FETCH_FORMAT = 'cloudinary/transformations/cloudinary_fetch_format';
 
     const STATUS_ENABLED = 1;
 
@@ -53,6 +59,26 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         $this->_setStoreConfig(self::CONFIG_DEFAULT_GRAVITY, $value);
     }
 
+    public function setFetchFormat($value)
+    {
+        $this->_setStoreConfig(self::CONFIG_DEFAULT_FETCH_FORMAT, $this->_getFetchFormatFlag($value));
+    }
+
+    public function getFetchFormat()
+    {
+        return Mage::getStoreConfig(self::CONFIG_DEFAULT_FETCH_FORMAT) === "1" ? Format::FETCH_FORMAT_AUTO : null;
+    }
+
+    public function setImageQuality($value)
+    {
+        $this->_setStoreConfig(self::CONFIG_DEFAULT_QUALITY, $value);
+    }
+
+    public function getImageQuality()
+    {
+        return (string)Mage::getStoreConfig(self::CONFIG_DEFAULT_QUALITY);
+    }
+
     public function isEnabled()
     {
         return (boolean)Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
@@ -75,7 +101,10 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
             Cloud::fromName($this->getCloudName())
         );
 
-        $config->getDefaultTransformation()->withGravity(Gravity::fromString($this->getDefaultGravity()));
+        $config->getDefaultTransformation()
+            ->withGravity(Gravity::fromString($this->getDefaultGravity()))
+            ->withFormat(Format::fromString($this->getFetchFormat()))
+            ->withQuality(Quality::fromString($this->getImageQuality()));
 
         return $config;
     }
@@ -91,6 +120,11 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         } else {
             Mage::app()->cleanCache();
         }
+    }
+
+    private function _getFetchFormatFlag($value)
+    {
+        return $value === Format::FETCH_FORMAT_AUTO ? 1 : 0;
     }
 
 }

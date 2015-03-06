@@ -4,6 +4,8 @@ namespace CloudinaryExtension\Image\Transformation;
 
 class Format
 {
+    const FETCH_FORMAT_AUTO = 'auto';
+
     private $value;
 
     private function __construct($value)

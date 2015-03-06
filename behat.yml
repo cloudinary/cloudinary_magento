@@ -1,14 +1,15 @@
 default:
   suites:
-    ui:
-      filters: { tags: '@critical' }
-      contexts:
-        - Ui\AdminCredentialsContext
     domain:
       filters: { tags: '~@not-automated' }
       contexts:
         - Domain\DomainContext
+        - Domain\TransformationContext
         - Domain\DeleteImageDomainContext
+    ui:
+      filters: { tags: '@critical' }
+      contexts:
+        - Ui\AdminCredentialsContext
 
   extensions:
     MageTest\MagentoExtension\Extension: ~

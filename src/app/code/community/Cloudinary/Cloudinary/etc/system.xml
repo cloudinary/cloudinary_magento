@@ -65,15 +65,35 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <cloudinary_gravity translate="label comment">
-                            <label>Image Gravity</label>
-                            <comment>Default Image Gravity</comment>
+                        <cloudinary_fetch_format>
+                            <label>Image fetch format(Optimisation)</label>
+                            <comment>Image Optimisations for specific web-clients</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <source_model>cloudinary_cloudinary/system_config_source_dropdown_values</source_model>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </cloudinary_fetch_format>
+                        <cloudinary_image_quality>
+                            <label>Image Quality</label>
+                            <comment>Default quality in which to show images</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>cloudinary_cloudinary/system_config_source_dropdown_quality</source_model>
+                        </cloudinary_image_quality>
+                        <cloudinary_gravity translate="label comment">
+                            <label>Image Gravity</label>
+                            <comment>Default Image Gravity</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>cloudinary_cloudinary/system_config_source_dropdown_gravity</source_model>
                         </cloudinary_gravity>
                     </fields>
                 </transformations>
