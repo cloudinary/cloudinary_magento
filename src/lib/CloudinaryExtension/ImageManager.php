@@ -4,6 +4,7 @@ namespace CloudinaryExtension;
 
 use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Image\Transformation\Format;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 
@@ -35,6 +36,8 @@ class ImageManager
 
     public function getUrlForImageWithTransformation(Image $image, Transformation $transformation)
     {
+        $transformation->withFormat(Format::fromExtension($image->getExtension()));
+
         $image = $this->imageProvider->transformImage($image, $transformation);
 
         return (string)$image;

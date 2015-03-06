@@ -5,6 +5,7 @@ namespace spec\CloudinaryExtension;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\Format;
 use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\Configuration;
 use PhpSpec\ObjectBehavior;
@@ -41,6 +42,21 @@ class ImageManagerSpec extends ObjectBehavior
 
         $this->getUrlForImageWithTransformation($image, $transformation)->shouldReturn(self::IMAGE_PROVIDER_URL);
     }
+
+    function it_builds_using_format_transformation_for_extension(ImageProvider $imageProvider)
+    {
+        $image = Image::fromPath(self::IMAGE_PATH);
+        $transformation = Transformation::builder();
+
+        $imageProvider->transformImage($image, $transformation)->willReturn(self::IMAGE_PROVIDER_URL);
+
+        $this->getUrlForImageWithTransformation($image, $transformation);
+
+        $transformationArray = $transformation->build();
+
+        expect($transformationArray['format'])->toBe('png');
+    }
+
 
     function it_deletes_an_image(ImageProvider $imageProvider)
     {

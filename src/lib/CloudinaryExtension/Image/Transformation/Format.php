@@ -11,7 +11,7 @@ class Format
         $this->value = $value;
     }
 
-    public static function fromString($value)
+    public static function fromExtension($value)
     {
         return new Format($value);
     }

@@ -27,7 +27,7 @@ class Transformation
         $this->quality = Quality::fromString('80');
         $this->fetchFormat = FetchFormat::fromString('auto');
         $this->crop = 'pad';
-        $this->format = Format::fromString('jpg');
+        $this->format = Format::fromExtension('jpg');
         $this->validFormats = array('gif', 'jpg', 'png', 'svg');
     }
 

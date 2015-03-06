@@ -110,7 +110,7 @@ class TransformationSpec extends ObjectBehavior
     function it_builds_with_format_from_original_extension_when_extension_is_valid()
     {
         $transformationArray = self::builder()
-            ->withFormat(Format::fromString('png'))
+            ->withFormat(Format::fromExtension('png'))
             ->build();
 
         $transformationArray->offsetGet('format')->shouldBe('png');
@@ -120,7 +120,7 @@ class TransformationSpec extends ObjectBehavior
     function it_builds_with_jpeg_format_when_original_extension_is_not_valid()
     {
         $transformationArray = self::builder()
-            ->withFormat(Format::fromString('xpm'))
+            ->withFormat(Format::fromExtension('xpm'))
             ->build();
 
         $transformationArray->offsetGet('format')->shouldBe('jpg');
