@@ -3,7 +3,7 @@
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\Image\Dimensions;
+use CloudinaryExtension\Image\Transformation\Dimensions;
 use CloudinaryExtension\ImageManager;
 
 class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image

@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\CloudinaryExtension\Image;
+namespace spec\CloudinaryExtension\Image\Transformation;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;

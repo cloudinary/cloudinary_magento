@@ -2,7 +2,10 @@
 
 namespace CloudinaryExtension\Image;
 
+use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\FetchFormat;
 use CloudinaryExtension\Image\Transformation\Format;
+use CloudinaryExtension\Image\Transformation\Gravity;
 use CloudinaryExtension\Image\Transformation\Quality;
 
 class Transformation
@@ -22,9 +25,10 @@ class Transformation
     public function __construct()
     {
         $this->quality = Quality::fromString('80');
-        $this->fetchFormat = Format::fromString('auto');
+        $this->fetchFormat = FetchFormat::fromString('auto');
         $this->crop = 'pad';
-        $this->format = 'jpg';
+        $this->format = Format::fromString('jpg');
+        $this->validFormats = array('gif', 'jpg', 'png', 'svg');
     }
 
     public function withGravity(Gravity $gravity)
@@ -42,9 +46,18 @@ class Transformation
         return $this;
     }
 
+    public function withFetchFormat(FetchFormat $fetchFormat)
+    {
+        $this->fetchFormat = $fetchFormat;
+
+        return $this;
+    }
+
     public function withFormat(Format $format)
     {
-        $this->fetchFormat = $format;
+        if (in_array((string) $format, $this->validFormats)) {
+            $this->format = $format;
+        }
 
         return $this;
     }
@@ -70,7 +83,7 @@ class Transformation
             'gravity' => (string) $this->gravity ?: null,
             'width' => $this->dimensions ? $this->dimensions->getWidth() : null,
             'height' => $this->dimensions ? $this->dimensions->getHeight() : null,
-            'format' => $this->format
+            'format' => (string) $this->format
         );
     }
 }

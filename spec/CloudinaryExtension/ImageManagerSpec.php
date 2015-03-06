@@ -3,8 +3,8 @@
 namespace spec\CloudinaryExtension;
 
 use CloudinaryExtension\Image;
-use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Image\Transformation\Dimensions;
 use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\Configuration;
 use PhpSpec\ObjectBehavior;
