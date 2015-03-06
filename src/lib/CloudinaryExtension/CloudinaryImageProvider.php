@@ -16,7 +16,7 @@ class CloudinaryImageProvider implements ImageProvider
     {
         $this->credentials = $credentials;
         $this->cloud = $cloud;
-        $this->authorize();
+        $this->authorise();
     }
 
     public function upload(Image $image)
@@ -34,7 +34,7 @@ class CloudinaryImageProvider implements ImageProvider
         Uploader::destroy($image->getId());
     }
 
-    private function authorize()
+    private function authorise()
     {
         Cloudinary::config(array(
             "cloud_name" => (string)$this->cloud,
