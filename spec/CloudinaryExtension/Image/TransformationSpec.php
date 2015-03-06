@@ -98,4 +98,11 @@ class TransformationSpec extends ObjectBehavior
 
         $transformationArray->offsetGet('crop')->shouldBe('pad');
     }
+
+    function it_builds_with_jpeg_format_by_default()
+    {
+        $transformationArray = self::builder()->build();
+
+        $transformationArray->offsetGet('format')->shouldBe('jpg');
+    }
 }

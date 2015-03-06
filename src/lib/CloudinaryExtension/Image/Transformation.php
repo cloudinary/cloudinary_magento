@@ -17,11 +17,14 @@ class Transformation
 
     private $quality;
 
+    private $format;
+
     public function __construct()
     {
         $this->quality = Quality::fromString('80');
         $this->fetchFormat = Format::fromString('auto');
         $this->crop = 'pad';
+        $this->format = 'jpg';
     }
 
     public function withGravity(Gravity $gravity)
@@ -66,7 +69,8 @@ class Transformation
             'crop' => (string) $this->crop,
             'gravity' => (string) $this->gravity ?: null,
             'width' => $this->dimensions ? $this->dimensions->getWidth() : null,
-            'height' => $this->dimensions ? $this->dimensions->getHeight() : null
+            'height' => $this->dimensions ? $this->dimensions->getHeight() : null,
+            'format' => $this->format
         );
     }
 }
