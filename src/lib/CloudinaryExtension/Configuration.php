@@ -12,8 +12,11 @@ class Configuration
 
     private $defaultTransformation;
 
+    private $cdnSubdomain = true;
+
     private function __construct(Cloud $cloud,Credentials $credentials)
     {
+        $this->cdnSubdomain = false;
         $this->credentials = $credentials;
         $this->cloud = $cloud;
         $this->defaultTransformation = Transformation::builder();
@@ -51,5 +54,15 @@ class Configuration
             "api_key"    => (string)$this->credentials->getKey(),
             "api_secret" => (string)$this->credentials->getSecret()
         );
+    }
+
+    public function enableCdnSubdomain()
+    {
+        $this->cdnSubdomain = true;
+    }
+
+    public function getCdnSubdomainStatus()
+    {
+        return $this->cdnSubdomain;
     }
 }

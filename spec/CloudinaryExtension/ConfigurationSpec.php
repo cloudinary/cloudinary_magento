@@ -26,4 +26,10 @@ class ConfigurationSpec extends ObjectBehavior
 
         $transformation->shouldBeAnInstanceOf('CloudinaryExtension\Image\Transformation');
     }
+
+    function it_sets_the_cdn_subdomain_flag()
+    {
+        $this->enableCdnSubdomain();
+        $this->getCdnSubdomainStatus()->shouldBe(true);
+    }
 }
