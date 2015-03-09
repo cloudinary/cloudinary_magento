@@ -15,9 +15,9 @@ use Prophecy\Argument;
  */
 class ConfigurationSpec extends ObjectBehavior
 {
-    function let(Credentials $credentials, Cloud $cloud)
+    function let(Cloud $cloud, Credentials $credentials)
     {
-        $this->beConstructedThrough('fromCloudAndCredentials', array($credentials, $cloud));
+        $this->beConstructedThrough('fromCloudAndCredentials', array($cloud, $credentials));
     }
 
     function it_has_a_default_transformation()

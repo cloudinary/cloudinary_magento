@@ -12,16 +12,16 @@ class Configuration
 
     private $defaultTransformation;
 
-    private function __construct(Credentials $credentials, Cloud $cloud)
+    private function __construct(Cloud $cloud,Credentials $credentials)
     {
         $this->credentials = $credentials;
         $this->cloud = $cloud;
         $this->defaultTransformation = Transformation::builder();
     }
 
-    public static function fromCloudAndCredentials(Credentials $credentials, Cloud $cloud)
+    public static function fromCloudAndCredentials(Cloud $cloud, Credentials $credentials)
     {
-        return new Configuration($credentials, $cloud);
+        return new Configuration($cloud, $credentials);
     }
 
     public function getCloud()

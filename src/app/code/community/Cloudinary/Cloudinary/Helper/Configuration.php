@@ -97,8 +97,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     public function buildConfiguration()
     {
         $config = Configuration::fromCloudAndCredentials(
-            $this->buildCredentials(),
-            Cloud::fromName($this->getCloudName())
+            Cloud::fromName($this->getCloudName()),
+            $this->buildCredentials()
         );
 
         $config->getDefaultTransformation()
