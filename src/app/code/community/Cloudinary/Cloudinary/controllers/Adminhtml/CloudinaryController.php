@@ -16,23 +16,24 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function indexAction()
     {
-        $totalImageCount = $this->_sumOfCatalogAndCmsImages();
-        $totalSynchronizedImageCount = $this->_synchronisedImageCount();
-
-        $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
-        $configBlock = $this->_buildConfigBlock($totalSynchronizedImageCount, $totalImageCount);
-
-        if ($totalImageCount === $totalSynchronizedImageCount) {
-            Mage::getSingleton('core/session')->addNotice('All images have been successfully migrated to Cloudinary');
-        }
-
+//        $totalImageCount = $this->_sumOfCatalogAndCmsImages();
+//        $totalSynchronizedImageCount = $this->_synchronisedImageCount();
+//
+//        $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
+//        $configBlock = $this->_buildConfigBlock($totalSynchronizedImageCount, $totalImageCount);
+//
+//        if ($totalImageCount === $totalSynchronizedImageCount) {
+//            Mage::getSingleton('core/session')->addNotice('All images have been successfully migrated to Cloudinary');
+//        }
+//
         $layout = $this->loadLayout();
-        $layout->_addContent($configBlock);
-
-        if ($this->_migrationTask->hasStarted()) {
-            $layout->_addContent($progressBlock);
-            $layout->_addContent($this->_buildMetaRefreshBlock());
-        }
+//        $layout->_addContent($configBlock);
+//        $layout->_addContent($this->_buildWarningBlock());
+//
+//        if ($this->_migrationTask->hasStarted()) {
+//            $layout->_addContent($progressBlock);
+//            $layout->_addContent($this->_buildMetaRefreshBlock());
+//        }
 
         $this->renderLayout();
     }
@@ -84,6 +85,12 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
             ->setImageCount($totalImageCount)
             ->setSynchronizedImageCount($totalSynchronizedImageCount)
             ->build();
+    }
+
+    private function _buildWarningBlock()
+    {
+//        return $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_warning')
+//            ->build();
     }
 
     private function redirect()

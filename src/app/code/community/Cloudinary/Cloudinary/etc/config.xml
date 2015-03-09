@@ -136,4 +136,13 @@
             </cloudinary_migrate>
         </jobs>
     </crontab>
+    <adminhtml>
+        <layout>
+            <updates>
+                <adminhtml_cloudinary>
+                    <file>cloudinary/cloudinary.xml</file>
+                </adminhtml_cloudinary>
+            </updates>
+        </layout>
+    </adminhtml>
 </config>
