@@ -2,6 +2,7 @@
 
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Exception\InvalidCredentials;
 use CloudinaryExtension\ImageProviderFactory;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
@@ -15,7 +16,7 @@ class Cloudinary_Cloudinary_Helper_Configuration_Validation extends Mage_Core_He
         $this->_providerName = $providerName;
     }
 
-    public function validateCredentials($apiKey, $apiSecret, $cloudName)
+    public function validateCredentials($cloudName, $apiKey, $apiSecret)
     {
         $key = Key::fromString($apiKey);
         $secret = Secret::fromString($apiSecret);
@@ -26,8 +27,9 @@ class Cloudinary_Cloudinary_Helper_Configuration_Validation extends Mage_Core_He
             Cloud::fromName($cloudName)
         );
 
-        $imageProvider->validateCredentials();
-
+        if (!$imageProvider->validateCredentials()) {
+            throw new InvalidCredentials("There was a problem validating your Cloudinary credentials.");
+        }
     }
 
 }

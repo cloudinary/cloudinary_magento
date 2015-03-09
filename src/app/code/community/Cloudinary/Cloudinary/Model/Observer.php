@@ -34,11 +34,16 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
         $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
 
-        $cloudinaryConfiguration->validateCredentials(
-            $configData['cloudinary_cloud_name'],
-            $configData['cloudinary_api_key'],
-            $configData['cloudinary_api_secret']
-        );
+        try {
+            $cloudinaryConfiguration->validateCredentials(
+                $configData['cloudinary_cloud_name'],
+                $configData['cloudinary_api_key'],
+                $configData['cloudinary_api_secret']
+            );
+        } catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            Mage::logException($e);
+        }
 
     }
 
