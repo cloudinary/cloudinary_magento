@@ -1,6 +1,7 @@
 <?php
 
-use CloudinaryExtension\ImageManagerFactory;
+use CloudinaryExtension\CloudinaryImageProvider;
+use CloudinaryExtension\Image;
 
 class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uploader
 {
@@ -11,11 +12,9 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
         parent::_afterSave($result);
 
         if (!empty($result['path']) && !empty($result['file'])) {
-            $imageManager = ImageManagerFactory::buildFromConfiguration(
-                Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()
-            );
+            $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
 
-            $imageManager->uploadImage($result['path'] . DIRECTORY_SEPARATOR . $result['file']);
+            $imageProvider->upload(Image::fromPath($result['path'] . DIRECTORY_SEPARATOR . $result['file']));
 
             $this->_trackSynchronisation($result['file']);
         }

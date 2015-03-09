@@ -43,4 +43,13 @@ class Configuration
     {
         $this->defaultTransformation = $transformation;
     }
+
+    public function build()
+    {
+        return array(
+            "cloud_name" => (string)$this->cloud,
+            "api_key"    => (string)$this->credentials->getKey(),
+            "api_secret" => (string)$this->credentials->getSecret()
+        );
+    }
 }

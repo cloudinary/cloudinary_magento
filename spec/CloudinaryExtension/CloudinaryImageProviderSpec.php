@@ -4,18 +4,16 @@ namespace spec\CloudinaryExtension;
 
 require_once ('src/lib/Cloudinary/src/Cloudinary.php');
 
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Configuration;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class CloudinaryImageProviderSpec extends ObjectBehavior
 {
-    function let(Credentials $credentials, Cloud $cloud)
+    function let(Configuration $configuration)
     {
-        $cloud->__toString()->willReturn('');
-
-        $this->beConstructedWith($credentials, $cloud);
+        $configuration->build()->shouldBeCalled();
+        $this->beConstructedThrough('fromConfiguration', [$configuration]);
     }
 
     function it_is_an_image_provider()

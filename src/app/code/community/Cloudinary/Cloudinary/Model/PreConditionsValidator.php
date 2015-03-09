@@ -1,8 +1,6 @@
 <?php
 trait  Cloudinary_Cloudinary_Model_PreConditionsValidator
 {
-    private $_config;
-
     private function _isEnabled()
     {
         return $this->_getConfigHelper()->isEnabled();
@@ -15,7 +13,7 @@ trait  Cloudinary_Cloudinary_Model_PreConditionsValidator
 
     private function _getConfigHelper()
     {
-        return $this->_config = Mage::helper('cloudinary_cloudinary/configuration');
+        return Mage::helper('cloudinary_cloudinary/configuration');
     }
 
     private function _imageShouldComeFromCloudinary($file)

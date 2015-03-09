@@ -62,6 +62,11 @@ class FakeImageProvider implements ImageProvider {
 
     public function transformImage(Image $image, \CloudinaryExtension\Image\Transformation $transformation)
     {
+        $imageName = (string)$image;
+        if($this->areCredentialsCorrect() && $this->isCloudCorrect()) {
+            return array_key_exists($imageName, $this->uploadedImageUrl) ? $this->uploadedImageUrl[$imageName] : '';
+        }
+        return '';
     }
 
     public function deleteImage(Image $image)
