@@ -39,10 +39,13 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function validateCredentials()
     {
-        $url = Security\Url::fromString("https://cloudinary.com/console/media_library/cms");
-        $signedUrl = Security\SignedUrl::fromUrlAndCredentials($url, $this->credentials);
+        $consoleUrl = Security\ConsoleUrl::fromPath("media_library/cms");
+        $signedConsoleUrl = Security\SignedConsoleUrl::fromConsoleUrlAndCredentials(
+            $consoleUrl,
+            $this->configuration->getCredentials()
+        );
 
-        $curlHandler = curl_init($signedUrl);
+        $curlHandler = curl_init($signedConsoleUrl);
 
         curl_setopt($curlHandler, CURLOPT_HEADER, 1);
         curl_setopt($curlHandler, CURLOPT_FAILONERROR, 1);
