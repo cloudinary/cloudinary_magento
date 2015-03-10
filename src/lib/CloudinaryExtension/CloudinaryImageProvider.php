@@ -1,10 +1,12 @@
 <?php
 
+
 namespace CloudinaryExtension;
 
 use Cloudinary;
 use Cloudinary\Uploader;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Security;
 
 class CloudinaryImageProvider implements ImageProvider
 {
@@ -34,6 +36,12 @@ class CloudinaryImageProvider implements ImageProvider
         return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
     }
 
+    public function validateCredentials()
+    {
+        $signedValidationUrl = $this->getSignedValidationUrl();
+        return $this->validationResult($signedValidationUrl);
+    }
+
     public function deleteImage(Image $image)
     {
         Uploader::destroy($image->getId());
@@ -42,5 +50,20 @@ class CloudinaryImageProvider implements ImageProvider
     private function authorise()
     {
         Cloudinary::config($this->configuration->build());
+    }
+
+    private function getSignedValidationUrl()
+    {
+        $consoleUrl = Security\ConsoleUrl::fromPath("media_library/cms");
+        return (string)Security\SignedConsoleUrl::fromConsoleUrlAndCredentials(
+            $consoleUrl,
+            $this->configuration->getCredentials()
+        );
+    }
+
+    private function validationResult($signedValidationUrl)
+    {
+        $request = new ValidateRemoteUrlRequest($signedValidationUrl);
+        return $request->validate();
     }
 }

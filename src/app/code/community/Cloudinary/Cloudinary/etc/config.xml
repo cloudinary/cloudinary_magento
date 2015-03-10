@@ -105,6 +105,18 @@
             </cloudinary_setup>
         </resources>
     </global>
+    <adminhtml>
+        <events>
+            <model_config_data_save_before>
+                <observers>
+                    <validate_cloudinary_credentials>
+                        <class>cloudinary_cloudinary/observer</class>
+                        <method>validateCloudinaryCredentials</method>
+                    </validate_cloudinary_credentials>
+                </observers>
+            </model_config_data_save_before>
+        </events>
+    </adminhtml>
     <admin>
         <routers>
             <adminhtml>
