@@ -54,8 +54,7 @@ class CloudinaryImageProvider implements ImageProvider
 
         $responseCode = curl_getinfo($curlHandler, CURLINFO_HTTP_CODE);
         $curlError = null;
-        if (curl_errno($curlHandler))
-        {
+        if (curl_errno($curlHandler)) {
             $curlError = curl_error($curlHandler);
         }
 
