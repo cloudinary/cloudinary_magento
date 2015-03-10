@@ -5,14 +5,13 @@ namespace Domain;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image\Transformation;
-use CloudinaryExtension\ImageProviderFactory;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Cloud;
+use ImageProviders\FakeImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
@@ -72,12 +71,7 @@ class DomainContext implements Context, SnippetAcceptingContext
     public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret(Image $anImage, Cloud $aCloud, Key $aKey, Secret $aSecret)
     {
         $credentials = new Credentials($aKey, $aSecret);
-        $configuration = Configuration::fromCloudAndCredentials($credentials, $aCloud);
-
-        $this->provider = ImageProviderFactory::fromProviderNameAndConfiguration(
-            'imageProviders\Fake',
-            $configuration
-        );
+        $this->provider = new FakeImageProvider($credentials, $aCloud);
 
         $this->provider->upload($anImage);
     }
@@ -124,12 +118,7 @@ class DomainContext implements Context, SnippetAcceptingContext
         $key = Key::fromString('ABC123');
         $secret = Secret::fromString('DEF456');
         $credentials = new Credentials($key, $secret);
-        $configuration = Configuration::fromCloudAndCredentials($credentials, $aCloud);
-
-        $this->provider = ImageProviderFactory::fromProviderNameAndConfiguration(
-            'imageProviders\Fake',
-            $configuration
-        );
+        $this->provider = new FakeImageProvider($credentials, $aCloud);
     }
 
     /**
@@ -140,12 +129,7 @@ class DomainContext implements Context, SnippetAcceptingContext
         $key = Key::fromString('UVW789');
         $secret = Secret::fromString('XYZ123');
         $credentials = new Credentials($key, $secret);
-        $configuration = Configuration::fromCloudAndCredentials($credentials, $aCloud);
-
-        $this->provider = ImageProviderFactory::fromProviderNameAndConfiguration(
-            'imageProviders\Fake',
-            $configuration
-        );
+        $this->provider = new FakeImageProvider($credentials, $aCloud);
     }
 
     /**
