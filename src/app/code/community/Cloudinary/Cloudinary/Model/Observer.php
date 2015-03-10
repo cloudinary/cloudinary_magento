@@ -30,10 +30,8 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
             return;
         }
 
-        $configData = $this->_flattenConfigData($configObject);
-
         try {
-            $this->_validateCredentialsFromConfigData($configData);
+            $this->_validateCredentialsFromConfigObject($configObject);
         } catch (Exception $e) {
             $this->_addErrorMessageToAdminSession($e);
             $this->_logException($e);
@@ -73,14 +71,16 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $configData;
     }
 
-    private function _isNotCloudinaryConfigurationSection($configObject)
+    private function _isNotCloudinaryConfigurationSection(Mage_Adminhtml_Model_Config_Data $configObject)
     {
         return $configObject->getSection() != self::CLOUDINARY_CONFIG_SECTION;
     }
 
-    private function _validateCredentialsFromConfigData(array $configData)
+    private function _validateCredentialsFromConfigObject(Mage_Adminhtml_Model_Config_Data $configObject)
     {
+        $configData = $this->_flattenConfigData($configObject);
         $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
+
         $cloudinaryConfiguration->validateCredentials(
             $configData['cloudinary_cloud_name'],
             $configData['cloudinary_api_key'],
