@@ -49,11 +49,12 @@ class Configuration
 
     public function build()
     {
-        return array(
-            "cloud_name" => (string)$this->cloud,
-            "api_key"    => (string)$this->credentials->getKey(),
-            "api_secret" => (string)$this->credentials->getSecret()
-        );
+        $configuration = $this->getMandatoryConfiguration();
+        if($this->cdnSubdomain) {
+            $configuration['cdn_subdomain'] = true;
+        }
+
+        return $configuration;
     }
 
     public function enableCdnSubdomain()
@@ -64,5 +65,14 @@ class Configuration
     public function getCdnSubdomainStatus()
     {
         return $this->cdnSubdomain;
+    }
+
+    private function getMandatoryConfiguration()
+    {
+        return array(
+            "cloud_name" => (string)$this->cloud,
+            "api_key" => (string)$this->credentials->getKey(),
+            "api_secret" => (string)$this->credentials->getSecret()
+        );
     }
 }

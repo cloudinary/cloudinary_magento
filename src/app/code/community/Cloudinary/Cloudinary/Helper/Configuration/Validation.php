@@ -27,8 +27,8 @@ class Cloudinary_Cloudinary_Helper_Configuration_Validation extends Mage_Core_He
         $secret = Secret::fromString($apiSecret);
 
         $configuration = Configuration::fromCloudAndCredentials(
-            new Credentials($key, $secret),
-            Cloud::fromName($cloudName)
+            Cloud::fromName($cloudName),
+            new Credentials($key, $secret)
         );
         return $configuration;
     }

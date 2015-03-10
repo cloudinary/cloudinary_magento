@@ -38,4 +38,8 @@ class ConfigImageProvider implements ImageProvider
     public function deleteImage(Image $image)
     {
     }
+
+    public function validateCredentials()
+    {
+    }
 }

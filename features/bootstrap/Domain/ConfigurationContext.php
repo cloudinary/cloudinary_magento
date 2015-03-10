@@ -27,9 +27,9 @@ class ConfigurationContext implements Context
     private $imageProvider;
 
     /**
-     * @Given I have a configuration to use multiple sub-domain
+     * @Given I have a configuration to use multiple sub-domains
      */
-    public function iHaveAConfigurationToUseMultipleSubDomain()
+    public function iHaveAConfigurationToUseMultipleSubDomains()
     {
         $cloud = Cloud::fromName('aCloud');
         $credentials = new Credentials(Key::fromString("aKey"), Secret::fromString("aSecret"));

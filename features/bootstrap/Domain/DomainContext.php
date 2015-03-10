@@ -18,7 +18,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 /**
  * Defines application features from the specific context.
  */
-class DomainContext implements Context, SnippetAcceptingContext
+class DomainContext implements Context
 {
     private $provider;
     private $image;
