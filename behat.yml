@@ -6,6 +6,7 @@ default:
         - Domain\DomainContext
         - Domain\TransformationContext
         - Domain\DeleteImageDomainContext
+        - Domain\ConfigurationContext
     ui:
       filters: { tags: '@critical' }
       contexts:

@@ -134,6 +134,9 @@
                 <cloudinary_fetch_format>1</cloudinary_fetch_format>
                 <cloudinary_image_quality>80</cloudinary_image_quality>
             </transformations>
+            <configuration>
+                <cloudinary_cdn_subdomain>1</cloudinary_cdn_subdomain>
+            </configuration>
         </cloudinary>
     </default>
     <crontab>

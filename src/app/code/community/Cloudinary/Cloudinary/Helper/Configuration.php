@@ -22,6 +22,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     const CONFIG_DEFAULT_FETCH_FORMAT = 'cloudinary/transformations/cloudinary_fetch_format';
 
+    const CONFIG_CDN_SUBDOMAIN = 'cloudinary/configuration/cloudinary_cdn_subdomain';
+
     const STATUS_ENABLED = 1;
 
     const STATUS_DISABLED = 0;
@@ -79,6 +81,11 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         return (string)Mage::getStoreConfig(self::CONFIG_DEFAULT_QUALITY);
     }
 
+    public function getCdnSubdomainFlag()
+    {
+        return (boolean)Mage::getStoreConfig(self::CONFIG_CDN_SUBDOMAIN);
+    }
+
     public function isEnabled()
     {
         return (boolean)Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
@@ -97,9 +104,13 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     public function buildConfiguration()
     {
         $config = Configuration::fromCloudAndCredentials(
-            $this->buildCredentials(),
-            Cloud::fromName($this->getCloudName())
+            Cloud::fromName($this->getCloudName()),
+            $this->buildCredentials()
         );
+
+        if($this->getCdnSubdomainFlag()) {
+            $config->enableCdnSubdomain();
+        }
 
         $config->getDefaultTransformation()
             ->withGravity(Gravity::fromString($this->getDefaultGravity()))
