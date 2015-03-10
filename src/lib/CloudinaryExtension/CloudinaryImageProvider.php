@@ -38,32 +38,8 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function validateCredentials()
     {
-        $consoleUrl = Security\ConsoleUrl::fromPath("media_library/cms");
-        $signedConsoleUrl = Security\SignedConsoleUrl::fromConsoleUrlAndCredentials(
-            $consoleUrl,
-            $this->configuration->getCredentials()
-        );
-
-        $curlHandler = curl_init($signedConsoleUrl);
-
-        curl_setopt($curlHandler, CURLOPT_HEADER, 1);
-        curl_setopt($curlHandler, CURLOPT_FAILONERROR, 1);
-        curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
-
-        curl_exec($curlHandler);
-
-        $responseCode = curl_getinfo($curlHandler, CURLINFO_HTTP_CODE);
-        $curlError = null;
-        if (curl_errno($curlHandler)) {
-            $curlError = curl_error($curlHandler);
-        }
-
-        curl_close($curlHandler);
-
-        if ($responseCode == 200 && is_null($curlError)) {
-            return true;
-        }
-        return false;
+        $signedValidationUrl = $this->getSignedValidationUrl();
+        return $this->validationResult($signedValidationUrl);
     }
 
     public function deleteImage(Image $image)
@@ -74,5 +50,20 @@ class CloudinaryImageProvider implements ImageProvider
     private function authorise()
     {
         Cloudinary::config($this->configuration->build());
+    }
+
+    private function getSignedValidationUrl()
+    {
+        $consoleUrl = Security\ConsoleUrl::fromPath("media_library/cms");
+        return (string)Security\SignedConsoleUrl::fromConsoleUrlAndCredentials(
+            $consoleUrl,
+            $this->configuration->getCredentials()
+        );
+    }
+
+    private function validationResult($signedValidationUrl)
+    {
+        $request = new ValidateRemoteUrlRequest($signedValidationUrl);
+        return $request->validate();
     }
 }
