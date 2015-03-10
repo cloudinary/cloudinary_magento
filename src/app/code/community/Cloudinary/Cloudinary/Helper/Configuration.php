@@ -4,8 +4,8 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Image\Transformation\FetchFormat;
 use CloudinaryExtension\Image\Transformation\Gravity;
-use CloudinaryExtension\Image\Transformation\Format;
 use CloudinaryExtension\Image\Transformation\Quality;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
@@ -66,7 +66,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function getFetchFormat()
     {
-        return Mage::getStoreConfig(self::CONFIG_DEFAULT_FETCH_FORMAT) === "1" ? Format::FETCH_FORMAT_AUTO : null;
+        return Mage::getStoreConfig(self::CONFIG_DEFAULT_FETCH_FORMAT) === "1" ? FetchFormat::FETCH_FORMAT_AUTO : null;
     }
 
     public function setImageQuality($value)
@@ -103,7 +103,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
         $config->getDefaultTransformation()
             ->withGravity(Gravity::fromString($this->getDefaultGravity()))
-            ->withFormat(Format::fromString($this->getFetchFormat()))
+            ->withFetchFormat(FetchFormat::fromString($this->getFetchFormat()))
             ->withQuality(Quality::fromString($this->getImageQuality()));
 
         return $config;

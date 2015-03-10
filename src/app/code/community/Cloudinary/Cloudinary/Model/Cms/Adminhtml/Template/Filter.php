@@ -1,7 +1,6 @@
 <?php
 
 use CloudinaryExtension\Image;
-use CloudinaryExtension\ImageManagerFactory;
 
 class Cloudinary_Cloudinary_Model_Cms_Adminhtml_Template_Filter
     extends Mage_Cms_Model_Adminhtml_Template_Filter

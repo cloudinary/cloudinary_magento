@@ -2,6 +2,10 @@
 
 class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
+    private $_migrationTask;
+
+    private $_cloudinaryConfig;
+
     public function __construct()
     {
         $this->_blockGroup = 'cloudinary_cloudinary';
@@ -11,41 +15,45 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         $this->_headerText = Mage::helper('cloudinary_cloudinary')
             ->__('Manage Cloudinary');
 
-        parent::__construct();
+        $this->_migrationTask = Mage::getModel('cloudinary_cloudinary/migration')
+            ->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
 
-        $this->_removeButton('add');
+        $this->_cloudinaryConfig = Mage::helper('cloudinary_cloudinary/configuration');
+
+        parent::__construct();
     }
 
-    public function build()
+    public function getPercentComplete()
     {
+        return $this->getSynchronizedImageCount() * 100 / $this->getTotalImageCount();
+    }
 
-        if ($this->getExtensionEnabled()) {
-            $enableLabel = 'Disable Cloudinary';
-            $enableAction = 'disableCloudinary';
-        } else {
-            $enableLabel = 'EnableCloudinary';
-            $enableAction = 'enableCloudinary';
-        }
+    public function getSynchronizedImageCount()
+    {
+        return Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')->getSize();
+    }
 
-        if ($this->getMigrationStarted()) {
-            $startLabel = 'Stop Migration';
-            $startAction = 'stopMigration';
-        } else {
-            $startLabel = 'Start Migration';
-            $startAction = 'startMigration';
-        }
+    public function getTotalImageCount()
+    {
+        $mediaCounter = Mage::getModel('cloudinary_cloudinary/mediaCollectionCounter')
+            ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/media_collection'))
+            ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'));
 
-        $noImagesToSync = (0 === $this->getSynchronizedImageCount() - $this->getImageCount());
+        return $mediaCounter->count();
+    }
 
-        $this->_addButton('cloudinary_migration_start', array(
-            'label' => $this->__($startLabel),
-            'disabled' => $noImagesToSync,
-            'onclick' => "setLocation('{$this->getUrl(sprintf('*/cloudinary/%s', $startAction))}')",
-        ));
+    public function hasMigrationStarted()
+    {
+        return $this->_migrationTask->hasStarted();
+    }
 
-        $this->_addButton('cloudinary_toggle_enable', array(
-            'label' => $this->__($enableLabel),
-            'onclick' => "setLocation('{$this->getUrl(sprintf('*/cloudinary/%s', $enableAction))}')",
-        ));
+    public function isExtensionEnabled()
+    {
+        return $this->_cloudinaryConfig->isEnabled();
+    }
+
+    public function allImagesSynced()
+    {
+        return $this->getSynchronizedImageCount() === $this->getTotalImageCount();
     }
 } 

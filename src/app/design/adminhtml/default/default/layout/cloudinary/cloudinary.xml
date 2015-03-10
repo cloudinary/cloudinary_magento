@@ -2,7 +2,7 @@
 <layout>
     <adminhtml_cloudinary_index>
         <reference name="content">
-            <block type="cloudinary_cloudinary/adminhtml_warning" name="cloudinary_warning" template="cloudinary/warning.phtml"></block>
+            <block type="cloudinary_cloudinary/adminhtml_manage" name="cloudinary_manage" template="cloudinary/manage.phtml"></block>
         </reference>
     </adminhtml_cloudinary_index>
 </layout>

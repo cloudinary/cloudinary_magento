@@ -1,0 +1,51 @@
+<div class="content-header">
+    <table cellspacing="0"><tbody>
+        <tr><td style="width:50%;"><h3 class="icon-head">Manage Cloudinary</h3></td></tr>
+    </tbody></table>
+</div>
+
+<?php if ($this->hasMigrationStarted()) : ?>
+    <button onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/stopMigration') ?>'">Stop Migration</button>
+<?php else : ?>
+    <button
+        onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/startMigration') ?>'"
+        class="<?php echo ($this->allImagesSynced())?'disabled':'' ?>"
+        <?php echo ($this->allImagesSynced())?'disabled':''?> >Start Migration
+    </button>
+<?php endif ?>
+
+<?php if ($this->isExtensionEnabled()) : ?>
+    <button onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/disableCloudinary') ?>'">Disable Cloudinary</button>
+<?php else : ?>
+    <button onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/enableCloudinary') ?>'">Enable Cloudinary</button>
+<?php endif ?>
+
+<br/>
+<br/>
+
+<? if ($this->allImagesSynced()) : ?>
+    <div id="messages"><ul class="messages"><li class="notice-msg"><ul><li><span>All images have been successfully migrated to Cloudinary</span></li></ul></li></ul></div>
+<? else : ?>
+    <p>Progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
+    <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated</p>
+<?php endif ?>
+
+<p>
+    <strong>
+        Please note that if you have a lot of images then migration could take a while.
+        You can leave this page and come back to check on progress
+    </strong>
+</p>
+
+<p>
+    <strong>Instructions:</strong>
+    If you want to learn how to use the Cloudinary Module: Head over to our <a href="">usage instructions</a> or our <a href="">&quot;How to use Video&quote; tutorial</a>
+</p>
+
+<p>
+    Need assistance? <a href="http://support.cloudinary.com/hc/en-us/selections">Submit a ticket</a>
+</p>
+
+<p>
+    Got feedback? <a href="mailto:feedback_magento@cloudinary.com">Email us</a>
+</p>
