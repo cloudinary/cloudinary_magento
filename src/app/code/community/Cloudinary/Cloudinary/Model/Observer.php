@@ -26,25 +26,18 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     public function validateCloudinaryCredentials(Varien_Event_Observer $observer)
     {
         $configObject = $observer->getEvent()->getObject();
-        if ($configObject->getSection() != self::CLOUDINARY_CONFIG_SECTION) {
+        if ($this->_isNotCloudinaryConfigurationSection($configObject)) {
             return;
         }
 
         $configData = $this->_flattenConfigData($configObject);
 
-        $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
-
         try {
-            $cloudinaryConfiguration->validateCredentials(
-                $configData['cloudinary_cloud_name'],
-                $configData['cloudinary_api_key'],
-                $configData['cloudinary_api_secret']
-            );
+            $this->_validateCredentialsFromConfigData($configData);
         } catch (Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            Mage::logException($e);
+            $this->_addErrorMessageToAdminSession($e);
+            $this->_logException($e);
         }
-
     }
 
     private function _getImagesToUpload(Mage_Catalog_Model_Product $product)
@@ -78,5 +71,30 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
             }
         }
         return $configData;
+    }
+
+    private function _isNotCloudinaryConfigurationSection($configObject)
+    {
+        return $configObject->getSection() != self::CLOUDINARY_CONFIG_SECTION;
+    }
+
+    private function _validateCredentialsFromConfigData(array $configData)
+    {
+        $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
+        $cloudinaryConfiguration->validateCredentials(
+            $configData['cloudinary_cloud_name'],
+            $configData['cloudinary_api_key'],
+            $configData['cloudinary_api_secret']
+        );
+    }
+
+    private function _addErrorMessageToAdminSession($e)
+    {
+        Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+    }
+
+    private function _logException($e)
+    {
+        Mage::logException($e);
     }
 }
