@@ -5,7 +5,6 @@ namespace Ui;
 use Behat\Behat\Context\Context;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
-use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
@@ -19,20 +18,11 @@ use Page\CloudinaryAdminSystemConfiguration;
 class AdminCredentialsContext extends RawMagentoContext implements Context
 {
 
-    /** @var  ImageProvider */
     private $imageProvider;
     private $_fixtureManager;
     private $image;
     private $areCredentialsValid;
-
-    /**
-     * @var CloudinaryAdminSystemConfiguration
-     */
     private $adminConfigPage;
-
-    /**
-     * @var AdminLogin
-     */
     private $adminLoginPage;
 
     public function __construct(CloudinaryAdminSystemConfiguration $adminSystemConfiguration, AdminLogin $adminLoginPage)

@@ -4,7 +4,6 @@
 namespace CloudinaryExtension;
 
 use Cloudinary;
-use Cloudinary\Api\GeneralError;
 use Cloudinary\Uploader;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security;
