@@ -62,11 +62,14 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     {
         $configData = array();
         $groups = $configObject->getGroups();
-        foreach ($groups as $groupData) {
-            foreach ($groupData['fields'] as $field => $fieldData) {
-                $configData[$field] = (is_array($fieldData) && isset($fieldData['value']))
-                    ? $fieldData['value'] : null;
-            }
+
+        if ($this->_containsCloudAndCredentials($groups)) {
+            $configData = array_map(
+                function($field) {
+                    return $field['value'];
+                },
+                array_merge($groups['cloud']['fields'], $groups['credentials']['fields'])
+            );
         }
         return $configData;
     }
@@ -96,5 +99,10 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     private function _logException($e)
     {
         Mage::logException($e);
+    }
+
+    private function _containsCloudAndCredentials($groups)
+    {
+        return array_key_exists('cloud', $groups) && array_key_exists('credentials', $groups);
     }
 }
