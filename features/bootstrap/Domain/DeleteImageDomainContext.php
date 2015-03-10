@@ -2,20 +2,15 @@
 
 namespace Domain;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\ImageProviderFactory;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
-use ImageProviders\FakeImageProvider;
-
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
@@ -48,7 +43,12 @@ class DeleteImageDomainContext implements Context
         $secret = Secret::fromString(self::IMAGE_PROVIDER_SECRET);
 
         $credentials = new Credentials($key, $secret);
-        $this->imageProvider = new FakeImageProvider($credentials, $cloud);
+        $configuration = Configuration::fromCloudAndCredentials($credentials, $cloud);
+
+        $this->imageProvider = ImageProviderFactory::fromProviderNameAndConfiguration(
+            'imageProviders\Fake',
+            $configuration
+        );
 
         $this->imageProvider->setMockCredentials($key, $secret);
         $this->imageProvider->setMockCloud($cloud);

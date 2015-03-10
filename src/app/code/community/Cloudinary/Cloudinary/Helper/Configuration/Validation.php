@@ -1,6 +1,7 @@
 <?php
 
 use CloudinaryExtension\Cloud;
+use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Exception\InvalidCredentials;
 use CloudinaryExtension\ImageProviderFactory;
@@ -21,10 +22,14 @@ class Cloudinary_Cloudinary_Helper_Configuration_Validation extends Mage_Core_He
         $key = Key::fromString($apiKey);
         $secret = Secret::fromString($apiSecret);
 
-        $imageProvider = ImageProviderFactory::fromProviderName(
-            $this->_providerName,
+        $configuration = Configuration::fromCloudAndCredentials(
             new Credentials($key, $secret),
             Cloud::fromName($cloudName)
+        );
+
+        $imageProvider = ImageProviderFactory::fromProviderNameAndConfiguration(
+            $this->_providerName,
+            $configuration
         );
 
         if (!$imageProvider->validateCredentials()) {

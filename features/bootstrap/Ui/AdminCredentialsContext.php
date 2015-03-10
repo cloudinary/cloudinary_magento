@@ -4,6 +4,7 @@ namespace Ui;
 
 use Behat\Behat\Context\Context;
 use CloudinaryExtension\Cloud;
+use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\ImageProvider;
 use CloudinaryExtension\ImageProviderFactory;
@@ -106,12 +107,17 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     {
         $this->saveCredentialsAndCloudToMagentoConfiguration($aKey, $aSecret, $aCloud);
 
-        $configuration = \Mage::helper('cloudinary_cloudinary/configuration');
-        $apiKey = Key::fromString($configuration->getApiKey());
-        $apiSecret = Secret::fromString($configuration->getApiSecret());
-        $cloudName = Cloud::fromName($configuration->getCloudName());
+        $configurationHelper = \Mage::helper('cloudinary_cloudinary/configuration');
+        $apiKey = Key::fromString($configurationHelper->getApiKey());
+        $apiSecret = Secret::fromString($configurationHelper->getApiSecret());
+        $cloudName = Cloud::fromName($configurationHelper->getCloudName());
 
-        $this->imageProvider = new FakeImageProvider(new Credentials($apiKey, $apiSecret), $cloudName);
+        $configuration = Configuration::fromCloudAndCredentials(new Credentials($apiKey, $apiSecret), $cloudName);
+
+        $this->imageProvider = ImageProviderFactory::fromProviderNameAndConfiguration(
+            'imageProviders\Fake',
+            $configuration
+        );
         $this->imageProvider->upload($anImage);
     }
 
@@ -152,10 +158,11 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
         $key = Key::fromString('ABC123');
         $secret = Secret::fromString('DEF456');
 
-        $this->imageProvider = ImageProviderFactory::fromProviderName(
-            'fake',
-            new Credentials($key, $secret),
-            $aCloud
+        $configuration = Configuration::fromCloudAndCredentials(new Credentials($key, $secret), $aCloud);
+
+        $this->imageProvider = ImageProviderFactory::fromProviderNameAndConfiguration(
+            'imageProviders\Fake',
+            $configuration
         );
     }
 
@@ -183,10 +190,11 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
         $key = Key::fromString('UVW789');
         $secret = Secret::fromString('XYZ123');
 
-        $this->imageProvider = ImageProviderFactory::fromProviderName(
-            'fake',
-            new Credentials($key, $secret),
-            $aCloud
+        $configuration = Configuration::fromCloudAndCredentials(new Credentials($key, $secret), $aCloud);
+
+        $this->imageProvider = ImageProviderFactory::fromProviderNameAndConfiguration(
+            'imageProviders\Fake',
+            $configuration
         );
     }
 

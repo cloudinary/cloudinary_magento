@@ -3,7 +3,7 @@
 namespace ImageProviders;
 
 use CloudinaryExtension\Cloud;
-use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
@@ -19,10 +19,16 @@ class FakeImageProvider implements ImageProvider {
     private $mockCloud;
     private $cloud;
 
-    public function __construct(Credentials $credentials, Cloud $cloud)
+    private function __construct(Configuration $configuration)
     {
-        $this->credentials = $credentials;
-        $this->cloud = $cloud;
+        $this->configuration = $configuration;
+        $this->credentials = $configuration->getCredentials();
+        $this->cloud = $configuration->getCloud();
+    }
+
+    public static function fromConfiguration(Configuration $configuration)
+    {
+        return new FakeImageProvider($configuration);
     }
 
     public function setMockCredentials(Key $aKey, Secret $aSecret)

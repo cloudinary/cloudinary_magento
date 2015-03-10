@@ -5,13 +5,13 @@ namespace CloudinaryExtension;
 class ImageProviderFactory
 {
 
-    public static function fromProviderName($providerName, Credentials $credentials, Cloud $cloud)
+    public static function fromProviderNameAndConfiguration($providerName, Configuration $configuration)
     {
         if ($providerName == 'cloudinary') {
-            return new CloudinaryImageProvider($credentials, $cloud);
+            return CloudinaryImageProvider::fromConfiguration($configuration);
         }
         $providerClass = ucwords($providerName) . 'ImageProvider';
-        return new $providerClass($credentials, $cloud);
+        return $providerClass::fromConfiguration($configuration);
     }
 
 }
