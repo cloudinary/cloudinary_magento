@@ -42,11 +42,6 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         return $mediaCounter->count();
     }
 
-    public function hasMigrationStarted()
-    {
-        return $this->_migrationTask->hasStarted();
-    }
-
     public function isExtensionEnabled()
     {
         return $this->_cloudinaryConfig->isEnabled();
@@ -55,5 +50,44 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
     public function allImagesSynced()
     {
         return $this->getSynchronizedImageCount() === $this->getTotalImageCount();
+    }
+
+    public function getEnableButton()
+    {
+        if ($this->_cloudinaryConfig->isEnabled()) {
+            $enableLabel = 'Disable Cloudinary';
+            $enableAction = 'disableCloudinary';
+        } else {
+            $enableLabel = 'EnableCloudinary';
+            $enableAction = 'enableCloudinary';
+        }
+
+        return $this->makeButton($enableLabel, $enableAction);
+    }
+
+    public function getMigrateButton()
+    {
+        if ($this->_migrationTask->hasStarted()) {
+            $startLabel = 'Stop Migration';
+            $startAction = 'stopMigration';
+        } else {
+            $startLabel = 'Start Migration';
+            $startAction = 'startMigration';
+        }
+
+        return $this->makeButton($startLabel, $startAction, $this->allImagesSynced());
+    }
+
+    private function makeButton($label, $action, $disabled = false)
+    {
+        $button = $this->getLayout()->createBlock('adminhtml/widget_button')
+            ->setData(array(
+                'id' => 'cloudinary_migration_start',
+                'label' => $this->helper('adminhtml')->__($label),
+                'disabled' => $disabled,
+                'onclick' => "setLocation('{$this->getUrl(sprintf('*/cloudinary/%s', $action))}')"
+            ));
+
+        return $button->toHtml();
     }
 } 

@@ -4,21 +4,9 @@
             <td style="width:50%;"><h3 class="icon-head">Manage Cloudinary</h3></td>
             <td class="form-buttons">
 
-                <?php if ($this->hasMigrationStarted()) : ?>
-                    <button onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/stopMigration') ?>'">Stop Migration</button>
-                <?php else : ?>
-                    <button
-                        onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/startMigration') ?>'"
-                        class="<?php echo ($this->allImagesSynced())?'disabled':'' ?>"
-                        <?php echo ($this->allImagesSynced())?'disabled':''?> >Start Migration
-                    </button>
-                <?php endif ?>
+                <?php echo $this->getMigrateButton() ?>
 
-                <?php if ($this->isExtensionEnabled()) : ?>
-                    <button onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/disableCloudinary') ?>'">Enable Cloudinary</button>
-                <?php else : ?>
-                    <button onclick="window.location.href='<?php echo $this->getUrl('*/cloudinary/enableCloudinary') ?>'">Disable Cloudinary</button>
-                <?php endif ?>
+                <?php echo $this->getEnableButton() ?>
 
             </td>
         </tr>
