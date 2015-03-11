@@ -42,11 +42,6 @@ class Configuration
         return $this->defaultTransformation;
     }
 
-    public function setDefaultTransformation(Transformation $transformation)
-    {
-        $this->defaultTransformation = $transformation;
-    }
-
     public function build()
     {
         $configuration = $this->getMandatoryConfiguration();

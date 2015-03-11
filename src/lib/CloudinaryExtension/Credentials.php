@@ -27,4 +27,10 @@ class Credentials
     {
         return $this->secret;
     }
+
+    public static function fromKeySecretPair($key, $secret)
+    {
+        return new Credentials(Key::fromString($key), Secret::fromString($secret));
+    }
+
 }
