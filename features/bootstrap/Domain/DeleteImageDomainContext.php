@@ -2,20 +2,14 @@
 
 namespace Domain;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Cloud;
-use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use ImageProviders\FakeImageProvider;
-
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 

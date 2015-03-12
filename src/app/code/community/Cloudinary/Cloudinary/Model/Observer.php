@@ -3,6 +3,8 @@
 class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 {
 
+    const CLOUDINARY_CONFIG_SECTION = 'cloudinary';
+
     public function loadCustomAutoloaders(Varien_Event_Observer $event)
     {
         Mage::helper('cloudinary_cloudinary/autoloader')->register();
@@ -18,6 +20,21 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
             foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
                 $cloudinaryImage->upload($image);
             }
+        }
+    }
+
+    public function validateCloudinaryCredentials(Varien_Event_Observer $observer)
+    {
+        $configObject = $observer->getEvent()->getObject();
+        if ($this->_isNotCloudinaryConfigurationSection($configObject)) {
+            return;
+        }
+
+        try {
+            $this->_validateCredentialsFromConfigObject($configObject);
+        } catch (Exception $e) {
+            $this->_addErrorMessageToAdminSession($e);
+            $this->_logException($e);
         }
     }
 
@@ -39,5 +56,53 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
     {
         $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
         return $productMedia->removedImagesForProduct($product);
+    }
+
+    private function _flattenConfigData(Mage_Adminhtml_Model_Config_Data $configObject)
+    {
+        $configData = array();
+        $groups = $configObject->getGroups();
+
+        if ($this->_containsCloudAndCredentials($groups)) {
+            $configData = array_map(
+                function($field) {
+                    return $field['value'];
+                },
+                array_merge($groups['cloud']['fields'], $groups['credentials']['fields'])
+            );
+        }
+        return $configData;
+    }
+
+    private function _isNotCloudinaryConfigurationSection(Mage_Adminhtml_Model_Config_Data $configObject)
+    {
+        return $configObject->getSection() != self::CLOUDINARY_CONFIG_SECTION;
+    }
+
+    private function _validateCredentialsFromConfigObject(Mage_Adminhtml_Model_Config_Data $configObject)
+    {
+        $configData = $this->_flattenConfigData($configObject);
+        $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
+
+        $cloudinaryConfiguration->validateCredentials(
+            $configData['cloudinary_cloud_name'],
+            $configData['cloudinary_api_key'],
+            $configData['cloudinary_api_secret']
+        );
+    }
+
+    private function _addErrorMessageToAdminSession($e)
+    {
+        Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+    }
+
+    private function _logException($e)
+    {
+        Mage::logException($e);
+    }
+
+    private function _containsCloudAndCredentials($groups)
+    {
+        return array_key_exists('cloud', $groups) && array_key_exists('credentials', $groups);
     }
 }

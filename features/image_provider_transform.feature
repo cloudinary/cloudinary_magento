@@ -4,7 +4,7 @@ Feature: Getting transformed images from the provider
   I want provide transformed versions of the images
 
   Scenario: Getting a cropped image from the provider
-    Given the image provider has an image "pink_dress.gif"
+    Given there's an image "pink_dress.gif" in the image provider
     When I ask the image provider for "pink_dress.gif" transformed to "100x150"
     Then I should receive that image with the dimensions "100x150"
 
@@ -39,6 +39,17 @@ Feature: Getting transformed images from the provider
 
   Scenario: Changing image quality to 60 percent
     Given there's an image "red-shirt.jpg" in the image provider
-    And I transform the image to have 60 percent quality
+    And I set image quality to 60 percent
     When I request the image from the image provider
     Then I should get an image with 60 percent quality from the image provider
+
+  Scenario: Getting an image with the default DPR setting
+    Given there's an image "red-shirt.jpg" in the image provider
+    When I request the image from the image provider
+    Then I should get the image "red-shirt.jpg" with the default DPR
+
+  Scenario: Changing the DRP setting
+    Given there's an image "red-shirt.jpg" in the image provider
+     And my DPR is set to 2.0 in the configuration
+    When I request the image from the image provider
+    Then I should get an image with DPR 2.0

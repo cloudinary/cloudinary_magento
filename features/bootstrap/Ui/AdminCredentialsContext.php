@@ -2,7 +2,6 @@
 
 namespace Ui;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
@@ -18,18 +17,12 @@ use Page\CloudinaryAdminSystemConfiguration;
 
 class AdminCredentialsContext extends RawMagentoContext implements Context
 {
+
     private $imageProvider;
     private $_fixtureManager;
     private $image;
-
-    /**
-     * @var CloudinaryAdminSystemConfiguration
-     */
+    private $areCredentialsValid;
     private $adminConfigPage;
-
-    /**
-     * @var AdminLogin
-     */
     private $adminLoginPage;
 
     public function __construct(CloudinaryAdminSystemConfiguration $adminSystemConfiguration, AdminLogin $adminLoginPage)
@@ -116,7 +109,12 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
      */
     public function theImageProviderHasACloud($aCloud)
     {
+        $key = Key::fromString('ABC123');
+        $secret = Secret::fromString('DEF456');
+
         $this->imageProvider->setMockCloud($aCloud);
+        $this->imageProvider->setMockCredentials($key, $secret);
+
     }
 
     /**
@@ -133,6 +131,52 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     public function theImageShouldBeAvailableThroughTheImageProvider()
     {
         expect($this->imageProvider->getImageUrlByName((string)$this->image))->notToBe('');
+    }
+
+    /**
+     * @Given I have configured the :aCloud cloud using valid credentials
+     */
+    public function iHaveConfiguredTheCloudUsingValidCredentials(Cloud $aCloud)
+    {
+        $key = Key::fromString('ABC123');
+        $secret = Secret::fromString('DEF456');
+
+        $this->imageProvider = new FakeImageProvider(new Credentials($key, $secret), $aCloud);
+    }
+
+    /**
+     * @When I ask the provider to validate my credentials
+     */
+    public function iAskTheProviderToValidateMyCredentials()
+    {
+        $this->areCredentialsValid = $this->imageProvider->validateCredentials();
+    }
+
+    /**
+     * @Then I should be informed my credentials are valid
+     */
+    public function iShouldBeInformedMyCredentialsAreValid()
+    {
+        expect($this->areCredentialsValid)->toBe(true);
+    }
+
+    /**
+     * @Given I have configured the :aCloud cloud using using invalid credentials
+     */
+    public function iHaveConfiguredTheCloudUsingUsingInvalidCredentials(Cloud $aCloud)
+    {
+        $key = Key::fromString('UVW789');
+        $secret = Secret::fromString('XYZ123');
+
+        $this->imageProvider = new FakeImageProvider(new Credentials($key, $secret), $aCloud);
+    }
+
+    /**
+     * @Then I should be informed that my credentials are not valid
+     */
+    public function iShouldBeInformedThatMyCredentialsAreNotValid()
+    {
+        expect($this->areCredentialsValid)->toBe(false);
     }
 
     private function saveCredentialsAndCloudToMagentoConfiguration($key, $secret, $cloud)

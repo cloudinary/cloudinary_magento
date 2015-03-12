@@ -3,17 +3,16 @@
 namespace ImageProviders;
 
 use CloudinaryExtension\Configuration;
-use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\ImageProvider;
 
-class TransformingImageProvider implements ImageProvider
+class ConfigImageProvider implements ImageProvider
 {
 
-    private $images = array();
-
     private $configuration;
+    private $subdomains = ['cdn1', 'cdn2'];
+    private $prefixCount = 0;
 
     public function __construct(Configuration $configuration)
     {
@@ -22,12 +21,18 @@ class TransformingImageProvider implements ImageProvider
 
     public function upload(Image $image)
     {
-        $this->images[(string)$image] = $image;
     }
 
     public function transformImage(Image $image, Transformation $transformation)
     {
-        return http_build_query($transformation->build()) .'/'. $this->images[(string)$image];
+        $prefix =  $this->subdomains[$this->prefixCount % 2];
+
+        if($this->configuration->getCdnSubdomainStatus() === true)
+        {
+            $this->prefixCount += 1;
+        }
+
+        return $prefix . "/" . $image;
     }
 
     public function deleteImage(Image $image)
@@ -37,5 +42,4 @@ class TransformingImageProvider implements ImageProvider
     public function validateCredentials()
     {
     }
-
 }
