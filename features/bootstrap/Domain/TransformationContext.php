@@ -39,7 +39,7 @@ class TransformationContext implements Context
     {
         $this->configuration = Configuration::fromCloudAndCredentials(
             Cloud::fromName('aCloudName'),
-            Credentials::fromKeySecretPair('aKey', 'aSecret')
+            new Credentials(Key::fromString('aKey'), Secret::fromString('aSecret'))
         );
 
         $this->configuration->getDefaultTransformation()
