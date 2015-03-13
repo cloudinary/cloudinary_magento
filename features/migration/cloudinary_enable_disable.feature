@@ -1,4 +1,4 @@
-@javascript @critical
+@javascript @ui
 Feature: Cloudinary can be enabled or disabled
 
   Background:
