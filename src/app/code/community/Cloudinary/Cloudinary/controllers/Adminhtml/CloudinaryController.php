@@ -53,7 +53,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         $this->_redirect();
     }
 
-    private function _redirect()
+    protected function _redirect()
     {
         return parent::_redirect('*/cloudinary');
     }
