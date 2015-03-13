@@ -17,6 +17,7 @@ class CloudinaryAdminSystemConfiguration extends Page
         'Save Config' => array('xpath' => '//*[@title="Save Config"]'),
         'Image Transformations Header' => array('xpath' => '//*[@id="cloudinary_transformations-head"]'),
         'Default Gravity for Images' => array('css' => "#cloudinary_transformations_cloudinary_gravity option[selected='selected']"),
+        'Sign Up Prompt' => array('xpath' => '//*[@id="config_edit_form"]//h3[contains(text(), "Haven\'t got a Cloudinary Account?")]'),
     );
 
     public function enterCredentials($aKey, $aSecret)
@@ -40,5 +41,10 @@ class CloudinaryAdminSystemConfiguration extends Page
     public function getSelectedGravity()
     {
         return $this->getElement('Default Gravity for Images')->getHtml();
+    }
+
+    public function containsSignUpPrompt()
+    {
+        return $this->hasElement('Sign Up Prompt');
     }
 }

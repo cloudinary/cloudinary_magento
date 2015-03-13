@@ -10,6 +10,13 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
+                <signup>
+                    <frontend_model>cloudinary_cloudinary/adminhtml_system_config_signup</frontend_model>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </signup>>
                 <cloud>
                     <label>Cloud</label>
                     <frontend_type>text</frontend_type>

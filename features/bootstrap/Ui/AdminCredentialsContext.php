@@ -179,6 +179,46 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
         expect($this->areCredentialsValid)->toBe(false);
     }
 
+    /**
+     * @Given I have not configured my cloud and credentials
+     */
+    public function iHaveNotConfiguredMyCloudAndCredentials()
+    {
+        $this->saveCredentialsAndCloudToMagentoConfiguration('', '', '');
+    }
+
+    /**
+     * @When I go to the Cloudinary configuration
+     */
+    public function iGoToTheCloudinaryConfiguration()
+    {
+        $this->adminConfigPage->open();
+    }
+
+    /**
+     * @Then I should be prompted to sign up to Cloudinary
+     */
+    public function iShouldBePromptedToSignUpToCloudinary()
+    {
+        expect($this->adminConfigPage->containsSignUpPrompt())->toBe(true);
+    }
+
+    /**
+     * @Given I have configured my cloud and credentials
+     */
+    public function iHaveConfiguredMyCloudAndCredentials()
+    {
+        $this->saveCredentialsAndCloudToMagentoConfiguration('aKey', 'aSecret', 'aCloud');
+    }
+
+    /**
+     * @Then I should not be prompted to sign up to Cloudinary
+     */
+    public function iShouldNotBePromptedToSignUpToCloudinary()
+    {
+        expect($this->adminConfigPage->containsSignUpPrompt())->toBe(false);
+    }
+
     private function saveCredentialsAndCloudToMagentoConfiguration($key, $secret, $cloud)
     {
         $this->adminLoginPage->sessionLogin('testadmin', 'testadmin123', $this->getSessionService());
