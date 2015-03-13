@@ -45,6 +45,11 @@
             </cloudinary_resource>
         </models>
         <blocks>
+            <adminhtml>
+                <rewrite>
+                    <page_menu>Cloudinary_Cloudinary_Block_Adminhtml_Page_Menu</page_menu>
+                </rewrite>
+            </adminhtml>
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Block</class>
             </cloudinary_cloudinary>
