@@ -62,7 +62,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
             $enableAction = 'enableCloudinary';
         }
 
-        return $this->makeButton($enableLabel, $enableAction);
+        return $this->_makeButton($enableLabel, $enableAction);
     }
 
     public function getMigrateButton()
@@ -75,10 +75,10 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
             $startAction = 'startMigration';
         }
 
-        return $this->makeButton($startLabel, $startAction, $this->allImagesSynced());
+        return $this->_makeButton($startLabel, $startAction, $this->allImagesSynced());
     }
 
-    private function makeButton($label, $action, $disabled = false)
+    private function _makeButton($label, $action, $disabled = false)
     {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
             ->setData(array(

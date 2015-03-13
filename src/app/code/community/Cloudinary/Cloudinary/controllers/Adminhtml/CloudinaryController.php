@@ -29,33 +29,33 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $this->_migrationTask->start();
 
-        $this->redirect();
+        $this->_redirect();
     }
 
     public function stopMigrationAction()
     {
         $this->_migrationTask->stop();
 
-        $this->redirect();
+        $this->_redirect();
     }
 
     public function enableCloudinaryAction()
     {
         $this->_cloudinaryConfig->enable();
 
-        $this->redirect();
+        $this->_redirect();
     }
 
     public function disableCloudinaryAction()
     {
         $this->_cloudinaryConfig->disable();
 
-        $this->redirect();
+        $this->_redirect();
     }
 
-    private function redirect()
+    private function _redirect()
     {
-        return $this->_redirect('*/cloudinary');
+        return parent::_redirect('*/cloudinary');
     }
 
     private function _buildMetaRefreshBlock()
