@@ -12,14 +12,8 @@ use Page\CloudinaryManagement;
 class ModuleEnableContext extends RawMagentoContext implements Context, SnippetAcceptingContext
 {
 
-    /**
-     * @var AdminLogin
-     */
     private $adminLogin;
 
-    /**
-     * @var CloudinaryManagement
-     */
     private $cloudinaryManagement;
 
     public function __construct(AdminLogin $adminLogin, CloudinaryManagement $cloudinaryManagement)
