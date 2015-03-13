@@ -11,7 +11,6 @@
                 </cloudinary>
                 <console module="cloudinary_cloudinary">
                     <title>Open Cloudinary Console</title>
-                    <action>adminhtml/cloudinary_console</action>
                 </console>
             </children>
         </cloudinary_cloudinary>
