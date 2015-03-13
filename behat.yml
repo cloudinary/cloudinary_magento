@@ -11,6 +11,7 @@ default:
       filters: { tags: '@critical,@ui' }
       contexts:
         - Ui\AdminCredentialsContext
+        - Ui\ModuleEnableContext
 
   extensions:
     MageTest\MagentoExtension\Extension: ~
