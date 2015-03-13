@@ -25,11 +25,11 @@ class CloudinaryManagement extends Page
 
     public function hasDisableButton()
     {
-        return $this->getElement('Disable Button') !== null;
+        return $this->hasElement('Disable Button');
     }
 
     public function hasEnableButton()
     {
-        return $this->getElement('Enable Button') !== null;
+        return $this->hasElement('Enable Button');
     }
 }
