@@ -1,14 +1,14 @@
 default:
   suites:
     domain:
-      filters: { tags: '~@not-automated' }
+      filters: { tags: '~@not-automated&&~@ui' }
       contexts:
         - Domain\DomainContext
         - Domain\TransformationContext
         - Domain\DeleteImageDomainContext
         - Domain\ConfigurationContext
     ui:
-      filters: { tags: '@critical' }
+      filters: { tags: '@critical,@ui' }
       contexts:
         - Ui\AdminCredentialsContext
         - Ui\ModuleEnableContext

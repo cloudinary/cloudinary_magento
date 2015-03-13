@@ -8,10 +8,12 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use CloudinaryExtension\Cloud;
+use CloudinaryExtension\Configuration;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\Dpr;
 use CloudinaryExtension\Image\Transformation\Quality;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
@@ -26,20 +28,34 @@ class TransformationContext implements Context
 {
 
     private $imageProvider;
+
     private $image;
 
     private $imageUrl;
 
-    private $transformation;
+    private $configuration;
 
     public function __construct()
     {
-        $cloud = Cloud::fromName("aCloudName");
-        $credentials = new Credentials(Key::fromString("aKey"), Secret::fromString("aSecret"));
+        $this->configuration = Configuration::fromCloudAndCredentials(
+            Cloud::fromName('aCloudName'),
+            new Credentials(Key::fromString('aKey'), Secret::fromString('aSecret'))
+        );
 
-        $this->imageProvider = new TransformingImageProvider($credentials, $cloud);
+        $this->configuration->getDefaultTransformation()
+            ->withQuality(Quality::fromString('80'))
+            ->withDpr(Dpr::fromString('1.0'))
+        ;
 
+        $this->imageProvider = new TransformingImageProvider($this->configuration);
+    }
 
+    /**
+     * @Transform :aDpr
+     */
+    public function transformStringToDpr($string)
+    {
+        return Dpr::fromString($string);
     }
 
     /**
@@ -63,7 +79,7 @@ class TransformationContext implements Context
     /**
      * @Given there's an image :anImage in the image provider
      */
-    public function thereSAnImageInTheImageProvider(Image $anImage)
+    public function thereIsAnImageInTheImageProvider(Image $anImage)
     {
         $this->image = $anImage;
         $this->imageProvider->upload($this->image);
@@ -74,7 +90,10 @@ class TransformationContext implements Context
      */
     public function iRequestTheImageFromTheImageProvider()
     {
-        $this->imageUrl = $this->imageProvider->transformImage($this->image, Transformation::builder());
+        $this->imageUrl = $this->imageProvider->transformImage(
+            $this->image,
+            $this->configuration->getDefaultTransformation()
+        );
     }
 
     /**
@@ -90,7 +109,7 @@ class TransformationContext implements Context
      */
     public function imageOptimisationIsDisabled()
     {
-        $this->transformation = Transformation::builder()->withOptimisationDisabled();
+        $this->configuration->getDefaultTransformation()->withOptimisationDisabled();
     }
 
     /**
@@ -98,8 +117,6 @@ class TransformationContext implements Context
      */
     public function iShouldGetTheOriginalImageFromTheImageProvider()
     {
-        $this->imageUrl = $this->imageProvider->transformImage($this->image, $this->transformation);
-
         expect($this->urlIsOptimised())->toBe(false);
     }
 
@@ -108,15 +125,15 @@ class TransformationContext implements Context
      */
     public function iShouldGetAnImageWithPercentQualityFromTheImageProvider(Quality $aQuality)
     {
-        expect($this->isPercentageQuality((string)$aQuality));
+        expect($this->isPercentageQuality((string)$aQuality))->toBe(true);
     }
 
     /**
-     * @Given I transform the image to have :aQuality percent quality
+     * @Given I set image quality to :aQuality percent
      */
     public function iTransformTheImageToHavePercentQuality(Quality $aQuality)
     {
-        $this->transformation = Transformation::builder()->withQuality($aQuality);
+        $this->configuration->getDefaultTransformation()->withQuality($aQuality);
     }
 
     /**
@@ -124,7 +141,7 @@ class TransformationContext implements Context
      */
     public function iRequestTheImageProvideForTransformedTo($imageName, Dimensions $aDimension)
     {
-        $this->receivedUrl = $this->imageProvider->transformImage(
+        $this->imageUrl = $this->imageProvider->transformImage(
             Image::fromPath($imageName),
             Transformation::builder()->withDimensions($aDimension)
         );
@@ -135,7 +152,32 @@ class TransformationContext implements Context
      */
     public function iShouldReceiveThatImageWithTheDimensions(Dimensions $aDimension)
     {
-        expect($this->hasDimensions($aDimension));
+        expect($this->hasDimensions($aDimension))->toBe(true);
+    }
+
+    /**
+     * @Then I should get the image :image with the default DPR
+     */
+    public function iShouldGetAnImageWithTheDefaultDpr($image)
+    {
+        expect(basename($this->imageUrl))->toBe($image);
+        expect($this->hasDefaultDpr())->toBe(true);
+    }
+
+    /**
+     * @Given my DPR is set to :aDpr in the configuration
+     */
+    public function myDprIsSetToInTheConfiguration(Dpr $aDpr)
+    {
+        $this->configuration->getDefaultTransformation()->withDpr($aDpr);
+    }
+
+    /**
+     * @Then I should get an image with DPR :aDpr
+     */
+    public function iShouldGetAnImageWithDpr(Dpr $aDpr)
+    {
+        expect($this->hasDpr($aDpr))->toBe(true);
     }
 
     private function urlIsOptimised()
@@ -153,5 +195,15 @@ class TransformationContext implements Context
         $hasWidth = strpos($this->imageUrl, "width={$dimension->getWidth()}") !== false;
         $hasHeight = strpos($this->imageUrl, "height={$dimension->getHeight()}") !== false;
         return $hasWidth && $hasHeight;
+    }
+
+    private function hasDefaultDpr()
+    {
+        return $this->hasDpr('1.0');
+    }
+
+    private function hasDpr($dpr)
+    {
+        return strpos($this->imageUrl, "dpr=$dpr") !== false;
     }
 }

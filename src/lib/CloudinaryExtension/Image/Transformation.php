@@ -3,6 +3,7 @@
 namespace CloudinaryExtension\Image;
 
 use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\Dpr;
 use CloudinaryExtension\Image\Transformation\FetchFormat;
 use CloudinaryExtension\Image\Transformation\Format;
 use CloudinaryExtension\Image\Transformation\Gravity;
@@ -21,6 +22,8 @@ class Transformation
     private $quality;
 
     private $format;
+
+    private $dpr;
 
     public function __construct()
     {
@@ -68,6 +71,13 @@ class Transformation
         return $this;
     }
 
+    public function withDpr(Dpr $dpr)
+    {
+        $this->dpr = $dpr;
+
+        return $this;
+    }
+
     public function withOptimisationDisabled()
     {
         $this->withFetchFormat(FetchFormat::fromString(''));
@@ -88,7 +98,8 @@ class Transformation
             'gravity' => (string) $this->gravity ?: null,
             'width' => $this->dimensions ? $this->dimensions->getWidth() : null,
             'height' => $this->dimensions ? $this->dimensions->getHeight() : null,
-            'format' => (string) $this->format
+            'format' => (string) $this->format,
+            'dpr' => (string) $this->dpr
         );
     }
 }
