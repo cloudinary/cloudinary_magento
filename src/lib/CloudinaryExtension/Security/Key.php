@@ -9,7 +9,7 @@ class Key
 
     private function __construct($key)
     {
-        $this->key = $key;
+        $this->key = (string)$key;
     }
 
     public static function fromString($aKey)
