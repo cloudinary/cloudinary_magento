@@ -5,6 +5,7 @@ namespace Ui;
 use Behat\Behat\Context\Context;
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Credentials;
+use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
@@ -57,30 +58,6 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     }
 
     /**
-     * @Transform :aKey
-     */
-    public function transformStringToAKey($string)
-    {
-        return Key::fromString($string);
-    }
-
-    /**
-     * @Transform :aSecret
-     */
-    public function transformStringToASecret($string)
-    {
-        return Secret::fromString($string);
-    }
-
-    /**
-     * @Transform :aCloud
-     */
-    public function transformStringToACloud($string)
-    {
-        return Cloud::fromName($string);
-    }
-
-    /**
      * @Given I have an image :anImage
      */
     public function iHaveAnImage($anImage)
@@ -89,40 +66,19 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     }
 
     /**
-     * @When I upload the image :anImage to the :aCloud cloud using the credentials with the API key :aKey and the secret :aSecret
+     * @When I upload the image :anImage
      */
-    public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret(Image $anImage, Cloud $aCloud, Key $aKey, Secret $aSecret)
+    public function iUploadTheImage(Image $anImage)
     {
-        $this->saveCredentialsAndCloudToMagentoConfiguration($aKey, $aSecret, $aCloud);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString('CLOUDINARY_URL=cloudinary://ABC123:DEF456@session-digital');
+        $this->saveEnvironmentVariableToMagentoConfiguration($environmentVariable);
 
-        $configuration = \Mage::helper('cloudinary_cloudinary/configuration');
-        $apiKey = Key::fromString($configuration->getApiKey());
-        $apiSecret = Secret::fromString($configuration->getApiSecret());
-        $cloudName = Cloud::fromName($configuration->getCloudName());
+        $this->imageProvider = new FakeImageProvider($environmentVariable);
 
-        $this->imageProvider = new FakeImageProvider(new Credentials($apiKey, $apiSecret), $cloudName);
+        $this->imageProvider->setMockCloud(Cloud::fromName('session-digital'));
+        $this->imageProvider->setMockCredentials(Key::fromString('ABC123'), Secret::fromString('DEF456'));
+
         $this->imageProvider->upload($anImage);
-    }
-
-    /**
-     * @When the image provider has a :aCloud cloud
-     */
-    public function theImageProviderHasACloud($aCloud)
-    {
-        $key = Key::fromString('ABC123');
-        $secret = Secret::fromString('DEF456');
-
-        $this->imageProvider->setMockCloud($aCloud);
-        $this->imageProvider->setMockCredentials($key, $secret);
-
-    }
-
-    /**
-     * @When the image provider is aware of the credentials with the API key :aKey and the secret :aSecret
-     */
-    public function theImageProviderIsAwareOfTheCredentialsWithTheApiKeyAndTheSecret(Key $aKey, Secret $aSecret)
-    {
-        $this->imageProvider->setMockCredentials($aKey, $aSecret);
     }
 
     /**
@@ -134,14 +90,37 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     }
 
     /**
-     * @Given I have configured the :aCloud cloud using valid credentials
+     * @Given I have used a valid environment variable in the configuration
      */
-    public function iHaveConfiguredTheCloudUsingValidCredentials(Cloud $aCloud)
+    public function iHaveUsedAValidEnvironmentVariableInTheConfiguration()
     {
-        $key = Key::fromString('ABC123');
-        $secret = Secret::fromString('DEF456');
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString('CLOUDINARY_URL=cloudinary://ABC123:DEF456@session-digital');
+        $this->imageProvider = new FakeImageProvider($environmentVariable);
+    }
 
-        $this->imageProvider = new FakeImageProvider(new Credentials($key, $secret), $aCloud);
+    /**
+     * @Given I have used an invalid environment variable in the configuration
+     */
+    public function iHaveUsedAnInvalidEnvironmentVariableInTheConfiguration()
+    {
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString('CLOUDINARY_URL=cloudinary://UVW789:XYZ123@session-digital');
+        $this->imageProvider = new FakeImageProvider($environmentVariable);
+    }
+
+    /**
+     * @Given I have not configured my environment variable
+     */
+    public function iHaveNotConfiguredMyEnvironmentVariable()
+    {
+        $this->saveEnvironmentVariableToMagentoConfiguration('');
+    }
+
+    /**
+     * @Given I have configured my environment variable
+     */
+    public function iHaveConfiguredMyEnvironmentVariable()
+    {
+        $this->saveEnvironmentVariableToMagentoConfiguration('anEnvironmentVariable');
     }
 
     /**
@@ -149,6 +128,9 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
      */
     public function iAskTheProviderToValidateMyCredentials()
     {
+        $this->imageProvider->setMockCloud(Cloud::fromName('session-digital'));
+        $this->imageProvider->setMockCredentials(Key::fromString('ABC123'), Secret::fromString('DEF456'));
+
         $this->areCredentialsValid = $this->imageProvider->validateCredentials();
     }
 
@@ -158,17 +140,6 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     public function iShouldBeInformedMyCredentialsAreValid()
     {
         expect($this->areCredentialsValid)->toBe(true);
-    }
-
-    /**
-     * @Given I have configured the :aCloud cloud using using invalid credentials
-     */
-    public function iHaveConfiguredTheCloudUsingUsingInvalidCredentials(Cloud $aCloud)
-    {
-        $key = Key::fromString('UVW789');
-        $secret = Secret::fromString('XYZ123');
-
-        $this->imageProvider = new FakeImageProvider(new Credentials($key, $secret), $aCloud);
     }
 
     /**
@@ -204,14 +175,6 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
     }
 
     /**
-     * @Given I have configured my cloud and credentials
-     */
-    public function iHaveConfiguredMyCloudAndCredentials()
-    {
-        $this->saveCredentialsAndCloudToMagentoConfiguration('aKey', 'aSecret', 'aCloud');
-    }
-
-    /**
      * @Then I should not be prompted to sign up to Cloudinary
      */
     public function iShouldNotBePromptedToSignUpToCloudinary()
@@ -219,15 +182,15 @@ class AdminCredentialsContext extends RawMagentoContext implements Context
         expect($this->adminConfigPage->containsSignUpPrompt())->toBe(false);
     }
 
-    private function saveCredentialsAndCloudToMagentoConfiguration($key, $secret, $cloud)
+    private function saveEnvironmentVariableToMagentoConfiguration($environmentVariable)
     {
         $this->adminLoginPage->sessionLogin('testadmin', 'testadmin123', $this->getSessionService());
 
         $this->adminConfigPage->open();
 
-        $this->adminConfigPage->enterCredentials($key, $secret);
-        $this->adminConfigPage->enterCloudName($cloud);
+        $this->adminConfigPage->enterEnvironmentVariable($environmentVariable);
         $this->adminConfigPage->saveCloudinaryConfiguration();
+
     }
 
 }

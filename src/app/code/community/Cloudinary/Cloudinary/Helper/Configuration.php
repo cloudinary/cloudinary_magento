@@ -15,7 +15,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 {
     const CONFIG_PATH_ENABLED = 'cloudinary/cloud/cloudinary_enabled';
 
-    const CONFIG_PATH_CLOUD_NAME = 'cloudinary/cloud/cloudinary_cloud_name';
+    const CONFIG_PATH_ENVIRONMENT_VARIABLE = 'cloudinary/setup/cloudinary_environment_variable';
 
     const CONFIG_DEFAULT_GRAVITY = 'cloudinary/transformations/cloudinary_gravity';
 
@@ -49,9 +49,9 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         return new Credentials($key, $secret);
     }
 
-    public function getCloudName()
+    public function getEnvironmentVariable()
     {
-        return (string)Mage::getStoreConfig(self::CONFIG_PATH_CLOUD_NAME);
+        return Mage::helper('core')->decrypt(Mage::getStoreConfig(self::CONFIG_PATH_ENVIRONMENT_VARIABLE));
     }
 
     public function getDefaultGravity()

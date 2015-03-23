@@ -15,7 +15,6 @@ use CloudinaryExtension\Cloud;
 use ImageProviders\FakeImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
-require_once 'src/lib/Cloudinary/src/Cloudinary.php';
 
 /**
  * Defines application features from the specific context.
