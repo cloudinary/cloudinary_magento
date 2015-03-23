@@ -3,12 +3,9 @@
 namespace Domain;
 
 use Behat\Behat\Context\Context;
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 use ImageProviders\FakeImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
@@ -18,9 +15,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
  */
 class DeleteImageDomainContext implements Context
 {
-    const IMAGE_PROVIDER_KEY = 'some key';
-    const IMAGE_PROVIDER_SECRET = 'some secret';
-    const IMAGE_PROVIDER_CLOUD = 'some cloud';
+    const IMAGE_PROVIDER_ENVIRONMENT_VARIABLE = 'CLOUDINARY_URL=cloudinary://ABC123:DEF456@session-digital';
 
     private $imageProvider;
 
@@ -37,15 +32,8 @@ class DeleteImageDomainContext implements Context
      */
     public function theImageProviderHasAnImage($anImage)
     {
-        $cloud = Cloud::fromName(self::IMAGE_PROVIDER_CLOUD);
-        $key = Key::fromString(self::IMAGE_PROVIDER_KEY);
-        $secret = Secret::fromString(self::IMAGE_PROVIDER_SECRET);
-
-        $credentials = new Credentials($key, $secret);
-        $this->imageProvider = new FakeImageProvider($credentials, $cloud);
-
-        $this->imageProvider->setMockCredentials($key, $secret);
-        $this->imageProvider->setMockCloud($cloud);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString(self::IMAGE_PROVIDER_ENVIRONMENT_VARIABLE);
+        $this->imageProvider = new FakeImageProvider($environmentVariable);
 
         $this->imageProvider->upload($anImage);
     }

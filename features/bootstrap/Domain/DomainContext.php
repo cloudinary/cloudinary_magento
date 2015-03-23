@@ -7,6 +7,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 use CloudinaryExtension\Security\Key;
 use CloudinaryExtension\Security\Secret;
 use CloudinaryExtension\Image;
@@ -14,11 +15,12 @@ use CloudinaryExtension\Cloud;
 use ImageProviders\FakeImageProvider;
 
 require_once 'PHPUnit/Framework/Assert/Functions.php';
+require_once 'src/lib/Cloudinary/src/Cloudinary.php';
 
 /**
  * Defines application features from the specific context.
  */
-class DomainContext implements Context
+class DomainContext implements Context, SnippetAcceptingContext
 {
     private $provider;
     private $image;
@@ -34,30 +36,6 @@ class DomainContext implements Context
     }
 
     /**
-     * @Transform :aKey
-     */
-    public function transformStringToAKey($string)
-    {
-        return Key::fromString($string);
-    }
-
-    /**
-     * @Transform :aSecret
-     */
-    public function transformStringToASecret($string)
-    {
-        return Secret::fromString($string);
-    }
-
-    /**
-     * @Transform :aCloud
-     */
-    public function transformStringToACloud($string)
-    {
-        return Cloud::fromName($string);
-    }
-
-    /**
      * @Given I have an image :anImage
      */
     public function iHaveAnImage(Image $anImage)
@@ -66,34 +44,20 @@ class DomainContext implements Context
     }
 
     /**
-     * @When I upload the image :anImage to the :aCloud cloud using the credentials with the API key :aKey and the secret :aSecret
+     * @When I upload the image :anImage
      */
-    public function iUploadTheImageToTheCloudUsingTheCredentialsWithTheApiKeyAndTheSecret(Image $anImage, Cloud $aCloud, Key $aKey, Secret $aSecret)
+    public function iUploadTheImage(Image $anImage)
     {
-        $credentials = new Credentials($aKey, $aSecret);
-        $this->provider = new FakeImageProvider($credentials, $aCloud);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString('CLOUDINARY_URL=cloudinary://ABC123:DEF456@session-digital');
+        $this->provider = new FakeImageProvider($environmentVariable);
 
-        $this->provider->upload($anImage);
-    }
-
-    /**
-     * @When the image provider has a :aCloud cloud
-     */
-    public function theImageProviderHasACloud($aCloud)
-    {
-        $this->provider->setMockCloud($aCloud);
-
+        $cloud = Cloud::fromName('session-digital');
         $key = Key::fromString('ABC123');
         $secret = Secret::fromString('DEF456');
+        $this->provider->setMockCloud($cloud);
         $this->provider->setMockCredentials($key, $secret);
-    }
 
-    /**
-     * @When the image provider is aware of the credentials with the API key :aKey and the secret :aSecret
-     */
-    public function theImageProviderAwareOfTheCredentialsWithTheApiKeyAndTheSecret($aKey, $aSecret)
-    {
-        $this->provider->setMockCredentials($aKey, $aSecret);
+        $this->provider->upload($anImage);
     }
 
     /**
@@ -111,25 +75,21 @@ class DomainContext implements Context
     }
 
     /**
-     * @Given I have configured the :aCloud cloud using valid credentials
+     * @Given I have used a valid environment variable in the configuration
      */
-    public function iHaveConfiguredTheCloudUsingValidCredentials(Cloud $aCloud)
+    public function iHaveUsedAValidEnvironmentVariableInTheConfiguration()
     {
-        $key = Key::fromString('ABC123');
-        $secret = Secret::fromString('DEF456');
-        $credentials = new Credentials($key, $secret);
-        $this->provider = new FakeImageProvider($credentials, $aCloud);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString('CLOUDINARY_URL=cloudinary://ABC123:DEF456@session-digital');
+        $this->provider = new FakeImageProvider($environmentVariable);
     }
 
     /**
-     * @Given I have configured the :aCloud cloud using using invalid credentials
+     * @Given I have used an invalid environment variable in the configuration
      */
-    public function iHaveConfiguredTheCloudUsingUsingInvalidCredentials(Cloud $aCloud)
+    public function iHaveUsedAnInvalidEnvironmentVariableInTheConfiguration()
     {
-        $key = Key::fromString('UVW789');
-        $secret = Secret::fromString('XYZ123');
-        $credentials = new Credentials($key, $secret);
-        $this->provider = new FakeImageProvider($credentials, $aCloud);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString('CLOUDINARY_URL=cloudinary://UVW789:XYZ123@session-digital');
+        $this->provider = new FakeImageProvider($environmentVariable);
     }
 
     /**
@@ -137,6 +97,12 @@ class DomainContext implements Context
      */
     public function iAskTheProviderToValidateMyCredentials()
     {
+        $cloud = Cloud::fromName('session-digital');
+        $key = Key::fromString('ABC123');
+        $secret = Secret::fromString('DEF456');
+        $this->provider->setMockCloud($cloud);
+        $this->provider->setMockCredentials($key, $secret);
+
         $this->areCredentialsValid = $this->provider->validateCredentials();
     }
 

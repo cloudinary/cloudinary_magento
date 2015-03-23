@@ -4,9 +4,7 @@ Feature: Uploading images to an image provider
   I want to be able to upload images to the image provider
 
   @javascript @critical
-  Scenario: Uploading an image using the correct keys
+  Scenario: Uploading an image
     Given I have an image "pink_dress.gif"
-    When I upload the image "pink_dress.gif" to the "session-digital" cloud using the credentials with the API key "ABC123" and the secret "DEF456"
-    And the image provider has a "session-digital" cloud
-    And the image provider is aware of the credentials with the API key "ABC123" and the secret "DEF456"
+    When I upload the image "pink_dress.gif"
     Then the image should be available through the image provider
