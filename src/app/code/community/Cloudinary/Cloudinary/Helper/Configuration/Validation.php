@@ -1,19 +1,16 @@
 <?php
 
-use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Configuration;
-use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Exception\InvalidCredentials;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 
 class Cloudinary_Cloudinary_Helper_Configuration_Validation extends Mage_Core_Helper_Abstract
 {
 
-    public function validateCredentials($cloudName, $apiKey, $apiSecret)
+    public function validateEnvironmentVariable($environmentVariable)
     {
-        $configuration = $this->_getConfiguration($cloudName, $apiKey, $apiSecret);
+        $configuration = $this->_getConfiguration($environmentVariable);
         $imageProvider = CloudinaryImageProvider::fromConfiguration($configuration);
 
         if (!$imageProvider->validateCredentials()) {
@@ -21,16 +18,11 @@ class Cloudinary_Cloudinary_Helper_Configuration_Validation extends Mage_Core_He
         }
     }
 
-    private function _getConfiguration($cloudName, $apiKey, $apiSecret)
+    private function _getConfiguration($environmentVariable)
     {
-        $key = Key::fromString($apiKey);
-        $secret = Secret::fromString($apiSecret);
-
-        $configuration = Configuration::fromCloudAndCredentials(
-            Cloud::fromName($cloudName),
-            new Credentials($key, $secret)
+        return Configuration::fromEnvironmentVariable(
+            CloudinaryEnvironmentVariable::fromString($environmentVariable)
         );
-        return $configuration;
     }
 
 }

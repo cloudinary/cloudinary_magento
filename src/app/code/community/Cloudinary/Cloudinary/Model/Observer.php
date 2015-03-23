@@ -31,7 +31,7 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         }
 
         try {
-            $this->_validateCredentialsFromConfigObject($configObject);
+            $this->_validateEnvironmentVariableFromConfigObject($configObject);
         } catch (Exception $e) {
             $this->_addErrorMessageToAdminSession($e);
             $this->_logException($e);
@@ -63,12 +63,12 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         $configData = array();
         $groups = $configObject->getGroups();
 
-        if ($this->_containsCloudAndCredentials($groups)) {
+        if ($this->_containsSetup($groups)) {
             $configData = array_map(
                 function($field) {
                     return $field['value'];
                 },
-                array_merge($groups['cloud']['fields'], $groups['credentials']['fields'])
+                $groups['setup']['fields']
             );
         }
         return $configData;
@@ -79,15 +79,13 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         return $configObject->getSection() != self::CLOUDINARY_CONFIG_SECTION;
     }
 
-    private function _validateCredentialsFromConfigObject(Mage_Adminhtml_Model_Config_Data $configObject)
+    private function _validateEnvironmentVariableFromConfigObject(Mage_Adminhtml_Model_Config_Data $configObject)
     {
         $configData = $this->_flattenConfigData($configObject);
         $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
 
-        $cloudinaryConfiguration->validateCredentials(
-            $configData['cloudinary_cloud_name'],
-            $configData['cloudinary_api_key'],
-            $configData['cloudinary_api_secret']
+        $cloudinaryConfiguration->validateEnvironmentVariable(
+            $configData['cloudinary_environment_variable']
         );
     }
 
@@ -101,8 +99,8 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
         Mage::logException($e);
     }
 
-    private function _containsCloudAndCredentials($groups)
+    private function _containsSetup($groups)
     {
-        return array_key_exists('cloud', $groups) && array_key_exists('credentials', $groups);
+        return array_key_exists('setup', $groups);
     }
 }
