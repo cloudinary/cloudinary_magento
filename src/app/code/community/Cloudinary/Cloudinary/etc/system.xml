@@ -17,58 +17,30 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                 </signup>>
-                <cloud>
-                    <label>Cloud</label>
+                <setup translate="label">
+                    <label>Cloudinary Setup</label>
                     <frontend_type>text</frontend_type>
                     <show_in_default>1</show_in_default>
                     <sort_order>1</sort_order>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                        <fields>
-                            <cloudinary_cloud_name translate="label comment">
-                                <label>Cloud Name</label>
-                                <comment>You can get your Cloud Name from the "Account Details" section on the Cloudinary dashboard.</comment>
-                                <sort_order>1</sort_order>
-                                <show_in_default>1</show_in_default>
-                                <show_in_website>1</show_in_website>
-                                <show_in_store>1</show_in_store>
-                            </cloudinary_cloud_name>
-                        </fields>
-                </cloud>
-                <credentials translate="label">
-                    <label>API Credentials</label>
-                    <frontend_type>text</frontend_type>
-                    <show_in_default>1</show_in_default>
-                    <sort_order>2</sort_order>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
                     <fields>
-                        <cloudinary_api_key translate="label comment">
-                            <label>API Key</label>
-                            <comment>You can get your API Key from the "Account Details" section on the Cloudinary dashboard.</comment>
+                        <cloudinary_environment_variable translate="label comment">
+                            <label>Environment Variable</label>
+                            <comment>You can get your Environment Variable from the "Account Details" section on the Cloudinary dashboard.</comment>
                             <frontend_type>password</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </cloudinary_api_key>
-                        <cloudinary_api_secret translate="label comment">
-                            <label>API Secret</label>
-                            <comment>You can get your API Secret by pressing "Reveal" in the "Account Details" section on the Cloudinary dashboard.</comment>
-                            <frontend_type>password</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>2</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </cloudinary_api_secret>
+                        </cloudinary_environment_variable>
                     </fields>
-                </credentials>
+                </setup>
                 <configuration translate="label">
                     <label>Cloudinary Configuration</label>
                     <show_in_default>1</show_in_default>
-                    <sort_order>3</sort_order>
+                    <sort_order>2</sort_order>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
@@ -87,7 +59,7 @@
                 <transformations translate="label">
                     <label>Default Transformations</label>
                     <show_in_default>1</show_in_default>
-                    <sort_order>4</sort_order>
+                    <sort_order>3</sort_order>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>

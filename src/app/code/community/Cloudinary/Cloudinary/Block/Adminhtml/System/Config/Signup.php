@@ -12,15 +12,15 @@ class Cloudinary_Cloudinary_Block_Adminhtml_System_Config_Signup extends Mage_Ad
 
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        if (!$this->_cloudAndCredentialsArePresentInConfig()) {
+        if (!$this->_environmentVariableIsPresentInConfig()) {
             return $this->toHtml();
         }
     }
 
-    private function _cloudAndCredentialsArePresentInConfig()
+    private function _environmentVariableIsPresentInConfig()
     {
         $configuration = Mage::helper('cloudinary_cloudinary/configuration');
-        return $configuration->getApiKey() && $configuration->getApiSecret() && $configuration->getCloudName();
+        return $configuration->getEnvironmentVariable();
     }
 
 }

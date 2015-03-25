@@ -3,6 +3,7 @@
 namespace CloudinaryExtension;
 
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Security\EnvironmentVariable;
 
 class Configuration
 {
@@ -25,6 +26,11 @@ class Configuration
     public static function fromCloudAndCredentials(Cloud $cloud, Credentials $credentials)
     {
         return new Configuration($cloud, $credentials);
+    }
+
+    public static function fromEnvironmentVariable(EnvironmentVariable $environmentVariable)
+    {
+        return new Configuration($environmentVariable->getCloud(), $environmentVariable->getCredentials());
     }
 
     public function getCloud()

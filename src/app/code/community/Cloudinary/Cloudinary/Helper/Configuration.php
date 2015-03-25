@@ -1,21 +1,18 @@
 <?php
 
-use CloudinaryExtension\Cloud;
 use CloudinaryExtension\Configuration;
-use CloudinaryExtension\Credentials;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Dpr;
 use CloudinaryExtension\Image\Transformation\FetchFormat;
 use CloudinaryExtension\Image\Transformation\Gravity;
 use CloudinaryExtension\Image\Transformation\Quality;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
+use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 
 class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstract
 {
     const CONFIG_PATH_ENABLED = 'cloudinary/cloud/cloudinary_enabled';
 
-    const CONFIG_PATH_CLOUD_NAME = 'cloudinary/cloud/cloudinary_cloud_name';
+    const CONFIG_PATH_ENVIRONMENT_VARIABLE = 'cloudinary/setup/cloudinary_environment_variable';
 
     const CONFIG_DEFAULT_GRAVITY = 'cloudinary/transformations/cloudinary_gravity';
 
@@ -31,27 +28,15 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     const STATUS_DISABLED = 0;
 
-    public function getApiKey()
-    {
-        return Mage::helper('core')->decrypt(Mage::getStoreConfig('cloudinary/credentials/cloudinary_api_key'));
-    }
-
-    public function getApiSecret()
-    {
-        return Mage::helper('core')->decrypt(Mage::getStoreConfig('cloudinary/credentials/cloudinary_api_secret'));
-    }
-
     public function buildCredentials()
     {
-        $key = Key::fromString($this->getApiKey());
-        $secret = Secret::fromString($this->getApiSecret());
-
-        return new Credentials($key, $secret);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString($this->getEnvironmentVariable());
+        return $environmentVariable->getCredentials();
     }
 
-    public function getCloudName()
+    public function getEnvironmentVariable()
     {
-        return (string)Mage::getStoreConfig(self::CONFIG_PATH_CLOUD_NAME);
+        return Mage::helper('core')->decrypt(Mage::getStoreConfig(self::CONFIG_PATH_ENVIRONMENT_VARIABLE));
     }
 
     public function getDefaultGravity()
@@ -111,9 +96,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function buildConfiguration()
     {
-        $config = Configuration::fromCloudAndCredentials(
-            Cloud::fromName($this->getCloudName()),
-            $this->buildCredentials()
+        $config = Configuration::fromEnvironmentVariable(
+            CloudinaryEnvironmentVariable::fromString($this->getEnvironmentVariable())
         );
 
         if($this->getCdnSubdomainFlag()) {
