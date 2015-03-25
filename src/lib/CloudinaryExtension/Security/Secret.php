@@ -9,7 +9,7 @@ class Secret
 
     private function __construct($secret)
     {
-        $this->secret = $secret;
+        $this->secret = (string)$secret;
     }
 
     public static function fromString($aSecret)
