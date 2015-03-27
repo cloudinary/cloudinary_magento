@@ -44,24 +44,9 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         return (string)Mage::getStoreConfig(self::CONFIG_DEFAULT_GRAVITY);
     }
 
-    public function setDefaultGravity($value)
-    {
-        $this->_setStoreConfig(self::CONFIG_DEFAULT_GRAVITY, $value);
-    }
-
-    public function setFetchFormat($value)
-    {
-        $this->_setStoreConfig(self::CONFIG_DEFAULT_FETCH_FORMAT, $this->_getFetchFormatFlag($value));
-    }
-
     public function getFetchFormat()
     {
         return Mage::getStoreConfig(self::CONFIG_DEFAULT_FETCH_FORMAT) === "1" ? FetchFormat::FETCH_FORMAT_AUTO : null;
-    }
-
-    public function setImageQuality($value)
-    {
-        $this->_setStoreConfig(self::CONFIG_DEFAULT_QUALITY, $value);
     }
 
     public function getImageQuality()
@@ -117,19 +102,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     private function _setStoreConfig($configPath, $value)
     {
         $config = new Mage_Core_Model_Config();
-        $config->saveConfig($configPath, $value);
-        Mage::app()->getCacheInstance()->cleanType('config');
-
-        if (Mage::getEdition() === 'Enterprise') {
-            Enterprise_PageCache_Model_Cache::getCacheInstance()->clean(Enterprise_PageCache_Model_Processor::CACHE_TAG);
-        } else {
-            Mage::app()->cleanCache();
-        }
-    }
-
-    private function _getFetchFormatFlag($value)
-    {
-        return $value === Format::FETCH_FORMAT_AUTO ? 1 : 0;
+        $config->saveConfig($configPath, $value)->reinit();
     }
 
 }
