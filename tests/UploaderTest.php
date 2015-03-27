@@ -190,7 +190,7 @@ class UploaderTest extends PHPUnit_Framework_TestCase {
     
     /**
      * @expectedException \Cloudinary\Error
-     * @expectedExceptionMessage illegal is not a valid
+     * @expectedExceptionMessage Background removal is invalid
      */
     function test_background_removal() {
         // should support requesting background_removal 
@@ -198,16 +198,38 @@ class UploaderTest extends PHPUnit_Framework_TestCase {
     }
 
     function test_large_upload() {
-        \Cloudinary\Uploader::upload_large("tests/docx.docx");          
+        $resource = \Cloudinary\Uploader::upload_large("tests/docx.docx", array("tags" => array("upload_large_tag")));
+        $this->assertEquals($resource["tags"], array("upload_large_tag"));
     }
 
     function test_upload_preset() {
       // should support unsigned uploading using presets
       $api = new \Cloudinary\Api();
-      $preset = $api->create_upload_preset(array("folder"=>"upload_folder", "unsigned"=>TRUE));
-      $result = \Cloudinary\Uploader::unsigned_upload("tests/logo.png", $preset["name"]);
-      $this->assertRegExp('/^upload_folder\/[a-z0-9]+$/', $result["public_id"]);
-      $api->delete_upload_preset($preset["name"]);
-    }    
+        $preset = $api->create_upload_preset(array("folder"=>"upload_folder", "unsigned"=>TRUE));
+        $result = \Cloudinary\Uploader::unsigned_upload("tests/logo.png", $preset["name"]);
+        $this->assertRegExp('/^upload_folder\/[a-z0-9]+$/', $result["public_id"]);
+        $api->delete_upload_preset($preset["name"]);
+
+    }
+
+    function test_overwrite_upload() {
+        $api = new \Cloudinary\Api();
+        $public_id = "api_test_overwrite";
+
+        $api->delete_resources($public_id);
+
+        $resource = \Cloudinary\Uploader::upload("tests/logo.png", array("public_id"=> $public_id));
+        $this->assertArrayHasKey("etag", $resource, "Should return an etag when uploading a new resource");
+
+        $resource = \Cloudinary\Uploader::upload("tests/logo.png", array("public_id"=> $public_id, "overwrite" => false));
+        $this->assertArrayNotHasKey("etag", $resource, "Should not return an etag when uploading a existing resource with overwrite=false");
+        $this->assertArrayHasKey("existing", $resource, "Should return 'existing' when uploading a existing resource with overwrite=false");
+
+        $resource = \Cloudinary\Uploader::upload("tests/logo.png", array("public_id"=> $public_id, "overwrite" => true));
+        $this->assertArrayHasKey("etag", $resource, "Should return an etag when uploading an existing resource with overwrite=true");
+
+        $api->delete_resources($public_id);
+
+    }
 }
 ?>
