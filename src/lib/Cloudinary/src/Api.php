@@ -195,8 +195,16 @@ class Api {
     $params = \Cloudinary\Uploader::build_upload_params($options);
     return $this->call_api("post", array("upload_presets"), array_merge($params, $this->only($options, array("name", "unsigned", "disallow_public_id"))), $options);    
   }
+
+  function root_folders($options=array()) {
+    return $this->call_api("get", array("folders"), array(), $options);
+  }
+
+  function subfolders($of_folder_path, $options=array()) {
+    return $this->call_api("get", array("folders", $of_folder_path), array(), $options);
+  }
     
-  protected function call_api($method, $uri, $params, &$options) {
+  function call_api($method, $uri, $params, &$options) {
     $prefix = \Cloudinary::option_get($options, "upload_prefix", \Cloudinary::config_get("upload_prefix", "https://api.cloudinary.com"));
     $cloud_name = \Cloudinary::option_get($options, "cloud_name", \Cloudinary::config_get("cloud_name"));
     if (!$cloud_name) throw new \InvalidArgumentException("Must supply cloud_name");
