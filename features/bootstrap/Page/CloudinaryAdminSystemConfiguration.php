@@ -14,7 +14,7 @@ class CloudinaryAdminSystemConfiguration extends Page
         'Save Config' => array('xpath' => '//*[@title="Save Config"]'),
         'Image Transformations Header' => array('xpath' => '//*[@id="cloudinary_transformations-head"]'),
         'Default Gravity for Images' => array('css' => "#cloudinary_transformations_cloudinary_gravity option[selected='selected']"),
-        'Sign Up Prompt' => array('xpath' => '//*[@id="config_edit_form"]//h3[contains(text(), "Haven\'t got a Cloudinary Account?")]'),
+        'Sign Up Prompt' => array('xpath' => '//*[@id="config_edit_form"]//h3[@id="cloudinary-signup-prompt"]'),
     );
 
     public function enterEnvironmentVariable($anEnvironmentVariable)
@@ -37,4 +37,5 @@ class CloudinaryAdminSystemConfiguration extends Page
     {
         return $this->hasElement('Sign Up Prompt');
     }
+
 }
