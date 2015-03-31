@@ -64,7 +64,7 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <cloudinary_fetch_format>
-                            <label>Automatic Image Format Optimization</label>
+                            <label>Automatic Image Format Optimisation</label>
                             <comment>Automatically deliver images converted to modern image formats based on viewing device and browser. For example, deliver WebP on Chrome and JPEG-XR on Internet Explorer for better performance and user experience.</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>1</sort_order>
