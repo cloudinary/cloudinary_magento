@@ -1,7 +1,7 @@
 <div class="content-header">
     <table cellspacing="0"><tbody>
         <tr>
-            <td style="width:50%;"><h3 class="icon-head">Manage Cloudinary</h3></td>
+            <td style="width:50%;"><h3 class="icon-head">Manage Cloudinary Images</h3></td>
             <td class="form-buttons">
 
                 <?php echo $this->getMigrateButton() ?>
@@ -17,27 +17,25 @@
     <?php if ($this->allImagesSynced()): ?>
         <div id="messages"><ul class="messages"><li class="notice-msg"><ul><li><span>All images have been successfully migrated to Cloudinary</span></li></ul></li></ul></div>
     <?php else: ?>
-        <p>Progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
-        <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated</p>
+        <p>Image migration progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
+        <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated to Cloudinary.</p>
     <?php endif; ?>
 </p>
 
 <p>
     <strong>
-        Please note that if you have a lot of images then migration could take a while.
-        You can leave this page and come back to check on progress
+        Note: If you have a lot of images (thousands or more), image migration may take a while.
+        You can leave this page and come back to check on progress while the migration is performed in the background.
     </strong>
 </p>
 
+
 <p>
-    <strong>Instructions:</strong>
-    If you want to learn how to use the Cloudinary Module: Head over to our <a href="">usage instructions</a> or our <a href="">&quot;How to use Video&quot; tutorial</a>
+    <strong>Looking for more information?</strong> 
+    <a href="http://support.cloudinary.com/hc/en-us/sections/200956331-Magento" target="_blank">Visit our Knowledge Base</a>.
 </p>
 
 <p>
-    Need assistance? <a href="http://support.cloudinary.com/hc/en-us/selections">Submit a ticket</a>
-</p>
-
-<p>
-    Got feedback? <a href="mailto:feedback_magento@cloudinary.com">Email us</a>
+    <strong>Need assistance or got feedback?</strong> 
+    <a href="http://support.cloudinary.com/hc/en-us/requests/new" target="_blank">Contact our support</a>.
 </p>

@@ -26,8 +26,8 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <cloudinary_environment_variable translate="label comment">
-                            <label>Environment Variable</label>
-                            <comment>You can get your Environment Variable from the "Account Details" section on the Cloudinary dashboard.</comment>
+                            <label>Cloudinary Account Credentials (CLOUDINARY_URL)</label>
+                            <comment>Set the credentials of your Cloudinary account. Copy the credentials string from the dashboard of Cloudinary's Management Console. It is available as the Environment variable of CLOUDINARY_URL.</comment>
                             <frontend_type>password</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <sort_order>1</sort_order>
@@ -45,8 +45,8 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <cloudinary_cdn_subdomain>
-                            <label>Enable fetching images from multiple sub-domains</label>
-                            <comment>Enable fetching images from multiple sub-domains</comment>
+                            <label>Image Delivery Domain Sharding</label>
+                            <comment>Enable multiple sub-domains of image delivery URLs for faster page load speed.</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
@@ -57,15 +57,15 @@
                     </fields>
                 </configuration>
                 <transformations translate="label">
-                    <label>Default Transformations</label>
+                    <label>Default Image Transformations</label>
                     <show_in_default>1</show_in_default>
                     <sort_order>3</sort_order>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
                         <cloudinary_fetch_format>
-                            <label>Image fetch format(Optimisation)</label>
-                            <comment>Image Optimisations for specific web-clients</comment>
+                            <label>Automatic Image Format Optimisation</label>
+                            <comment>Automatically deliver images converted to modern image formats based on viewing device and browser. For example, deliver WebP on Chrome and JPEG-XR on Internet Explorer for better performance and user experience.</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
@@ -75,7 +75,7 @@
                         </cloudinary_fetch_format>
                         <cloudinary_image_quality>
                             <label>Image Quality</label>
-                            <comment>Default quality in which to show images</comment>
+                            <comment>Adjust quality of generated images to balance between visual quality and file size minimization. The quality is relevant for JPEG and WebP compression levels for example.</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
@@ -84,8 +84,8 @@
                             <source_model>cloudinary_cloudinary/system_config_source_dropdown_quality</source_model>
                         </cloudinary_image_quality>
                         <cloudinary_gravity translate="label comment">
-                            <label>Image Gravity</label>
-                            <comment>Default Image Gravity</comment>
+                            <label>Image Cropping Gravity</label>
+                            <comment>Define the part of the image to focus on when cropping images in order to better match your graphic design.</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
@@ -94,8 +94,8 @@
                             <source_model>cloudinary_cloudinary/system_config_source_dropdown_gravity</source_model>
                         </cloudinary_gravity>
                         <cloudinary_image_dpr>
-                            <label>Image DPR</label>
-                            <comment>Default DPR in which to fetch images</comment>
+                            <label>Image Device Pixel Ratio (DPR)</label>
+                            <comment>Use DPR value higher than 1.0 to generate and deliver hi-res images for better visual result on HiDPI devices, such as Retina Display devices (e.g., 2.0).</comment>
                             <frontend_type>select</frontend_type>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
