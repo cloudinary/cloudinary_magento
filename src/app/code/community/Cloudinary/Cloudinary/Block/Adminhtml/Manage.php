@@ -58,7 +58,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
             $enableLabel = 'Disable Cloudinary';
             $enableAction = 'disableCloudinary';
         } else {
-            $enableLabel = 'EnableCloudinary';
+            $enableLabel = 'Enable Cloudinary';
             $enableAction = 'enableCloudinary';
         }
 
