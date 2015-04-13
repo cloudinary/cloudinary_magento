@@ -1,13 +1,8 @@
 <?php
 
-use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
-use CloudinaryExtension\Credentials;
-use CloudinaryExtension\ImageManager;
-use CloudinaryExtension\ImageManagerFactory;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\Security\Key;
-use CloudinaryExtension\Security\Secret;
+
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
@@ -15,8 +10,8 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function upload(array $imageDetails)
     {
-        $imageManager = $this->_getImageManager();
-        $imageManager->uploadImage($this->_imageFullPathFromImageDetails($imageDetails));
+        $imageManager = $this->_getImageProvider();
+        $imageManager->upload(Image::fromPath($this->_imageFullPathFromImageDetails($imageDetails)));
 
         Mage::getModel('cloudinary_cloudinary/synchronisation')
             ->setValueId($imageDetails['value_id'])
@@ -44,33 +39,17 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function deleteImage($imageName)
     {
-        $imageProvider = new CloudinaryImageProvider($this->_getCredentials(), $this->_getCloudName());
-        $cloudinary = new ImageManager($imageProvider);
-        $cloudinary->deleteImage(Image::fromPath($imageName));
-    }
-
-    private function _getCredentials()
-    {
-        $key = Key::fromString($this->_getConfigHelper()->getApiKey());
-        $secret = Secret::fromString($this->_getConfigHelper()->getApiSecret());
-        return new Credentials($key, $secret);
-    }
-
-    private function _getCloudName()
-    {
-        return Cloud::fromName($this->_getConfigHelper()->getCloudName());
+        $this->_getImageProvider()->deleteImage(Image::fromPath($imageName));
     }
 
     public function getUrl($imagePath)
     {
-        $imageManager = $this->_getImageManager();
-        return $imageManager->getUrlForImage(Image::fromPath($imagePath));
+        $imageProvider = $this->_getImageProvider();
+        return (string)$imageProvider->transformImage(Image::fromPath($imagePath));
     }
 
-    private function _getImageManager()
+    private function _getImageProvider()
     {
-        return ImageManagerFactory::buildFromConfiguration(
-            $this->_getConfigHelper()->buildConfiguration()
-        );
+        return CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
     }
 }

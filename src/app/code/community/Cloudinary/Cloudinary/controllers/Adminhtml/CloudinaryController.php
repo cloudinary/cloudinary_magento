@@ -16,21 +16,9 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function indexAction()
     {
-        $totalImageCount = $this->_sumOfCatalogAndCmsImages();
-        $totalSynchronizedImageCount = $this->_synchronisedImageCount();
-
-        $progressBlock = $this->_buildProgressBlock($totalSynchronizedImageCount, $totalImageCount);
-        $configBlock = $this->_buildConfigBlock($totalSynchronizedImageCount, $totalImageCount);
-
-        if ($totalImageCount === $totalSynchronizedImageCount) {
-            Mage::getSingleton('core/session')->addNotice('All images have been successfully migrated to Cloudinary');
-        }
-
         $layout = $this->loadLayout();
-        $layout->_addContent($configBlock);
 
         if ($this->_migrationTask->hasStarted()) {
-            $layout->_addContent($progressBlock);
             $layout->_addContent($this->_buildMetaRefreshBlock());
         }
 
@@ -41,52 +29,31 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $this->_migrationTask->start();
 
-        $this->redirect();
+        $this->_redirectToManageCloudinary();
     }
 
     public function stopMigrationAction()
     {
         $this->_migrationTask->stop();
 
-        $this->redirect();
+        $this->_redirectToManageCloudinary();
     }
 
     public function enableCloudinaryAction()
     {
         $this->_cloudinaryConfig->enable();
 
-        $this->redirect();
+        $this->_redirectToManageCloudinary();
     }
 
     public function disableCloudinaryAction()
     {
         $this->_cloudinaryConfig->disable();
 
-        $this->redirect();
+        $this->_redirectToManageCloudinary();
     }
 
-    private function _buildConfigBlock($totalSynchronizedImageCount, $totalImageCount)
-    {
-
-        $configBlock = $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_manage');
-        $configBlock->setMigrationStarted($this->_migrationTask->hasStarted())
-            ->setExtensionEnabled($this->_cloudinaryConfig->isEnabled())
-            ->setImageCount($totalImageCount)
-            ->setSynchronizedImageCount($totalSynchronizedImageCount)
-            ->build();
-
-        return $configBlock;
-    }
-
-    private function _buildProgressBlock($totalSynchronizedImageCount, $totalImageCount)
-    {
-        return $this->getLayout()->createBlock('cloudinary_cloudinary/adminhtml_progress')
-            ->setImageCount($totalImageCount)
-            ->setSynchronizedImageCount($totalSynchronizedImageCount)
-            ->build();
-    }
-
-    private function redirect()
+    private function _redirectToManageCloudinary()
     {
         return $this->_redirect('*/cloudinary');
     }
@@ -96,17 +63,4 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         return $this->getLayout()->createBlock('core/text')->setText('<meta http-equiv="refresh" content="5">');
     }
 
-    private function _sumOfCatalogAndCmsImages()
-    {
-        $mediaCounter = Mage::getModel('cloudinary_cloudinary/mediaCollectionCounter')
-            ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/media_collection'))
-            ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'));
-
-        return $mediaCounter->count();
-    }
-
-    private function _synchronisedImageCount()
-    {
-        return Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')->getSize();
-    }
 }

@@ -2,30 +2,105 @@
 
 namespace CloudinaryExtension\Image;
 
+use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\Dpr;
+use CloudinaryExtension\Image\Transformation\FetchFormat;
+use CloudinaryExtension\Image\Transformation\Format;
+use CloudinaryExtension\Image\Transformation\Gravity;
+use CloudinaryExtension\Image\Transformation\Quality;
+
 class Transformation
 {
+    private $gravity;
+
     private $dimensions;
 
-    private $crop = 'pad';
+    private $crop;
 
-    private function __construct(Dimensions $dimensions)
+    private $fetchFormat;
+
+    private $quality;
+
+    private $format;
+
+    private $dpr;
+
+    public function __construct()
+    {
+        $this->fetchFormat = FetchFormat::fromString(Format::FETCH_FORMAT_AUTO);
+        $this->crop = 'pad';
+        $this->format = Format::fromExtension('jpg');
+        $this->validFormats = array('gif', 'jpg', 'png', 'svg');
+    }
+
+    public function withGravity(Gravity $gravity)
+    {
+        $this->gravity = $gravity;
+        $this->crop = ((string) $gravity) ? 'crop' : 'pad';
+
+        return $this;
+    }
+
+    public function withDimensions(Dimensions $dimensions)
     {
         $this->dimensions = $dimensions;
+
+        return $this;
     }
 
-    public static function toDimensions(Dimensions $dimensions)
+    public function withFetchFormat(FetchFormat $fetchFormat)
     {
-        return new Transformation($dimensions);
+        $this->fetchFormat = $fetchFormat;
+
+        return $this;
     }
 
-    public function getDimensions()
+    public function withFormat(Format $format)
     {
-        return $this->dimensions;
+        if (in_array((string) $format, $this->validFormats)) {
+            $this->format = $format;
+        }
+
+        return $this;
     }
 
-    public function getCrop()
+    public function withQuality(Quality $quality)
     {
-        return $this->crop;
+        $this->quality = $quality;
+
+        return $this;
     }
 
+    public function withDpr(Dpr $dpr)
+    {
+        $this->dpr = $dpr;
+
+        return $this;
+    }
+
+    public function withOptimisationDisabled()
+    {
+        $this->withFetchFormat(FetchFormat::fromString(''));
+        return $this;
+    }
+
+    public static function builder()
+    {
+        return new Transformation();
+    }
+
+    public function build()
+    {
+        return array(
+            'fetch_format' => (string) $this->fetchFormat,
+            'quality' => (string) $this->quality,
+            'crop' => (string) $this->crop,
+            'gravity' => (string) $this->gravity ?: null,
+            'width' => $this->dimensions ? $this->dimensions->getWidth() : null,
+            'height' => $this->dimensions ? $this->dimensions->getHeight() : null,
+            'format' => (string) $this->format,
+            'dpr' => (string) $this->dpr
+        );
+    }
 }
+

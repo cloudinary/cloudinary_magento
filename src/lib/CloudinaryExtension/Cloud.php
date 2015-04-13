@@ -10,7 +10,7 @@ class Cloud
 
     private function __construct($cloudName)
     {
-        $this->cloudName = $cloudName;
+        $this->cloudName = (string)$cloudName;
     }
 
     public static function fromName($aCloudName)

@@ -24,7 +24,9 @@
         "theseer/fxsl": "1.0.*@dev",
         "phpunit/phpunit": "3.7.*",
         "covex-nn/phpcb": "1.0.*@dev",
-        "bossa/phpspec2-expect": "dev-master"
+        "bossa/phpspec2-expect": "dev-master",
+        "ocramius/proxy-manager": "~0.5",
+        "symfony/dependency-injection": "2.6.4"
     },
     "config": {
         "bin-dir": "bin"
@@ -37,10 +39,17 @@
                 "../../../public/app/code/community",
                 "../../../public/app/code/core",
                 "../../../public/lib",
-                "features/bootstrap"
+                "features/bootstrap",
+                "src/lib/Cloudinary/src"
             ]
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.firegento.com"
+        }
+    ],
     "extra": {
         "magento-root-dir": "./"
     }

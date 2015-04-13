@@ -2,19 +2,16 @@
 
 namespace CloudinaryExtension;
 
-use CloudinaryExtension\Image\Dimensions;
-
 class Image
 {
-
     private $imagePath;
 
-    private $dimensions;
+    private $pathParts;
 
-    private function __construct($imagePath, Dimensions $dimensions = null)
+    private function __construct($imagePath)
     {
         $this->imagePath = $imagePath;
-        $this->dimensions = $dimensions;
+        $this->pathParts = pathinfo(basename($this->imagePath));
     }
 
     public static function fromPath($anImagePath)
@@ -27,8 +24,13 @@ class Image
         return $this->imagePath;
     }
 
-    public function getDimensions()
+    public function getId()
     {
-        return $this->dimensions;
+        return $this->pathParts['filename'];
+    }
+
+    public function getExtension()
+    {
+        return $this->pathParts['extension'];
     }
 }

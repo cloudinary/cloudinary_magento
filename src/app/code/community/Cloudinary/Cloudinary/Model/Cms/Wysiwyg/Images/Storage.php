@@ -1,47 +1,40 @@
 <?php
 
+use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
-use CloudinaryExtension\Image\Dimensions;
 use CloudinaryExtension\Image\Transformation;
-use CloudinaryExtension\ImageManagerFactory;
+use CloudinaryExtension\Image\Transformation\Dimensions;
 
 class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Model_Wysiwyg_Images_Storage
 {
+    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
-        if ($this->_getConfigHelper()->isEnabled() && $this->_isImageInCloudinary($filePath)) {
-            $imageManager = $this->_buildImageManager();
-            $image = Image::fromPath($filePath);
-            return $imageManager->getUrlForImageWithTransformation($image, $this->_buildResizeTransformation());
+        if ($this->_imageShouldComeFromCloudinary($filePath)) {
+            $imageProvider = $this->_buildImageProvider();
+            $imageDimensions = $this->_buildImageDimensions();
+            $defaultTransformation = $this->_getConfigHelper()->buildConfiguration()->getDefaultTransformation();
+
+            return (string)$imageProvider->transformImage(
+                Image::fromPath($filePath),
+                $defaultTransformation->withDimensions($imageDimensions)
+            );
         }
         return parent::getThumbnailUrl($filePath, $checkFile);
     }
 
-    private function _getConfigHelper()
+    private function _buildImageProvider()
     {
-        return Mage::helper('cloudinary_cloudinary/configuration');
+        return CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
     }
 
-    private function _buildImageManager()
+    private function _buildImageDimensions()
     {
-        return ImageManagerFactory::buildFromConfiguration(
-            $this->_getConfigHelper()->buildConfiguration()
-        );
-    }
-
-    private function _buildResizeTransformation()
-    {
-        $dimensions = Dimensions::fromWidthAndHeight(
+        return Dimensions::fromWidthAndHeight(
             $this->getConfigData('resize_width'),
             $this->getConfigData('resize_height')
         );
-        return Transformation::toDimensions($dimensions);
-    }
-
-    private function _isImageInCloudinary($imageName)
-    {
-        return Mage::getModel('cloudinary_cloudinary/synchronisation')->isImageInCloudinary(basename($imageName));
     }
 
     public function uploadFile($targetPath, $type = null)

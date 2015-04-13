@@ -6,78 +6,64 @@ namespace CloudinaryExtension;
 use Cloudinary;
 use Cloudinary\Uploader;
 use CloudinaryExtension\Image\Transformation;
+use CloudinaryExtension\Security;
 
 class CloudinaryImageProvider implements ImageProvider
 {
+    private $configuration;
 
-    private $credentials;
-    private $cloud;
-
-    public function __construct(Credentials $credentials, Cloud $cloud)
+    private function __construct(Configuration $configuration)
     {
-        $this->credentials = $credentials;
-        $this->cloud = $cloud;
+        $this->configuration = $configuration;
+        $this->authorise();
+    }
+
+    public static function fromConfiguration(Configuration $configuration)
+    {
+        return new CloudinaryImageProvider($configuration);
     }
 
     public function upload(Image $image)
     {
-        $this->setCloudinaryCredentialsAndCloudName();
-        Uploader::upload((string)$image, array("public_id" => $this->getImageId($image)));
+        Uploader::upload((string)$image, array("public_id" => $image->getId()));
     }
 
-    public function getImageUrlByName($imageName, $options = array())
+    public function transformImage(Image $image, Transformation $transformation = null)
     {
-        $this->setCloudinaryCredentialsAndCloudName();
-        return \cloudinary_url($this->getImageId($imageName), $this->getConsolidatedOptions($options));
-    }
-
-    public function transformImage(Image $image, Transformation $transformation)
-    {
-        $this->setCloudinaryCredentialsAndCloudName();
-
-        $options = array(
-            'width' => $transformation->getDimensions()->getWidth(),
-            'height' => $transformation->getDimensions()->getHeight(),
-            'crop' => $transformation->getCrop()
-        );
-
-        return Image::fromPath(\cloudinary_url($this->getImageId((string)$image), $this->getConsolidatedOptions($options)));
-    }
-
-    private function getConsolidatedOptions($options)
-    {
-        if (!array_key_exists('fetch_format', $options)) {
-            $options['fetch_format'] = 'auto';
+        if ($transformation === null) {
+            $transformation = $this->configuration->getDefaultTransformation();
         }
-
-        if (!array_key_exists('quality', $options)) {
-            $options['quality'] = '80';
-        }
-
-        return $options;
+        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
     }
 
-    private function getImageId($image)
+    public function validateCredentials()
     {
-        $imagePath = explode(DIRECTORY_SEPARATOR, $image);
-        $imageName = explode(".", $imagePath[count($imagePath) - 1]);
-        return $imageName[0];
-    }
-
-    private function setCloudinaryCredentialsAndCloudName()
-    {
-        Cloudinary::config(
-            array(
-                "cloud_name" => (string)$this->cloud,
-                "api_key" => (string)$this->credentials->getKey(),
-                "api_secret" => (string)$this->credentials->getSecret()
-            )
-        );
+        $signedValidationUrl = $this->getSignedValidationUrl();
+        return $this->validationResult($signedValidationUrl);
     }
 
     public function deleteImage(Image $image)
     {
-        $this->setCloudinaryCredentialsAndCloudName();
-        Uploader::destroy($this->getImageId($image));
+        Uploader::destroy($image->getId());
+    }
+
+    private function authorise()
+    {
+        Cloudinary::config($this->configuration->build());
+    }
+
+    private function getSignedValidationUrl()
+    {
+        $consoleUrl = Security\ConsoleUrl::fromPath("media_library/cms");
+        return (string)Security\SignedConsoleUrl::fromConsoleUrlAndCredentials(
+            $consoleUrl,
+            $this->configuration->getCredentials()
+        );
+    }
+
+    private function validationResult($signedValidationUrl)
+    {
+        $request = new ValidateRemoteUrlRequest($signedValidationUrl);
+        return $request->validate();
     }
 }
