@@ -2,7 +2,6 @@
 
 namespace spec\CloudinaryExtension;
 
-use CloudinaryExtension\Image\Dimensions;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -13,8 +12,13 @@ class ImageSpec extends ObjectBehavior
         $this->beConstructedThrough('fromPath', ['image_path.gif']);
     }
 
-    function it_is_initializable()
+    function it_provides_a_public_id_from_path()
     {
-        $this->shouldHaveType('CloudinaryExtension\Image');
+        $this->getId()->shouldBe('image_path');
+    }
+
+    function it_provides_the_extension_from_path()
+    {
+        $this->getExtension()->shouldBe('gif');
     }
 }

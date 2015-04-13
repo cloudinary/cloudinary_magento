@@ -20,4 +20,18 @@ class AdminLogin extends Page
         $this->getElement('Password')->setValue($password);
         $this->getElement('Login Button')->click();
     }
+
+    public function sessionLogin($username, $password, $mageSession)
+    {
+        if (!$this->isOpen()) {
+            $this->open();
+        }
+
+        $this->getSession()
+            ->setCookie(
+                'adminhtml',
+                $mageSession->adminLogin($username, $password)
+            )
+        ;
+    }
 }

@@ -9,6 +9,9 @@
                     <title>Manage</title>
                     <action>adminhtml/cloudinary</action>
                 </cloudinary>
+                <console module="cloudinary_cloudinary">
+                    <title>Open Cloudinary Console</title>
+                </console>
             </children>
         </cloudinary_cloudinary>
     </menu>
@@ -25,6 +28,9 @@
                             <cloudinary module="cloudinary_cloudinary">
                                 <title>Manage</title>
                             </cloudinary>
+                            <console module="cloudinary_cloudinary">
+                                <title>Open Cloudinary Console</title>
+                            </console>
                         </children>
                     </cloudinary_cloudinary>
                     <system>

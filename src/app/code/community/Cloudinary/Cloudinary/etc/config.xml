@@ -45,6 +45,11 @@
             </cloudinary_resource>
         </models>
         <blocks>
+            <adminhtml>
+                <rewrite>
+                    <page_menu>Cloudinary_Cloudinary_Block_Adminhtml_Page_Menu</page_menu>
+                </rewrite>
+            </adminhtml>
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Block</class>
             </cloudinary_cloudinary>
@@ -105,6 +110,18 @@
             </cloudinary_setup>
         </resources>
     </global>
+    <adminhtml>
+        <events>
+            <model_config_data_save_before>
+                <observers>
+                    <validate_cloudinary_credentials>
+                        <class>cloudinary_cloudinary/observer</class>
+                        <method>validateCloudinaryCredentials</method>
+                    </validate_cloudinary_credentials>
+                </observers>
+            </model_config_data_save_before>
+        </events>
+    </adminhtml>
     <admin>
         <routers>
             <adminhtml>
@@ -116,6 +133,18 @@
             </adminhtml>
         </routers>
     </admin>
+    <default>
+        <cloudinary>
+            <transformations>
+                <cloudinary_fetch_format>1</cloudinary_fetch_format>
+                <cloudinary_image_quality>80</cloudinary_image_quality>
+                <cloudinary_image_dpr>1.0</cloudinary_image_dpr>
+            </transformations>
+            <configuration>
+                <cloudinary_cdn_subdomain>1</cloudinary_cdn_subdomain>
+            </configuration>
+        </cloudinary>
+    </default>
     <crontab>
         <jobs>
             <cloudinary_migrate>
@@ -128,4 +157,13 @@
             </cloudinary_migrate>
         </jobs>
     </crontab>
+    <adminhtml>
+        <layout>
+            <updates>
+                <adminhtml_cloudinary>
+                    <file>cloudinary/cloudinary.xml</file>
+                </adminhtml_cloudinary>
+            </updates>
+        </layout>
+    </adminhtml>
 </config>
