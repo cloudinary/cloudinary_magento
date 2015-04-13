@@ -9,7 +9,7 @@ class CloudinaryManagement extends Page
     protected $path = '/index.php/admin/cloudinary/';
 
     protected $elements = array(
-        'Enable Button' => array('css' => 'button[title="EnableCloudinary"]'),
+        'Enable Button' => array('css' => 'button[title="Enable Cloudinary"]'),
         'Disable Button' => array('css' => 'button[title="Disable Cloudinary"]'),
     );
 
