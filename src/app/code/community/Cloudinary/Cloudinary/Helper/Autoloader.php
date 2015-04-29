@@ -22,10 +22,10 @@ class Cloudinary_Cloudinary_Helper_Autoloader
         spl_autoload_register(
             function ($className) {
                 if(
-                    strpos($className, self::CLOUDINARY_EXTENSION_LIB_PATH . '\\') === 0 ||
-                    strpos($className, self::CLOUDINARY_LIB_PATH . '\\') === 0
+                    strpos($className, Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_EXTENSION_LIB_PATH . '\\') === 0 ||
+                    strpos($className, Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_LIB_PATH . '\\') === 0
                 ) {
-                    include_once preg_replace(self::CONVERT_CLASS_TO_PATH_REGEX, '/', $className) . '.php';
+                    include_once preg_replace(Cloudinary_Cloudinary_Helper_Autoloader::CONVERT_CLASS_TO_PATH_REGEX, '/', $className) . '.php';
                 }
             }
         );
@@ -39,8 +39,8 @@ class Cloudinary_Cloudinary_Helper_Autoloader
 
         spl_autoload_register(
             function ($className) use ($libFolder) {
-                if($className ===  self::CLOUDINARY_LIB_PATH) {
-                    foreach(new GlobIterator($libFolder . DS . self::CLOUDINARY_LIB_PATH . DS . '*.php') as $phpFile) {
+                if($className ===  Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_LIB_PATH) {
+                    foreach(new GlobIterator($libFolder . DS . Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_LIB_PATH . DS . '*.php') as $phpFile) {
                         include_once $phpFile;
                     }
                 }
