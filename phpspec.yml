@@ -1,0 +1,5 @@
+suites:
+  cloudinary:
+    src_path: src/lib
+  magento:
+    src_path: src/app/code/community
