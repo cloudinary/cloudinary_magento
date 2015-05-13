@@ -8,11 +8,6 @@ Cloudinary offers comprehensive APIs and administration capabilities and is easy
 
 Cloudinary provides URL and HTTP based APIs that can be easily integrated with any Web development framework. 
 
-For Ruby on Rails, Cloudinary provides a GEM for simplifying the integration even further.
-
-## Getting started guide
-![More](http://res.cloudinary.com/cloudinary/image/upload/see_more_bullet.png)  **Take a look at our [Getting started guide of Ruby on Rails](http://cloudinary.com/documentation/rails_integration#getting_started_guide)**.
-
 
 ## Important: Changing cloud names
 
@@ -81,14 +76,11 @@ Additional resources are available at:
 * [Website](http://cloudinary.com)
 * [Documentation](http://cloudinary.com/documentation)
 * [Knowledge Base](http://support.cloudinary.com/forums)
-* [Documentation for Ruby on Rails integration](http://cloudinary.com/documentation/rails_integration)
-* [Ruby on Rails image upload documentation](http://cloudinary.com/documentation/rails_image_upload)
-* [Ruby on Rails image manipulation documentation](http://cloudinary.com/documentation/rails_image_manipulation)
 * [Image transformations documentation](http://cloudinary.com/documentation/image_transformations)
 
 ## Support
 
-You can [open an issue through GitHub](https://github.com/cloudinary/cloudinary_gem/issues).
+You can [open an issue through GitHub](https://github.com/cloudinary/cloudinary_magento/issues).
 
 Contact us [http://cloudinary.com/contact](http://cloudinary.com/contact)
 
