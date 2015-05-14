@@ -29,7 +29,8 @@ Removes the browser bottleneck limit of 4 images  by serving the images from mul
 ### Automatic Caching of images
 The plugin will automatically cache and serve images from the closest server to a visitor using one of the top CDNs ( Akamai)
 
-### Fully Robust backup - All images are stored locally as well as on Cloudinary automatically to make sure users always get the right image whether the plugin is off or on. In addition all images are saved and can be located easily using search. 
+### Fully Robust backup 
+All images are stored locally as well as on Cloudinary automatically to make sure users always get the right image whether the plugin is off or on. In addition all images are saved and can be located easily using search. 
 
 ## What is Cloudinary
 
