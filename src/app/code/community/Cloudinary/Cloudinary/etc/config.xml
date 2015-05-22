@@ -41,6 +41,9 @@
                     <migration>
                         <table>cloudinary_migration</table>
                     </migration>
+                    <catalog_media_gallery>
+                        <table>catalog_product_entity_media_gallery</table>
+                    </catalog_media_gallery>
                 </entities>
             </cloudinary_resource>
         </models>
