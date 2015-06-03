@@ -5,7 +5,8 @@
     "description": "Cloudinary Magento Integration.",
     "require": {
         "php": ">=5.4.0",
-        "magento-hackathon/magento-composer-installer":"*"
+        "magento-hackathon/magento-composer-installer":"*",
+        "cloudinary/cloudinary_php": "~1.1.1"
     },
     "require-dev": {
         "phpspec/phpspec": "2.1.0-RC1",

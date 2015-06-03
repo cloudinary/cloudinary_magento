@@ -2,8 +2,6 @@
 
 namespace spec\CloudinaryExtension;
 
-require_once ('src/lib/Cloudinary/src/Cloudinary.php');
-
 use CloudinaryExtension\Configuration;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;

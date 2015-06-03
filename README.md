@@ -64,3 +64,6 @@ cd /vagrant/vendor/inviqa/cloudinary
 ```
 bin/behat -fprogress
 ```
+
+## API Version
+This module currently uses version 1.1.* of the Cloudinary Api
