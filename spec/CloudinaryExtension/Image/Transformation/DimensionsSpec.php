@@ -17,4 +17,12 @@ class DimensionsSpec extends ObjectBehavior
         $this->getWidth()->shouldBe(100);
         $this->getHeight()->shouldBe(150);
     }
+
+    function it_rounds_float_values()
+    {
+        $this->beConstructedThrough('fromWidthAndHeight', [1.5, 2.9]);
+
+        $this->getWidth()->shouldBe(2);
+        $this->getHeight()->shouldBe(3);
+    }
 }
