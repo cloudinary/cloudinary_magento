@@ -35,11 +35,11 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
 
     public function getTotalImageCount()
     {
-        $mediaCounter = Mage::getModel('cloudinary_cloudinary/mediaCollectionCounter')
+        $collectionCounter = Mage::getModel('cloudinary_cloudinary/collectionCounter')
             ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/media_collection'))
             ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'));
 
-        return $mediaCounter->count();
+        return $collectionCounter->count();
     }
 
     public function isExtensionEnabled()
