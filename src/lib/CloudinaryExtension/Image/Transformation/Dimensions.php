@@ -10,8 +10,8 @@ class Dimensions
 
     private function __construct($width, $height)
     {
-        $this->width = $width;
-        $this->height = $height;
+        $this->width = (int) round($width);
+        $this->height = (int) round($height);
     }
 
     public function getWidth()
