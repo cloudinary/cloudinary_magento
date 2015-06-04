@@ -15,6 +15,8 @@ class Configuration
 
     private $cdnSubdomain = true;
 
+    private $userPlatform = '';
+
     private function __construct(Cloud $cloud,Credentials $credentials)
     {
         $this->cdnSubdomain = false;
@@ -75,5 +77,21 @@ class Configuration
             "api_key" => (string)$this->credentials->getKey(),
             "api_secret" => (string)$this->credentials->getSecret()
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserPlatform()
+    {
+        return $this->userPlatform;
+    }
+
+    /**
+     * @param string $userPlatform
+     */
+    public function setUserPlatform($userPlatform)
+    {
+        $this->userPlatform = $userPlatform;
     }
 }

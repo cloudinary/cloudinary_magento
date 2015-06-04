@@ -50,6 +50,7 @@ class CloudinaryImageProvider implements ImageProvider
     private function authorise()
     {
         Cloudinary::config($this->configuration->build());
+        Cloudinary::$USER_PLATFORM = $this->configuration->getUserPlatform();
     }
 
     private function getSignedValidationUrl()
