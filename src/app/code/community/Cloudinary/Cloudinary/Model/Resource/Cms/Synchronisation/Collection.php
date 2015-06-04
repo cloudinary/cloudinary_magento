@@ -4,7 +4,7 @@ use CloudinaryExtension\Migration\SynchronizedMediaRepository;
 
 class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
     extends Mage_Cms_Model_Wysiwyg_Images_Storage_Collection
-    implements SynchronizedMediaRepository, Cloudinary_Cloudinary_Model_Resource_Media_Collection_Interface
+    implements SynchronizedMediaRepository
 {
 
     public function __construct()
