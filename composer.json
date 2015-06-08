@@ -15,7 +15,7 @@
         "magetest/manager": "dev-master",
         "sensiolabs/behat-page-object-extension": "*@dev",
         "behat/mink-selenium2-driver": "*",
-        "behat/mink-goutte-driver": "1.0.*",
+        "behat/mink-goutte-driver": "^1.0",
         "squizlabs/php_codesniffer": "1.*",
         "phpmd/phpmd": "1.*",
         "sebastian/phpcpd": "2.*",
