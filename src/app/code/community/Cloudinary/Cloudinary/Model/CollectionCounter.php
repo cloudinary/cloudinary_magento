@@ -1,9 +1,8 @@
 <?php
 
-class Cloudinary_Cloudinary_Model_MediaCollectionCounter implements Countable
+class Cloudinary_Cloudinary_Model_CollectionCounter implements Countable
 {
-
-    private $_collections = array();
+    private $_collections = [];
 
     public function addCollection(Varien_Data_Collection $collection)
     {
@@ -14,11 +13,10 @@ class Cloudinary_Cloudinary_Model_MediaCollectionCounter implements Countable
 
     public function count()
     {
-        $mediaCount = 0;
+        $count = 0;
         foreach ($this->_collections as $collection) {
-            $mediaCount += $collection->getSize();
+            $count += $collection->getSize();
         }
-        return $mediaCount;
+        return $count;
     }
-
 }
