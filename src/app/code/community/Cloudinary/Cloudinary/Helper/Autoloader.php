@@ -8,17 +8,24 @@ class Cloudinary_Cloudinary_Helper_Autoloader
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
     private $_originalAutoloaders;
+    static protected $_isRegistered = false;
 
     public function register()
     {
+        if (self::$_isRegistered) {
+            return;
+        }
         $this->_deregisterVarienAutoloaders();
         $this->_registerCloudinaryAutoloader();
         $this->_registerCloudinaryExtensionAutoloader();
         $this->_reregisterVarienAutoloaders();
+
+        self::$_isRegistered = true;
     }
 
     private function _registerCloudinaryExtensionAutoloader()
     {
+
         spl_autoload_register(
             function ($className) {
                 if(
@@ -68,4 +75,4 @@ class Cloudinary_Cloudinary_Helper_Autoloader
             spl_autoload_register($autoloader);
         }
     }
-} 
+}

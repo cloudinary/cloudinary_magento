@@ -92,7 +92,7 @@
                     </delete_images_from_cloudinary>
                 </observers>
             </catalog_product_save_before>
-            <controller_front_init_before>
+            <resource_get_tablename>
                 <observers>
                     <load_custom_autoloaders>
                         <type>singleton</type>
@@ -100,7 +100,7 @@
                         <method>loadCustomAutoloaders</method>
                     </load_custom_autoloaders>
                 </observers>
-            </controller_front_init_before>
+            </resource_get_tablename>
         </events>
         <resources>
             <cloudinary_setup>
