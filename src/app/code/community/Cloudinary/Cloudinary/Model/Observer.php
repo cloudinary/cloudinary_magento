@@ -45,10 +45,12 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 
     public function deleteImagesFromCloudinary(Varien_Event_Observer $event)
     {
-        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
+        if (Mage::helper('cloudinary_cloudinary/configuration')->isEnabled()) {
+            $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
 
-        foreach ($this->_getImagesToDelete($event->getProduct()) as $image) {
-            $cloudinaryImage->deleteImage($image['file']);
+            foreach ($this->_getImagesToDelete($event->getProduct()) as $image) {
+                $cloudinaryImage->deleteImage($image['file']);
+            }
         }
     }
 
