@@ -6,11 +6,20 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
     extends Mage_Cms_Model_Wysiwyg_Images_Storage_Collection
     implements SynchronizedMediaRepository
 {
+    /**
+     * @var string[]
+     * @link http://cloudinary.com/documentation/image_transformations#format_conversion
+     * @link http://cloudinary.com/documentation/upload_images
+     */
+    private $allowedImgExtensions = ['JPG', 'PNG', 'GIF', 'BMP', 'TIFF', 'EPS', 'PSD', 'SVG', 'WebP'];
 
     public function __construct()
     {
         $this->addTargetDir(Mage::helper('cms/wysiwyg_images')->getStorageRoot());
         $this->setItemObjectClass('cloudinary_cloudinary/cms_synchronisation');
+        $this->setFilesFilter(
+            sprintf('#^[a-z0-9\.\-\_]+\.(?:%s)$#i', implode('|', $this->allowedImgExtensions))
+        );
     }
 
     public function findUnsynchronisedImages()
