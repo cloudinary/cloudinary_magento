@@ -22,6 +22,20 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
         );
     }
 
+    public function addTargetDir($value)
+    {
+        try {
+            parent::addTargetDir($value);
+        } catch (Exception $e) {
+            Mage::logException($e);
+            if (!Mage::registry('error_' . $value)) {
+                Mage::getSingleton('core/session')->addError("Couldn't find path " . $value);
+                Mage::register('error_' . $value, true);
+            }
+            throw $e;
+        }
+    }
+
     public function findUnsynchronisedImages()
     {
         $this->addFieldToFilter('basename', array('nin' => $this->_getSynchronisedImageNames()));
