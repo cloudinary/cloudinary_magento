@@ -58,7 +58,6 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
         return Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
             ->addFieldToSelect('image_name')
             ->addFieldToFilter('media_gallery_id', array('null' => true))
-            ->distinct(true)
             ->getData();
     }
 
