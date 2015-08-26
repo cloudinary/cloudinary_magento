@@ -8,7 +8,7 @@ use CloudinaryExtension\ImageProvider;
 
 class BatchUploader
 {
-    const MESSAGE_STATUS = 'Cloudinary migration: %s images migrated';
+    const MESSAGE_STATUS = 'Cloudinary migration: %s images migrated, %s failed';
 
     const MESSAGE_UPLOADED = 'Cloudinary migration: uploaded %s';
 
@@ -23,6 +23,7 @@ class BatchUploader
     private $migrationTask;
 
     private $countMigrated = 0;
+    private $countFailed = 0;
 
     public function __construct(ImageProvider $imageProvider, Task $migrationTask, Logger $logger, $baseMediaPath)
     {
@@ -44,7 +45,7 @@ class BatchUploader
             $this->uploadImage($image);
         }
 
-        $this->logger->notice(sprintf(self::MESSAGE_STATUS, $this->countMigrated));
+        $this->logger->notice(sprintf(self::MESSAGE_STATUS, $this->countMigrated, $this->countFailed));
     }
 
     private function getAbsolutePath(Synchronizable $image)
@@ -60,6 +61,7 @@ class BatchUploader
             $this->countMigrated++;
             $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $image->getFilename()));
         } catch (\Exception $e) {
+            $this->countFailed++;
             $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $image->getFilename()));
         }
     }
