@@ -48,6 +48,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function __toString()
     {
+        $result = null;
         $imageFile = $this->_getRequestedImageFile();
 
         if ($this->_imageShouldComeFromCloudinary($imageFile)) {
@@ -56,9 +57,10 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
             $transformation = $this->_configuration->getDefaultTransformation()
                 ->withDimensions($this->_dimensions);
 
-            return (string)$this->_imageProvider->transformImage($image, $transformation);
+            $result = (string)$this->_imageProvider->transformImage($image, $transformation);
+        } else {
+            $result =  parent::__toString();
         }
-
-        return parent::__toString();
+        return $result;
     }
 }
