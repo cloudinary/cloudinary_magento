@@ -12,7 +12,7 @@ class CloudinaryImageProvider implements ImageProvider
 {
     private $configuration;
 
-    const UPLOADER_API_UPLOAD_OPTIONS = array(
+    private $uploaderApiUploadOptions = array(
         "use_filename" => true,
         "unique_filename" => false,
         "overwrite" => false
@@ -31,7 +31,7 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function upload(Image $image)
     {
-        $uploadResult = Uploader::upload((string)$image, self::UPLOADER_API_UPLOAD_OPTIONS);
+        $uploadResult = Uploader::upload((string)$image, $this->uploaderApiUploadOptions);
         if ($uploadResult['existing'] == 1){
             throw new \Exception("File already exists in cloudinary (note that Cloudinary is case insensitive!)");
         }
