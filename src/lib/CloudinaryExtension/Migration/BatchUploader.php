@@ -36,7 +36,6 @@ class BatchUploader
     public function uploadImages(array $images)
     {
         $this->countMigrated = 0;
-
         foreach ($images as $image) {
 
             if ($this->migrationTask->hasBeenStopped()) {
@@ -55,14 +54,18 @@ class BatchUploader
 
     private function uploadImage(Synchronizable $image)
     {
+        $absolutePath = $this->getAbsolutePath($image);
+        $relativePath = $image->getRelativePath();
+        $apiImage = Image::fromPath($absolutePath, $relativePath);
+
         try {
-            $this->imageProvider->upload(Image::fromPath($this->getAbsolutePath($image)));
+            $this->imageProvider->upload($apiImage);
             $image->tagAsSynchronized();
             $this->countMigrated++;
-            $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $image->getFilename()));
+            $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $absolutePath . ' - ' . $relativePath));
         } catch (\Exception $e) {
             $this->countFailed++;
-            $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $image->getFilename()));
+            $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $absolutePath . ' - ' . $relativePath));
         }
     }
 

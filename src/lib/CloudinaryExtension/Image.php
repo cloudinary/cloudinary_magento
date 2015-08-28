@@ -30,6 +30,12 @@ class Image
         return $this->relativePath;
     }
 
+    public function getRelativeFolder()
+    {
+        $result = dirname($this->getRelativePath());
+        return $result == '.' ? '' : $result;
+    }
+
     public function getId()
     {
         return $this->pathParts['filename'];
