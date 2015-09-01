@@ -8,6 +8,7 @@ class Cloudinary_Cloudinary_Helper_Loggerutil
      * @param $message
      * @param int $level
      * @param null $fileName
+     * @deprecated use Cloudinary_Cloudinary_Model_Logger::detail() instead
      */
     public static function log($message, $level = 7, $fileName = null)
     {
@@ -23,6 +24,6 @@ class Cloudinary_Cloudinary_Helper_Loggerutil
             $logSignature = sprintf("%s::%s", $class, $logSignature);
         }
 
-        Mage::log($logSignature . json_encode($message, JSON_PRETTY_PRINT), $level, $fileName);
+        Mage::log($logSignature . $message, $level, $fileName);
     }
 }

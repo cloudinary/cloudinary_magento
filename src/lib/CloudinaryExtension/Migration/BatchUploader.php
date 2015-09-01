@@ -59,14 +59,39 @@ class BatchUploader
         $apiImage = Image::fromPath($absolutePath, $relativePath);
 
         try {
-            $this->imageProvider->upload($apiImage);
+            $uploadResult = $this->imageProvider->upload($apiImage);
             $image->tagAsSynchronized();
             $this->countMigrated++;
+            $this->_debugLogResult($uploadResult);
             $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $absolutePath . ' - ' . $relativePath));
         } catch (\Exception $e) {
             $this->countFailed++;
             $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $absolutePath . ' - ' . $relativePath));
         }
     }
+
+    /**
+     * @param $array the original key we want to select from
+     * @param $keys the keys to preserve as an array
+     * @return array
+     */
+    private function _arraySelect($array, $keys)
+    {
+        $result = [];
+        foreach ($keys as $key) {
+            $result[$key] = $array[$key];
+        }
+        return $result;
+    }
+
+    /**
+     * @param $uploadResult
+     */
+    private function _debugLogResult($uploadResult)
+    {
+        $extractedResult = $this->_arraySelect($uploadResult, ['url', 'public_id']);
+        $this->logger->debugLog(json_encode($extractedResult, JSON_PRETTY_PRINT) . "\n ------------------------------------------- \n");
+    }
+
 
 }

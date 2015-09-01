@@ -18,13 +18,22 @@
         <p>
         Foldered migration now available! (don't start migration if you want foldered migration before doing the below tasks) <br> <br>
         To set up foldered migration you need to: <br> <br>
-         - https://cloudinary.com/console/settings/upload and set 'Auto-create folders' - Enabled <br>
-         - https://cloudinary.com/console/settings/upload and set 'Use file name in Media Library' - Yes <br>
-         - **magento admin**/system_config/edit/section/cloudinary/ and set 'Migrate images to folders relative to the magento root folder' - Yes <br>
+
+         - <a target="_blank" href="https://cloudinary.com/console/settings/upload">https://cloudinary.com/console/settings/upload</a>
+        and set 'Auto-create folders' - Enabled <br>
+
+         - <a target="_blank" href="https://cloudinary.com/console/settings/upload">https://cloudinary.com/console/settings/upload</a>
+        and set 'Use file name in Media Library' - Yes <br>
+
+         - <a target="_blank" href="/admin/system_config/edit/section/cloudinary/">**magento admin**/system_config/edit/section/cloudinary/</a>
+         and set 'Migrate images to folders relative to the magento root folder' - Yes <br>
         <br>
+
         If you already use simple migration, you will have deprecated information which you can fold: <br>
          - `cloudinary_synchronisation` table entries (you can wipe the table clean before starting foldered migration) <br>
-         - all previously migrated images to cloudinary are not touched and will remain in the unfoldered structure <br> <br> <br>
+         - all previously migrated images to cloudinary are not touched and will remain in the unfoldered structure
+        (they all are in the cloudinary root folder and can be erased safely, since all images migrated with folders
+        will take place in the /media/... folder) <br> <br> <br>
         </p>
 
     </p>

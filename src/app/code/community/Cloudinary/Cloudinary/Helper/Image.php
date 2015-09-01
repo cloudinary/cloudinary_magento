@@ -63,4 +63,5 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         }
         return $result;
     }
+
 }
