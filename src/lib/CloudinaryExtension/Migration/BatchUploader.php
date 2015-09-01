@@ -71,7 +71,7 @@ class BatchUploader
     }
 
     /**
-     * @param $array the original key we want to select from
+     * @param $array the original array we want to select from
      * @param $keys the keys to preserve as an array
      * @return array
      */
