@@ -6,18 +6,20 @@ class Image
 {
     private $imagePath;
     private $relativePath;
-    private $pathParts;
+    private $pathInfo;
 
     private function __construct($imagePath, $relativePath = '')
     {
+        $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2];
+        \Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog("$imagePath, $relativePath, {$caller['class']}::{$caller['function']}");
         $this->imagePath = $imagePath;
         $this->relativePath = $relativePath;
-        $this->pathParts = pathinfo(basename($this->imagePath));
+        $this->pathInfo = pathinfo($this->imagePath);
     }
 
-    public static function fromPath($anImagePath, $relativepath = '')
+    public static function fromPath($imagePath, $relativePath = '')
     {
-        return new Image($anImagePath, $relativepath);
+        return new Image($imagePath, $relativePath);
     }
 
     public function __toString()
@@ -38,11 +40,15 @@ class Image
 
     public function getId()
     {
-        return $this->pathParts['filename'];
+        if ($this->relativePath){
+            return $this->getRelativeFolder() . DS . $this->pathInfo['filename'];
+        } else {
+            return $this->pathInfo['filename'];
+        }
     }
 
     public function getExtension()
     {
-        return $this->pathParts['extension'];
+        return $this->pathInfo['extension'];
     }
 }

@@ -149,4 +149,11 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         $config->saveConfig($configPath, $value)->reinit();
     }
 
+    /**
+     * @return Cloudinary_Cloudinary_Helper_Configuration
+     */
+    public static function getInstance(){
+        return Mage::helper('cloudinary_cloudinary/configuration');
+    }
+
 }

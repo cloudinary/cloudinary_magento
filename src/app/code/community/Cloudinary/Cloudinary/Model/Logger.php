@@ -21,7 +21,9 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
 
     public function debugLog($message)
     {
-        Mage::log($this->getSignature() . $message, 1, debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['class']);
+        if (Mage::getIsDeveloperMode()){
+            Mage::log($this->getSignature() . $message . "\n", 1, debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['class']);
+        }
     }
 
     /**
@@ -34,5 +36,12 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
         $parentTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2];
         $logSignature = sprintf(self::SIGNATURE_TEMPLATE, $parentTrace['class'], $parentTrace['function']);
         return $logSignature;
+    }
+
+    /**
+     * @return Cloudinary_Cloudinary_Model_Logger
+     */
+    public static function getInstance(){
+        return Mage::getModel('cloudinary_cloudinary/logger');
     }
 }

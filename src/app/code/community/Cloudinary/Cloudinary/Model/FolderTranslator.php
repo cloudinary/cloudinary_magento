@@ -9,6 +9,6 @@
  */
 interface Cloudinary_Cloudinary_Model_FolderTranslator
 {
-    public function translate($folder);
+    public function translate($path);
     public function reverse($folder);
 }

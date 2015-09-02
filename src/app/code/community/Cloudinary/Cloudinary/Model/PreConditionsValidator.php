@@ -23,6 +23,7 @@ trait  Cloudinary_Cloudinary_Model_PreConditionsValidator
     private function _imageShouldComeFromCloudinary($file)
     {
         $relativePath = $this->_getConfigHelper()->getMigratedPath($file);
-        return $this->_isEnabled() && $this->_isImageInCloudinary($relativePath);
+        $result = $this->_isEnabled() && $this->_isImageInCloudinary($relativePath);
+        return $result;
     }
 }
