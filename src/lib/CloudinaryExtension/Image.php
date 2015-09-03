@@ -40,7 +40,7 @@ class Image
 
     public function getId()
     {
-        if ($this->relativePath){
+        if ($this->relativePath) {
             return $this->getRelativeFolder() . DS . $this->pathInfo['filename'];
         } else {
             return $this->pathInfo['filename'];

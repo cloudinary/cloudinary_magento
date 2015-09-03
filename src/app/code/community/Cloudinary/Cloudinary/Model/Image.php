@@ -39,23 +39,18 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function deleteImage($imageName)
     {
-        $this->_getImageProvider()->deleteImage(self::newApiImage($imageName));
+        $this->_getImageProvider()->deleteImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($imageName));
     }
 
     public function getUrl($imagePath)
     {
         $imageProvider = $this->_getImageProvider();
 
-        return (string)$imageProvider->transformImage(self::newApiImage($imagePath));
+        return (string)$imageProvider->transformImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($imagePath));
     }
 
     private function _getImageProvider()
     {
         return CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
-    }
-
-    public static function newApiImage($path){
-        $migratedPath = Cloudinary_Cloudinary_Helper_Configuration::getInstance()->getMigratedPath($path);
-        return Image::fromPath($path, $migratedPath);
     }
 }

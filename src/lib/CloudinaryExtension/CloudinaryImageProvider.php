@@ -46,7 +46,7 @@ class CloudinaryImageProvider implements ImageProvider
         if ($transformation === null) {
             $transformation = $this->configuration->getDefaultTransformation();
         }
-        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
+        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()), $image->getRelativePath());
     }
 
     public function validateCredentials()

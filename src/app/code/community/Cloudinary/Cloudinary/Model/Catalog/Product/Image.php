@@ -9,13 +9,15 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
 
     public function getUrl()
     {
-        if ($this->_imageShouldComeFromCloudinary($this->_newFile)) {
-
-            $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
-
-            return (string)$imageProvider->transformImage(Image::fromPath($this->_newFile));
+        $config = $this->_getConfigHelper();
+        $file = $this->_newFile;
+        if ($this->_imageShouldComeFromCloudinary($file)) {
+            $imageProvider = CloudinaryImageProvider::fromConfiguration($config->buildConfiguration());
+            $result = (string)$imageProvider->transformImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($file));
+        } else {
+            $result = parent::getUrl();
         }
-        
-        return parent::getUrl();
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog($result);
+        return $result;
     }
 }
