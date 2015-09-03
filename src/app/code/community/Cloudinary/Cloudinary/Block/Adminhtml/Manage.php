@@ -43,13 +43,14 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
     {
         try {
             $collectionCounter = Mage::getModel('cloudinary_cloudinary/collectionCounter')
-                ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/media_collection'))
                 ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'));
-
-            return $collectionCounter->count();
+            $result = $collectionCounter->count();
         } catch (Exception $e) {
             return 'Unknown';
         }
+
+        $result += Mage::getResourceModel('cloudinary_cloudinary/media_collection')->uniqueImageCount();
+        return $result;
     }
 
     public function isExtensionEnabled()
@@ -104,4 +105,4 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
 
         return $button->toHtml();
     }
-} 
+}
