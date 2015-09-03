@@ -5,6 +5,7 @@ namespace CloudinaryExtension\Migration;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Synchronizable;
 use CloudinaryExtension\ImageProvider;
+use \Cloudinary_Cloudinary_Helper_Util_ArrayUtils as ArrayUtils;
 
 class BatchUploader
 {
@@ -71,25 +72,11 @@ class BatchUploader
     }
 
     /**
-     * @param $array the original array we want to select from
-     * @param $keys the keys to preserve in the input array
-     * @return array
-     */
-    private function _arraySelect($array, $keys)
-    {
-        $result = [];
-        foreach ($keys as $key) {
-            $result[$key] = $array[$key];
-        }
-        return $result;
-    }
-
-    /**
      * @param $uploadResult
      */
     private function _debugLogResult($uploadResult)
     {
-        $extractedResult = $this->_arraySelect($uploadResult, ['url', 'public_id']);
+        $extractedResult = ArrayUtils::arraySelect($uploadResult, ['url', 'public_id']);
         $this->logger->debugLog(json_encode($extractedResult, JSON_PRETTY_PRINT) . "\n ------------------------------------------- \n");
     }
 

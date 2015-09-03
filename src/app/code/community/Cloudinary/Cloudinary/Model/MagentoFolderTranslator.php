@@ -53,9 +53,9 @@ class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements Cloudinary_
         return $result;
     }
 
-    public function reverse($folder)
+    public function reverse($path)
     {
-        return $this->unifiedDirName(Mage::getBaseDir() . DS . $folder);
+        return str_replace(DS . DS, DS, Mage::getBaseDir() . DS . $path);
     }
 
     /**

@@ -31,7 +31,7 @@ class Cloudinary_Cloudinary_Model_Cms_Synchronisation extends Mage_Core_Model_Ab
         $this->setData('media_gallery_id', null);
         $this->setData('cloudinary_synchronisation_id', null);
         $this->setData('image_name', $this->getRelativePath());
-        Cloudinary_Cloudinary_Helper_Loggerutil::log( json_encode($this->toArray(), JSON_PRETTY_PRINT));
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog( json_encode($this->toArray(), JSON_PRETTY_PRINT));
         $this->save();
     }
 

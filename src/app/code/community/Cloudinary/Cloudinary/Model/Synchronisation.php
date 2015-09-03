@@ -14,8 +14,9 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
     {
         $this->setData('image_name', $this->getRelativePath());
         $this->setData('media_gallery_id', $this['value_id']);
+        $this->setData('media_gallery_value', $this['value']);
         $this->unsetData('value_id');
-        Cloudinary_Cloudinary_Helper_Loggerutil::log( json_encode($this->toArray(), JSON_PRETTY_PRINT));
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog( json_encode($this->toArray(), JSON_PRETTY_PRINT));
         $this->save();
     }
 

@@ -21,7 +21,8 @@ class Cloudinary_Cloudinary_Model_SynchronisedMediaUnifier implements Synchroniz
                 $synchronisedMediaRepository->findUnsynchronisedImages()
             );
         }
-        return array_slice($this->_unsychronisedImages, 0, $limit);
+        $result = array_slice($this->_unsychronisedImages, 0, $limit);
+        return $result;
     }
 
 }

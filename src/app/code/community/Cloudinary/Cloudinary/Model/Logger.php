@@ -41,7 +41,8 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
     /**
      * @return Cloudinary_Cloudinary_Model_Logger
      */
-    public static function getInstance(){
+    public static function getInstance()
+    {
         return Mage::getModel('cloudinary_cloudinary/logger');
     }
 }

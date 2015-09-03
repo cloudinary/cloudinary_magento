@@ -45,13 +45,13 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
             $this->addFieldToFilter('basename', array('nin' => $this->_getSynchronisedImageNames()));
         }
 
-        Cloudinary_Cloudinary_Helper_Loggerutil::log(json_encode($this->toArray(), JSON_PRETTY_PRINT));
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(json_encode($this->toArray(), JSON_PRETTY_PRINT));
         return $this->getItems();
     }
 
     private function _getSynchronisedImageNames()
     {
-        $helperConfig = Mage::helper('cloudinary_cloudinary/configuration');
+        $helperConfig = Cloudinary_Cloudinary_Helper_Configuration::getInstance();
         $result = array_map(
             function ($itemData) use ($helperConfig) {
                 $imageName = $itemData['image_name'];
@@ -59,6 +59,7 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
             },
             $this->_getSynchronisedImageData()
         );
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(print_r($result, true));
         return $result;
     }
 
