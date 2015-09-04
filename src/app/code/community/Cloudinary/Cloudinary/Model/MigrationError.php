@@ -12,7 +12,6 @@ class Cloudinary_Cloudinary_Model_MigrationError extends Mage_Core_Model_Abstrac
     {
         $image = $e->getImage();
         $filePath = (string)$image;
-        print_r(__FUNCTION__ . ": " . get_class($image) . "\n");
 
         $entry = Mage::getModel('cloudinary_cloudinary/migrationError');
         $entry->setFilePath($filePath);

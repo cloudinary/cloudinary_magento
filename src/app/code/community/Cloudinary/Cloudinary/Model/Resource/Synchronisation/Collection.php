@@ -36,11 +36,13 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
         $tableName = Mage::getSingleton('core/resource')->getTableName('cloudinary_cloudinary/catalog_media_gallery');
         $syncedImagesQuery = $this->getQueryForSyncedImageNames();
 
-        $this->getSelect()
+        $select = $this->getSelect();
+
+        $select
             ->joinRight($tableName, 'value_id=media_gallery_id', '*')
-            ->where("cloudinary_synchronisation_id is null and value not in ($syncedImagesQuery)")
             ->group('value')
             ->order('value')
+            ->where("cloudinary_synchronisation_id is null and value not in ($syncedImagesQuery)")
             ->limit($limit);
 
         Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(print_r($this->toArray(), true));
@@ -56,6 +58,7 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
     {
         $select = clone $this->getSelect();
         $select->reset(Zend_Db_Select::COLUMNS);
+        $select->where('media_gallery_value is not null');
         return $select->columns('media_gallery_value');
     }
 }
