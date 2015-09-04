@@ -46,6 +46,21 @@
         <p>Image migration progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
         <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated to Cloudinary.</p>
     <?php endif; ?>
+
+    <div class="migration_errors">
+
+        <?php
+            if ($this->getErrors()){
+                echo "<div><strong>ERRORS:</strong></div>";
+            }
+            foreach ($this->getErrors() as $error){
+                $message = $error->getMessage();
+                $filePath = $error->getFilePath();
+                $timestamp = $error->getTimestamp();
+                echo "<div class='migration_error'>$filePath: $message ($timestamp)</div>";
+            }
+        ?>
+    </div>
 </p>
 
 <p>

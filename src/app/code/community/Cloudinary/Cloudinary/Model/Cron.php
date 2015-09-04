@@ -38,6 +38,10 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 
         $migrationQueue->process();
 
+        foreach ($batchUploader->getMigrationErrors() as $error) {
+            Cloudinary_Cloudinary_Model_MigrationError::saveFromException($error);
+        }
+
         return $this;
     }
 }

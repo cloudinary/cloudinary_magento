@@ -5,6 +5,8 @@ namespace CloudinaryExtension;
 
 use Cloudinary;
 use Cloudinary\Uploader;
+use CloudinaryExtension\Exception\FileAlreadyExists;
+use CloudinaryExtension\Exception\MigrationError;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security;
 
@@ -36,7 +38,7 @@ class CloudinaryImageProvider implements ImageProvider
         $uploadResult = Uploader::upload($imagePath, $uploadOptionsAndFolder);
 
         if ($uploadResult['existing'] == 1) {
-            throw new \FileAlreadyExists("File already exists in cloudinary (note that Cloudinary is case insensitive!)");
+            MigrationError::throwWith($image, MigrationError::CODE_FILE_ALREADY_EXISTS);
         }
         return $uploadResult;
     }
