@@ -36,7 +36,7 @@ class CloudinaryImageProvider implements ImageProvider
         $uploadResult = Uploader::upload($imagePath, $uploadOptionsAndFolder);
 
         if ($uploadResult['existing'] == 1) {
-            throw new \Exception("File already exists in cloudinary (note that Cloudinary is case insensitive!)");
+            throw new \FileAlreadyExists("File already exists in cloudinary (note that Cloudinary is case insensitive!)");
         }
         return $uploadResult;
     }

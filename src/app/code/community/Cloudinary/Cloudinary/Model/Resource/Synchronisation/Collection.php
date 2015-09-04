@@ -43,7 +43,6 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
             ->order('value')
             ->limit($limit);
 
-        print_r($this->getSelect()->assemble());
         Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(print_r($this->toArray(), true));
         return $this->getItems();
     }

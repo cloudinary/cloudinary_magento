@@ -3,7 +3,6 @@
 class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
     private $_migrationTask;
-
     private $_cloudinaryConfig;
 
     public function __construct()
@@ -21,6 +20,11 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         $this->_cloudinaryConfig = Mage::helper('cloudinary_cloudinary/configuration');
 
         parent::__construct();
+    }
+
+    public function isFolderedMigration()
+    {
+        return $this->_cloudinaryConfig->isFolderedMigration();
     }
 
     public function getPercentComplete()
