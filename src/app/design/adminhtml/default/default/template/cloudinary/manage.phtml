@@ -51,7 +51,7 @@
 
         <?php
             if ($this->getErrors()){
-                echo "<div><strong>ERRORS:</strong></div>";
+                echo "<div><strong>ERRORS:</strong> (re-occuring errors refresh their timestamp)</div>";
             }
             foreach ($this->getErrors() as $error){
                 $message = $error->getMessage();

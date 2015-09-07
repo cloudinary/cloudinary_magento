@@ -81,7 +81,7 @@ class BatchUploader
     private function _debugLogResult($uploadResult)
     {
         $extractedResult = ArrayUtils::arraySelect($uploadResult, ['url', 'public_id']);
-        $this->logger->debugLog(json_encode($extractedResult, JSON_PRETTY_PRINT) . "\n ------------------------------------------- \n");
+        $this->logger->debugLog(json_encode($extractedResult, JSON_PRETTY_PRINT) . "\n");
     }
 
     /**

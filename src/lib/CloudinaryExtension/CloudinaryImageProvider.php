@@ -33,14 +33,18 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function upload(Image $image)
     {
-        $imagePath = (string)$image;
-        $uploadOptionsAndFolder = $this->uploadConfig + ["folder" => $image->getRelativeFolder()];
-        $uploadResult = Uploader::upload($imagePath, $uploadOptionsAndFolder);
+        try{
+            $imagePath = (string)$image;
+            $uploadOptionsAndFolder = $this->uploadConfig + ["folder" => $image->getRelativeFolder()];
+            $uploadResult = Uploader::upload($imagePath, $uploadOptionsAndFolder);
 
-        if ($uploadResult['existing'] == 1) {
-            MigrationError::throwWith($image, MigrationError::CODE_FILE_ALREADY_EXISTS);
+            if ($uploadResult['existing'] == 1) {
+                MigrationError::throwWith($image, MigrationError::CODE_FILE_ALREADY_EXISTS);
+            }
+            return $uploadResult;
+        } catch (\Exception $e) {
+            MigrationError::throwWith($image, MigrationError::CODE_API_ERROR, $e->getMessage());
         }
-        return $uploadResult;
     }
 
     public function transformImage(Image $image, Transformation $transformation = null)

@@ -12,13 +12,14 @@ use Exception;
 class MigrationError extends Exception
 {
     const CODE_FILE_ALREADY_EXISTS = 0;
-    private $messages = [self::CODE_FILE_ALREADY_EXISTS => 'File already exists (cloudinary is case insensitive!!)'];
-    private $image;
+    const CODE_API_ERROR = 1;
 
-    public function getMessageText()
-    {
-        return $this->messages[$this->getCode()];
-    }
+    private static $messages = [
+        self::CODE_FILE_ALREADY_EXISTS => 'File already exists (cloudinary is case insensitive!!).',
+        self::CODE_API_ERROR => 'Internal API error'
+    ];
+
+    private $image;
 
     /**
      * @return Image
@@ -31,19 +32,19 @@ class MigrationError extends Exception
     /**
      * @param Image $image
      * @param $code
+     * @param $message overrides the default message attached to the code
      * @return MigrationError
      */
-    private static function build(Image $image, $code)
+    private static function build(Image $image, $code, $message = '')
     {
-        $result = new MigrationError('', $code);
+        $result = new MigrationError($message ?: self::$messages[$code], $code);
         $result->image = $image;
-        $result->message = $result->getMessageText();
         return $result;
     }
 
-    public static function throwWith(Image $image, $code)
+    public static function throwWith(Image $image, $code, $message = '')
     {
-        throw self::build($image, $code);
+        throw self::build($image, $code, $message);
     }
 
 }

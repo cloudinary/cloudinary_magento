@@ -17,7 +17,7 @@ class Cloudinary_Cloudinary_Model_MigrationError extends Mage_Core_Model_Abstrac
         $entry->setFilePath($filePath);
 
         $entry->setRelativePath($image->getRelativePath());
-        $entry->setMessage($e->getMessageText());
+        $entry->setMessage($e->getMessage());
         $entry->setCode($e->getCode());
         $entry->setTimestamp(time());
 
