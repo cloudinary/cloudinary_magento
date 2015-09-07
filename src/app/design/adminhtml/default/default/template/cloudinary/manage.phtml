@@ -50,10 +50,13 @@
     <div class="migration_errors">
 
         <?php
-            if ($this->getErrors()){
-                echo "<div><strong>ERRORS:</strong> (re-occuring errors refresh their timestamp)</div>";
-            }
-            foreach ($this->getErrors() as $error){
+
+            $errors = $this->getErrors();
+            $count = sizeof($errors);
+            echo "<div><strong>ERRORS ($count):</strong> (re-occuring errors refresh their timestamp)</div>";
+            echo $this->getClearErrorsButton();
+
+            foreach ($errors as $error){
                 $message = $error->getMessage();
                 $filePath = $error->getFilePath();
                 $timestamp = $error->getTimestamp();

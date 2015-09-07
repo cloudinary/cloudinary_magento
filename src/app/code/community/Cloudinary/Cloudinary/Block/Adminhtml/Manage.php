@@ -97,6 +97,12 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         return $this->_makeButton($startLabel, $startAction, $this->allImagesSynced());
     }
 
+    public function getClearErrorsButton()
+    {
+        $areThereErrors = $this->getErrors();
+        return $this->_makeButton($areThereErrors ? 'Clear errors' : 'No errors to clear', 'clearErrors', !$areThereErrors);
+    }
+
     private function _makeButton($label, $action, $disabled = false)
     {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
