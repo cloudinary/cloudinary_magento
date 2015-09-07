@@ -155,7 +155,7 @@
         <jobs>
             <cloudinary_migrate>
                 <schedule>
-                    <cron_expr>* * * * *</cron_expr>
+                    <cron_expr>* * * * */3</cron_expr>
                 </schedule>
                 <run>
                     <model>cloudinary_cloudinary/cron::migrateImages</model>
