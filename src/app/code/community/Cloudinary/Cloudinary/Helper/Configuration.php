@@ -36,7 +36,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function __construct()
     {
-        $this->folderTranslator = new Cloudinary_Cloudinary_Model_MagentoFolderTranslator();
+        $this->folderTranslator = Mage::getModel('cloudinary_cloudinary/magentoFolderTranslator');
     }
 
     public function buildCredentials()

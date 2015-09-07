@@ -1,6 +1,6 @@
 <?php
 
-class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements Cloudinary_Cloudinary_Model_FolderTranslator
+class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements \CloudinaryExtension\FolderTranslator
 {
     private $absolutePathRegex;
     private $wysiwygPathRegex;

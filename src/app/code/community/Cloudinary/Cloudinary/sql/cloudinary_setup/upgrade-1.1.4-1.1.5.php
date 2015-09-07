@@ -15,4 +15,6 @@ $table = $installer->getConnection()
     ->addColumn('relative_path', Varien_Db_Ddl_Table::TYPE_BINARY, 255)
     ->addColumn('timestamp', Varien_Db_Ddl_Table::TYPE_DATETIME, null);
 
+$installer->getConnection()->createTable($table);
+
 $installer->endSetup();

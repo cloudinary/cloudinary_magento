@@ -1,5 +1,7 @@
 <?php
 
+namespace CloudinaryExtension;
+
 /**
  * Interface FolderTranslator
  *
@@ -7,7 +9,7 @@
  *
  * @package CloudinaryExtension\Migration
  */
-interface Cloudinary_Cloudinary_Model_FolderTranslator
+interface FolderTranslator
 {
     public function translate($path);
     public function reverse($folder);
