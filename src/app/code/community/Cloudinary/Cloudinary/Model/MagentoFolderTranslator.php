@@ -18,7 +18,7 @@ class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements \Cloudinary
     }
 
     /**
-     * The method tries to find out the absolute path of the input (this method is typically called via a product image path, a wysiwyg path, or an absolute path)
+     * The method tries to find out the absolute path of the input, and remove the magento base directory from it (this method is typically called via a product image path, a wysiwyg path, or an absolute path)
      *
      * @param $path
      * @return mixed the input, truncated from the magento base directory
