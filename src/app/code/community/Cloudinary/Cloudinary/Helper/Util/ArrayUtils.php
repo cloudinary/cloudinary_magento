@@ -1,6 +1,5 @@
 <?php
 
-
 class Cloudinary_Cloudinary_Helper_Util_ArrayUtils
 {
 

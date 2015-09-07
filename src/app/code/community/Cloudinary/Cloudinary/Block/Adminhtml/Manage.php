@@ -116,7 +116,8 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         return $button->toHtml();
     }
 
-    public function getErrors(){
+    public function getErrors()
+    {
         $coll = Mage::getModel('cloudinary_cloudinary/migrationError')->getCollection();
         $coll->addOrder('timestamp');
         return $coll->getItems();

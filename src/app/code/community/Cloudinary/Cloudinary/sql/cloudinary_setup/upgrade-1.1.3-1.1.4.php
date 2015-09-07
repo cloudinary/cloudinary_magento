@@ -14,6 +14,5 @@ $options = [
 ];
 
 $result = $conn->addColumn($synchronizationTable, 'media_gallery_value', $options);
-print_r($result);
 
 $installer->endSetup();

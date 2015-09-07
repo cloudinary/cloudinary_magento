@@ -77,7 +77,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function isFolderedMigration()
     {
-        return (boolean)Mage::getStoreConfig(self::CONFIG_FOLDERED_MIGRATION);
+        return Mage::getStoreConfigFlag(self::CONFIG_FOLDERED_MIGRATION);
     }
 
     public function getMigratedPath($file)
@@ -152,7 +152,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     /**
      * @return Cloudinary_Cloudinary_Helper_Configuration
      */
-    public static function getInstance(){
+    public static function getInstance()
+    {
         return Mage::helper('cloudinary_cloudinary/configuration');
     }
 

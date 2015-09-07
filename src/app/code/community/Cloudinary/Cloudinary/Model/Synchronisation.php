@@ -25,8 +25,8 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         $coll = $this->getCollection();
         $table = $coll->getMainTable();
         // case sensitive check
-        $query = "select image_name from $table where binary image_name = '$imageName'";
-        return $coll->getConnection()->query($query)->rowCount() > 0;
+        $query = "select count(*) from $table where binary image_name = '$imageName' limit 1";
+        return $coll->getConnection()->query($query)->fetchColumn() > 0;
     }
 
     public function getFilename()
