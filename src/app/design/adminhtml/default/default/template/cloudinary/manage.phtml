@@ -14,12 +14,56 @@
 </div>
 
 <p>
+    <p>
+        <p>
+
+        Foldered migration: <strong><?php echo $this->isFolderedMigration() ? "Enabled" : "Disabled" ?> </strong><br>
+
+        Foldered migration now available! (don't start migration if you want foldered migration before doing the below tasks) <br> <br>
+        To set up foldered migration you need to: <br> <br>
+
+         - <a target="_blank" href="https://cloudinary.com/console/settings/upload">https://cloudinary.com/console/settings/upload</a>
+        and set 'Auto-create folders' - Enabled <br>
+
+         - <a target="_blank" href="https://cloudinary.com/console/settings/upload">https://cloudinary.com/console/settings/upload</a>
+        and set 'Use file name in Media Library' - Yes <br>
+
+         - <a target="_blank" href="/admin/system_config/edit/section/cloudinary/">**magento admin**/system_config/edit/section/cloudinary/</a>
+         and set 'Migrate images to folders relative to the magento root folder' - Yes <br>
+        <br>
+
+        If you already use simple migration, you will have deprecated information which you can fold: <br>
+         - `cloudinary_synchronisation` table entries (you can wipe the table clean before starting foldered migration) <br>
+         - all previously migrated images to cloudinary are not touched and will remain in the unfoldered structure
+        (they all are in the cloudinary root folder and can be erased safely, since all images migrated with folders
+        will take place in the /media/... folder) <br> <br> <br>
+        </p>
+
+    </p>
     <?php if ($this->allImagesSynced()): ?>
         <div id="messages"><ul class="messages"><li class="notice-msg"><ul><li><span>All images have been successfully migrated to Cloudinary</span></li></ul></li></ul></div>
     <?php else: ?>
         <p>Image migration progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
         <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated to Cloudinary.</p>
     <?php endif; ?>
+
+    <div class="migration_errors">
+
+        <?php
+
+            $errors = $this->getErrors();
+            $count = sizeof($errors);
+            echo "<div><strong>ERRORS ($count):</strong> (re-occuring errors refresh their timestamp)</div>";
+            echo $this->getClearErrorsButton();
+
+            foreach ($errors as $error){
+                $message = $error->getMessage();
+                $filePath = $error->getFilePath();
+                $timestamp = $error->getTimestamp();
+                echo "<div class=\"migration_error\">$filePath: $message ($timestamp)</div>";
+            }
+        ?>
+    </div>
 </p>
 
 <p>
@@ -31,11 +75,11 @@
 
 
 <p>
-    <strong>Looking for more information?</strong> 
+    <strong>Looking for more information?</strong>
     <a href="http://support.cloudinary.com/hc/en-us/sections/200956331-Magento" target="_blank">Visit our Knowledge Base</a>.
 </p>
 
 <p>
-    <strong>Need assistance or got feedback?</strong> 
+    <strong>Need assistance or got feedback?</strong>
     <a href="http://support.cloudinary.com/hc/en-us/requests/new" target="_blank">Contact our support</a>.
 </p>

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>1.1.2</version>
+            <version>1.1.5</version>
         </Cloudinary_Cloudinary>
     </modules>
     <global>
@@ -44,6 +44,9 @@
                     <catalog_media_gallery>
                         <table>catalog_product_entity_media_gallery</table>
                     </catalog_media_gallery>
+                    <migrationError>
+                      <table>cloudinary_migration_error</table>
+                    </migrationError>
                 </entities>
             </cloudinary_resource>
         </models>
@@ -152,7 +155,7 @@
         <jobs>
             <cloudinary_migrate>
                 <schedule>
-                    <cron_expr>* * * * *</cron_expr>
+                    <cron_expr>* * * * */3</cron_expr>
                 </schedule>
                 <run>
                     <model>cloudinary_cloudinary/cron::migrateImages</model>

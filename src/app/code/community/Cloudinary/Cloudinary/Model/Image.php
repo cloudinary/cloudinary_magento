@@ -39,13 +39,14 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 
     public function deleteImage($imageName)
     {
-        $this->_getImageProvider()->deleteImage(Image::fromPath($imageName));
+        $this->_getImageProvider()->deleteImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($imageName));
     }
 
     public function getUrl($imagePath)
     {
         $imageProvider = $this->_getImageProvider();
-        return (string)$imageProvider->transformImage(Image::fromPath($imagePath));
+
+        return (string)$imageProvider->transformImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($imagePath));
     }
 
     private function _getImageProvider()

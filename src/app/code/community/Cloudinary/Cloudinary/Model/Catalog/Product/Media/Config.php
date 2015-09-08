@@ -28,8 +28,9 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
 
     private function _getUrlForImage($file)
     {
-        $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
+        $config = Cloudinary_Cloudinary_Helper_Configuration::getInstance();
+        $imageProvider = CloudinaryImageProvider::fromConfiguration($config->buildConfiguration());
 
-        return (string)$imageProvider->transformImage(Image::fromPath($file));
+        return (string)$imageProvider->transformImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($file));
     }
 }
