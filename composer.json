@@ -1,11 +1,12 @@
 {
-    "name": "cloudinary/cloudinary_magento",
+    "name": "inviqa/cloudinary",
     "type": "magento-module",
     "license": "proprietary",
     "description": "Cloudinary Magento Integration.",
     "require": {
         "php": ">=5.4.0",
-        "magento-hackathon/magento-composer-installer":"*"
+        "magento-hackathon/magento-composer-installer":"*",
+        "cloudinary/cloudinary_php": "~1.1.1"
     },
     "require-dev": {
         "phpspec/phpspec": "2.1.0-RC1",
@@ -14,7 +15,7 @@
         "magetest/manager": "dev-master",
         "sensiolabs/behat-page-object-extension": "*@dev",
         "behat/mink-selenium2-driver": "*",
-        "behat/mink-goutte-driver": "1.0.*",
+        "behat/mink-goutte-driver": "^1.0",
         "squizlabs/php_codesniffer": "1.*",
         "phpmd/phpmd": "1.*",
         "sebastian/phpcpd": "2.*",

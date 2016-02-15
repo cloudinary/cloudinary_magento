@@ -28,6 +28,8 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     const STATUS_DISABLED = 0;
 
+    const USER_PLATFORM_TEMPLATE = 'CloudinaryMagento/%s (Magento %s)';
+
     public function buildCredentials()
     {
         $environmentVariable = CloudinaryEnvironmentVariable::fromString($this->getEnvironmentVariable());
@@ -79,11 +81,22 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         $this->_setStoreConfig(self::CONFIG_PATH_ENABLED, self::STATUS_DISABLED);
     }
 
+    public function getUserPlatform()
+    {
+        return sprintf(
+            self::USER_PLATFORM_TEMPLATE,
+            Mage::getConfig()->getModuleConfig('Cloudinary_Cloudinary')->version,
+            Mage::getVersion()
+        );
+    }
+
     public function buildConfiguration()
     {
         $config = Configuration::fromEnvironmentVariable(
             CloudinaryEnvironmentVariable::fromString($this->getEnvironmentVariable())
         );
+
+        $config->setUserPlatform($this->getUserPlatform());
 
         if($this->getCdnSubdomainFlag()) {
             $config->enableCdnSubdomain();

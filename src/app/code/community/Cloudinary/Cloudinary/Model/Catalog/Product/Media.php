@@ -1,5 +1,5 @@
 <?php
- 
+
 class Cloudinary_Cloudinary_Model_Catalog_Product_Media extends Mage_Core_Model_Abstract
 {
 
@@ -41,7 +41,11 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media extends Mage_Core_Model_
 
     private function _getRemovedImages(array $mediaGallery)
     {
-        return array_filter(json_decode($mediaGallery['images'], true), array($this, '_isImageRemoved'));
+        if (!is_array($mediaGallery['images'])) {
+            $mediaGallery['images'] = json_decode($mediaGallery['images'], true);
+        }
+
+        return array_filter($mediaGallery['images'], array($this, '_isImageRemoved'));
     }
 
     private function _isImageRemoved($toFilter)

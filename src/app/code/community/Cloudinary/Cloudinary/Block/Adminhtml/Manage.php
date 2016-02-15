@@ -25,7 +25,13 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
 
     public function getPercentComplete()
     {
-        return $this->getSynchronizedImageCount() * 100 / $this->getTotalImageCount();
+        try {
+            if ($this->getTotalImageCount() != 0) {
+                return $this->getSynchronizedImageCount() * 100 / $this->getTotalImageCount();
+            }
+        } catch (Exception $e) {
+            return 'Unknown';
+        }
     }
 
     public function getSynchronizedImageCount()
@@ -35,11 +41,15 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
 
     public function getTotalImageCount()
     {
-        $mediaCounter = Mage::getModel('cloudinary_cloudinary/mediaCollectionCounter')
-            ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/media_collection'))
-            ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'));
+        try {
+            $collectionCounter = Mage::getModel('cloudinary_cloudinary/collectionCounter')
+                ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/media_collection'))
+                ->addCollection(Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection'));
 
-        return $mediaCounter->count();
+            return $collectionCounter->count();
+        } catch (Exception $e) {
+            return 'Unknown';
+        }
     }
 
     public function isExtensionEnabled()
@@ -49,7 +59,11 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
 
     public function allImagesSynced()
     {
-        return $this->getSynchronizedImageCount() === $this->getTotalImageCount();
+        try {
+            return $this->getSynchronizedImageCount() === $this->getTotalImageCount();
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public function getEnableButton()

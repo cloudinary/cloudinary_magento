@@ -49,8 +49,8 @@ class TransformationSpec extends ObjectBehavior
             ->withDimensions(Dimensions::fromWidthAndHeight('80', '90'))
             ->build();
 
-        $transformationArray->offsetGet('width')->shouldBe('80');
-        $transformationArray->offsetGet('height')->shouldBe('90');
+        $transformationArray->offsetGet('width')->shouldBe(80);
+        $transformationArray->offsetGet('height')->shouldBe(90);
     }
 
     function it_builds_with_no_gravity_by_default()
