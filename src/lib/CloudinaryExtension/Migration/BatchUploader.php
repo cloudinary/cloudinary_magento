@@ -94,7 +94,7 @@ class BatchUploader
     public function getMigrationErrors()
     {
         return array_filter($this->errors, function ($val) {
-            return is_a($val, MigrationError::class);
+            return $val instanceof MigrationError;
         });
     }
 
