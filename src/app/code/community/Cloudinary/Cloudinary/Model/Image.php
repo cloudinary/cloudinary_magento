@@ -8,10 +8,16 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
     use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
+    private $_folder;
+
     public function upload(array $imageDetails)
     {
+        if ($this->_getConfigHelper()->isFolderedMigration()) {
+            $this->_folder = $this->_getConfigHelper()->getMigratedPath($imageDetails['file']);
+        }
+
         $imageManager = $this->_getImageProvider();
-        $imageManager->upload(Image::fromPath($this->_imageFullPathFromImageDetails($imageDetails)));
+        $imageManager->upload(Image::fromPath($this->_imageFullPathFromImageDetails($imageDetails), $this->_folder));
 
         Mage::getModel('cloudinary_cloudinary/synchronisation')
             ->setValueId($imageDetails['value_id'])
