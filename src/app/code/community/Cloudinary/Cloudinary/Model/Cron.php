@@ -45,13 +45,3 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
         return $this;
     }
 }
-
-/*
-
-TODO find out why:
-
-2015-09-04T08:51:25+00:00 ERR (3): Cloudinary migration: Error in sending request to server - failed creating formpost data trying to upload /vagrant/public/media/catalog/product/2/0/20141004_224709_96.jpg - /media/catalog/product/2/0/20141004_224709_96.jpg
-2015-09-04T08:51:25+00:00 ERR (3): Cloudinary migration: Error in sending request to server - failed creating formpost data trying to upload /vagrant/public/media/catalog/product/4/_/4_10.jpg - /media/catalog/product/4/_/4_10.jpg
-2015-09-04T08:51:26+00:00 ERR (3): Cloudinary migration: Error in sending request to server - failed creating formpost data trying to upload /vagrant/public/media/catalog/product/4/_/4_sep_2014_09_52_23_1.jpg - /media/catalog/product/4/_/4_sep_2014_09_52_23_1.jpg
-
-*/
