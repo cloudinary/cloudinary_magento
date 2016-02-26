@@ -2,7 +2,6 @@
 
 namespace CloudinaryExtension\Migration;
 
-use CloudinaryExtension\Exception\FileAlreadyExists;
 use CloudinaryExtension\Exception\MigrationError;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Synchronizable;
@@ -95,7 +94,7 @@ class BatchUploader
     public function getMigrationErrors()
     {
         return array_filter($this->errors, function ($val) {
-            return is_a($val, MigrationError::class);
+            return $val instanceof MigrationError;
         });
     }
 
