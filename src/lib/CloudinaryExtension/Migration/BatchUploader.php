@@ -2,7 +2,6 @@
 
 namespace CloudinaryExtension\Migration;
 
-use CloudinaryExtension\Exception\FileAlreadyExists;
 use CloudinaryExtension\Exception\MigrationError;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Synchronizable;
