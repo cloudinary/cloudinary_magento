@@ -1,5 +1,5 @@
 <_>
-   <form_key>h0sFDwJxZlePvoE8</form_key>
+   <form_key>zMR3SJIJuXV8Ps1D</form_key>
    <name>Cloudinary_Cloudinary</name>
    <channel>community</channel>
    <version_ids>
@@ -9,14 +9,13 @@
    <description>Cloudinary supercharges your images! Upload images to the cloud, deliver optimized via a fast CDN, perform smart resizing and apply effects.</description>
    <license>MIT License (MITL)</license>
    <license_uri/>
-   <version>1.1.2</version>
+   <version>1.2.0</version>
    <stability>stable</stability>
-   <notes>v1.1.2
+   <notes>v1.2.0
 
 Release Highlights:
 
-* Deal gracefully with missing media/wysiwyg folder
-</notes>
+* Foldered migration</notes>
    <authors>
       <name>
          <name>Cloudinary</name>
@@ -45,7 +44,7 @@ Release Highlights:
             <max/>
          </max>
          <files>
-            <files>      </files>
+            <files>        </files>
          </files>
       </package>
       <extension>
