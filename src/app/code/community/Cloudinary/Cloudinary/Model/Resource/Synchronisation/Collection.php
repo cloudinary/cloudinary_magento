@@ -31,16 +31,34 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
         return $resource->getMainTable();
     }
 
-    public function findUnsynchronisedImages($limit=200)
+    public function findUnsynchronisedImages($limit = 100)
     {
         $tableName = Mage::getSingleton('core/resource')->getTableName('cloudinary_cloudinary/catalog_media_gallery');
+        $syncedImagesQuery = $this->getQueryForSyncedImageNames();
 
-        $this->getSelect()
-             ->joinRight($tableName, 'value_id=media_gallery_id', '*')
-             ->where('cloudinary_synchronisation_id is null')
-             ->limit($limit)
-        ;
+        $select = $this->getSelect();
 
+        $select
+            ->joinRight($tableName, 'value_id=media_gallery_id', '*')
+            ->group('value')
+            ->order('value')
+            ->where("cloudinary_synchronisation_id is null and value not in ($syncedImagesQuery)")
+            ->limit($limit);
+
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(print_r($this->toArray(), true));
         return $this->getItems();
+    }
+
+    /**
+     * basically returns with all product image's media_gallery stored name which has been synced
+     *
+     * @return Varien_Db_Select
+     */
+    private function getQueryForSyncedImageNames()
+    {
+        $select = clone $this->getSelect();
+        $select->reset(Zend_Db_Select::COLUMNS);
+        $select->where('media_gallery_value is not null');
+        return $select->columns('media_gallery_value');
     }
 }

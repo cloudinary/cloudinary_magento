@@ -24,11 +24,20 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     const CONFIG_CDN_SUBDOMAIN = 'cloudinary/configuration/cloudinary_cdn_subdomain';
 
+    const CONFIG_FOLDERED_MIGRATION = 'cloudinary/configuration/cloudinary_foldered_migration';
+
     const STATUS_ENABLED = 1;
 
     const STATUS_DISABLED = 0;
 
     const USER_PLATFORM_TEMPLATE = 'CloudinaryMagento/%s (Magento %s)';
+
+    private $folderTranslator;
+
+    public function __construct()
+    {
+        $this->folderTranslator = Mage::getModel('cloudinary_cloudinary/magentoFolderTranslator');
+    }
 
     public function buildCredentials()
     {
@@ -66,6 +75,29 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
         return (boolean)Mage::getStoreConfig(self::CONFIG_CDN_SUBDOMAIN);
     }
 
+    public function isFolderedMigration()
+    {
+        return Mage::getStoreConfigFlag(self::CONFIG_FOLDERED_MIGRATION);
+    }
+
+    public function getMigratedPath($file)
+    {
+        if ($this->isFolderedMigration()) {
+            $result = $this->folderTranslator->translate($file);
+        } else {
+            $result = basename($file);
+        }
+        return $result;
+    }
+
+    public function reverseMigratedPathIfNeeded($migratedPath)
+    {
+        if ($this->isFolderedMigration()) {
+            return $this->folderTranslator->reverse($migratedPath);
+        }
+        return $migratedPath;
+    }
+
     public function isEnabled()
     {
         return (boolean)Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
@@ -98,7 +130,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
         $config->setUserPlatform($this->getUserPlatform());
 
-        if($this->getCdnSubdomainFlag()) {
+        if ($this->getCdnSubdomainFlag()) {
             $config->enableCdnSubdomain();
         }
 
@@ -106,8 +138,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
             ->withGravity(Gravity::fromString($this->getDefaultGravity()))
             ->withFetchFormat(FetchFormat::fromString($this->getFetchFormat()))
             ->withQuality(Quality::fromString($this->getImageQuality()))
-            ->withDpr(Dpr::fromString($this->getImageDpr()))
-        ;
+            ->withDpr(Dpr::fromString($this->getImageDpr()));
 
         return $config;
     }
@@ -116,6 +147,14 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
     {
         $config = new Mage_Core_Model_Config();
         $config->saveConfig($configPath, $value)->reinit();
+    }
+
+    /**
+     * @return Cloudinary_Cloudinary_Helper_Configuration
+     */
+    public static function getInstance()
+    {
+        return Mage::helper('cloudinary_cloudinary/configuration');
     }
 
 }

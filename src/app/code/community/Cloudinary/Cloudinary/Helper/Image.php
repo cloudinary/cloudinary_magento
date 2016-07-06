@@ -48,17 +48,25 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 
     public function __toString()
     {
+        $result = null;
         $imageFile = $this->_getRequestedImageFile();
 
         if ($this->_imageShouldComeFromCloudinary($imageFile)) {
-            $image = Image::fromPath($imageFile);
+            $image = Cloudinary_Cloudinary_Helper_Image::newApiImage($imageFile);
 
             $transformation = $this->_configuration->getDefaultTransformation()
                 ->withDimensions($this->_dimensions);
 
-            return (string)$this->_imageProvider->transformImage($image, $transformation);
+            $result = (string)$this->_imageProvider->transformImage($image, $transformation);
+        } else {
+            $result =  parent::__toString();
         }
-
-        return parent::__toString();
+        return $result;
     }
+
+    public static function newApiImage($path){
+        $migratedPath = Cloudinary_Cloudinary_Helper_Configuration::getInstance()->getMigratedPath($path);
+        return Image::fromPath($path, $migratedPath);
+    }
+
 }

@@ -38,28 +38,38 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
 
     public function findUnsynchronisedImages()
     {
-        $this->addFieldToFilter('basename', array('nin' => $this->_getSynchronisedImageNames()));
+        $helperConfig = Mage::helper('cloudinary_cloudinary/configuration');
+        if ($helperConfig->isFolderedMigration()){
+            $this->addFieldToFilter('filename', array('nin' => $this->_getSynchronisedImageNames()));
+        } else {
+            $this->addFieldToFilter('basename', array('nin' => $this->_getSynchronisedImageNames()));
+        }
 
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(json_encode($this->toArray(), JSON_PRETTY_PRINT));
         return $this->getItems();
     }
 
     private function _getSynchronisedImageNames()
     {
-        return array_map(
-            function ($itemData) {
-                return $itemData['image_name'];
+        $helperConfig = Cloudinary_Cloudinary_Helper_Configuration::getInstance();
+        $result = array_map(
+            function ($itemData) use ($helperConfig) {
+                $imageName = $itemData['image_name'];
+                return $helperConfig->reverseMigratedPathIfNeeded($imageName);
             },
             $this->_getSynchronisedImageData()
         );
+        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(print_r($result, true));
+        return $result;
     }
 
     private function _getSynchronisedImageData()
     {
-        return Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
+        $result = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
             ->addFieldToSelect('image_name')
             ->addFieldToFilter('media_gallery_id', array('null' => true))
-            ->distinct(true)
             ->getData();
+        return $result;
     }
 
 }

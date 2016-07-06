@@ -53,6 +53,17 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         $this->_redirectToManageCloudinary();
     }
 
+    public function clearErrorsAction()
+    {
+        $items = Mage::getModel('cloudinary_cloudinary/migrationError')->getCollection()->getItems();
+
+        foreach ($items as $error){
+            $error->delete();
+        }
+
+        $this->_redirectToManageCloudinary();
+    }
+
     private function _redirectToManageCloudinary()
     {
         return $this->_redirect('*/cloudinary');

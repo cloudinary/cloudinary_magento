@@ -5,12 +5,20 @@ namespace CloudinaryExtension;
 
 use Cloudinary;
 use Cloudinary\Uploader;
+use CloudinaryExtension\Exception\FileAlreadyExists;
+use CloudinaryExtension\Exception\MigrationError;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Security;
 
 class CloudinaryImageProvider implements ImageProvider
 {
     private $configuration;
+
+    private $uploadConfig = array(
+        "use_filename" => true,
+        "unique_filename" => false,
+        "overwrite" => false
+    );
 
     private function __construct(Configuration $configuration)
     {
@@ -25,7 +33,18 @@ class CloudinaryImageProvider implements ImageProvider
 
     public function upload(Image $image)
     {
-        Uploader::upload((string)$image, array("public_id" => $image->getId()));
+        try{
+            $imagePath = (string)$image;
+            $uploadOptionsAndFolder = $this->uploadConfig + ["folder" => $image->getRelativeFolder()];
+            $uploadResult = Uploader::upload($imagePath, $uploadOptionsAndFolder);
+
+            if ($uploadResult['existing'] == 1) {
+                MigrationError::throwWith($image, MigrationError::CODE_FILE_ALREADY_EXISTS);
+            }
+            return $uploadResult;
+        } catch (\Exception $e) {
+            MigrationError::throwWith($image, MigrationError::CODE_API_ERROR, $e->getMessage());
+        }
     }
 
     public function transformImage(Image $image, Transformation $transformation = null)
@@ -33,7 +52,7 @@ class CloudinaryImageProvider implements ImageProvider
         if ($transformation === null) {
             $transformation = $this->configuration->getDefaultTransformation();
         }
-        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()));
+        return Image::fromPath(\cloudinary_url($image->getId(), $transformation->build()), $image->getRelativePath());
     }
 
     public function validateCredentials()
