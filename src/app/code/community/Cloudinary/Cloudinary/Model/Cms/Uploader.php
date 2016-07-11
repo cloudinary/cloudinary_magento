@@ -11,11 +11,9 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
     {
         parent::_afterSave($result);
 
-        if (!empty($result['path']) && !empty($result['file'])) {
+        if ($this->canImageBeSynced($result)) {
             $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
-
             $imageProvider->upload(Image::fromPath($result['path'] . DIRECTORY_SEPARATOR . $result['file']));
-
             $this->_trackSynchronisation($result['file']);
         }
 
@@ -27,5 +25,28 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
         Mage::getModel('cloudinary_cloudinary/cms_synchronisation')
             ->setValue($fileName)
             ->tagAsSynchronized();
+    }
+
+    /**
+     * Make sure we only sync images
+     *
+     * @param array $result
+     * @return bool
+     */
+    private function canImageBeSynced($result) {
+        if (empty($result['path'])) {
+            return false;
+        }
+        if (empty($result['file'])) {
+            return false;
+        }
+        if (empty($result['type'])) {
+            return false;
+        }
+        if (strpos($result['type'], 'image') === false) {
+            return false;
+        }
+
+        return true;
     }
 }
