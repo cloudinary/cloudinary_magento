@@ -9,7 +9,7 @@ trait  Cloudinary_Cloudinary_Model_PreConditionsValidator
 
     private function _isImageInCloudinary($imageName)
     {
-        return Mage::getModel('cloudinary_cloudinary/synchronisation')->isImageInCloudinary($imageName);
+        return Mage::getSingleton('cloudinary_cloudinary/syncedImages')->isImageInCloudinary($imageName);
     }
 
     /**
