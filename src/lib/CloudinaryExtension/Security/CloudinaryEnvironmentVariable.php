@@ -14,7 +14,11 @@ class CloudinaryEnvironmentVariable implements EnvironmentVariable
     private function __construct($environmentVariable)
     {
         $this->environmentVariable = (string)$environmentVariable;
-        Cloudinary::config_from_url(str_replace('CLOUDINARY_URL=', '', $environmentVariable));
+        $cloudinaryUrl = str_replace('CLOUDINARY_URL=', '', $environmentVariable);
+        if ($this->_isUrlValid($cloudinaryUrl)) {
+            Cloudinary::config_from_url($cloudinaryUrl);
+        }
+
     }
 
     public static function fromString($environmentVariable)
@@ -38,6 +42,11 @@ class CloudinaryEnvironmentVariable implements EnvironmentVariable
     public function __toString()
     {
         return $this->environmentVariable;
+    }
+
+    protected function _isUrlValid($cloudinaryUrl)
+    {
+        return parse_url($cloudinaryUrl, PHP_URL_SCHEME) == "cloudinary";
     }
 
 }
