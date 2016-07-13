@@ -37,6 +37,9 @@ class BatchUploaderSpec extends ObjectBehavior
         $image1->getFilename()->willReturn('/z/b/image1.jpg');
         $image2->getFilename()->willReturn('/r/b/image2.jpg');
 
+        $image1->getRelativePath()->willReturn('');
+        $image2->getRelativePath()->willReturn('');
+
         $images = array($image1, $image2);
 
         $this->uploadImages($images);
@@ -47,10 +50,10 @@ class BatchUploaderSpec extends ObjectBehavior
         $image1->tagAsSynchronized()->shouldHaveBeenCalled();
         $image2->tagAsSynchronized()->shouldHaveBeenCalled();
 
-        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/z/b/image1.jpg'))->shouldHaveBeenCalled();
-        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/r/b/image2.jpg'))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/catalog/media/z/b/image1.jpg' . ' - ' . ''))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/catalog/media/r/b/image2.jpg' . ' - ' . ''))->shouldHaveBeenCalled();
 
-        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 2))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 2, 0))->shouldHaveBeenCalled();
     }
 
     function it_logs_an_error_if_any_of_the_image_uploads_fails(
@@ -61,6 +64,9 @@ class BatchUploaderSpec extends ObjectBehavior
     ) {
         $image1->getFilename()->willReturn('/z/b/image1.jpg');
         $image2->getFilename()->willReturn('/invalid');
+
+        $image1->getRelativePath()->willReturn('');
+        $image2->getRelativePath()->willReturn('');
 
         $exception = new \Exception('Invalid file');
 
@@ -75,10 +81,10 @@ class BatchUploaderSpec extends ObjectBehavior
         $image2->tagAsSynchronized()->shouldNotHaveBeenCalled();
 
         $logger->error(
-            sprintf(BatchUploader::MESSAGE_UPLOAD_ERROR, $exception->getMessage(), '/invalid')
+            sprintf(BatchUploader::MESSAGE_UPLOAD_ERROR, $exception->getMessage(), ('/catalog/media/invalid' . ' - '. ''))
         )->shouldHaveBeenCalled();
 
-        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 1))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 1, 1))->shouldHaveBeenCalled();
     }
 
 
@@ -92,6 +98,9 @@ class BatchUploaderSpec extends ObjectBehavior
         $image1->getFilename()->willReturn('/z/b/image1.jpg');
         $image2->getFilename()->willReturn('/invalid');
 
+        $image1->getRelativePath()->willReturn('/z/b/image1.jpg');
+        $image2->getRelativePath()->willReturn('/invalid');
+
         $migrationTask->hasBeenStopped()->willReturn(false, true);
 
         $images = array($image1, $image2);
@@ -104,7 +113,7 @@ class BatchUploaderSpec extends ObjectBehavior
         $imageProvider->upload('/catalog/media/r/b/image2.jpg')->shouldNotHaveBeenCalled();
         $image2->tagAsSynchronized()->shouldNotHaveBeenCalled();
 
-        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 1))->shouldHaveBeenCalled();
+        $logger->notice(sprintf(BatchUploader::MESSAGE_STATUS, 1, 0))->shouldHaveBeenCalled();
     }
 }
 
