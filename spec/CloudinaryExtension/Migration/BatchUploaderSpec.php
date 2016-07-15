@@ -82,6 +82,28 @@ class BatchUploaderSpec extends ObjectBehavior
     }
 
 
+    function it_rescues_already_exists_errors_and_tags_image_as_synchronized(
+        ImageProvider $imageProvider,
+        Logger $logger,
+        Synchronizable $image1,
+        Synchronizable $image2
+    ) {
+        $image1->getFilename()->willReturn('/z/b/image1.jpg');
+
+        $exception = new \Cloudinary\Api\AlreadyExists('Already exists');
+
+        $images = array($image1);
+
+        $imageProvider->upload(Image::fromPath('/catalog/media/z/b/image1.jpg'))->willThrow($exception);
+
+        $this->uploadImages($images);
+
+        $image1->tagAsSynchronized()->shouldHaveBeenCalled();
+
+        $logger->notice(sprintf(BatchUploader::MESSAGE_UPLOADED, '/z/b/image1.jpg'))->shouldHaveBeenCalled();
+    }
+
+
     function it_stops_the_upload_process_if_task_is_stopped(
         ImageProvider $imageProvider,
         Task $migrationTask,

@@ -12,6 +12,8 @@ class BatchUploader
 
     const MESSAGE_UPLOADED = 'Cloudinary migration: uploaded %s';
 
+    const MESSAGE_UPLOADED_EXISTS = 'Cloudinary migration: %s exists - tagged as synchronized';
+
     const MESSAGE_UPLOAD_ERROR = 'Cloudinary migration: %s trying to upload %s';
 
     private $imageProvider;
@@ -59,6 +61,10 @@ class BatchUploader
             $image->tagAsSynchronized();
             $this->countMigrated++;
             $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $image->getFilename()));
+        } catch (\Cloudinary\Api\AlreadyExists $e) {
+            $image->tagAsSynchronized();
+            $this->countMigrated++;
+            $this->logger->notice(sprintf(self::MESSAGE_UPLOADED_EXISTS, $image->getFilename()));
         } catch (\Exception $e) {
             $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $image->getFilename()));
         }
