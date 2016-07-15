@@ -8,14 +8,13 @@ use CloudinaryExtension\Credentials;
 
 class CloudinaryEnvironmentVariable implements EnvironmentVariable
 {
-
     private $environmentVariable;
 
     private function __construct($environmentVariable)
     {
         $this->environmentVariable = (string)$environmentVariable;
         $cloudinaryUrl = str_replace('CLOUDINARY_URL=', '', $environmentVariable);
-        if ($this->_isUrlValid($cloudinaryUrl)) {
+        if ($this->isUrlValid($cloudinaryUrl)) {
             Cloudinary::config_from_url($cloudinaryUrl);
         }
 
@@ -44,9 +43,8 @@ class CloudinaryEnvironmentVariable implements EnvironmentVariable
         return $this->environmentVariable;
     }
 
-    protected function _isUrlValid($cloudinaryUrl)
+    private function isUrlValid($cloudinaryUrl)
     {
         return parse_url($cloudinaryUrl, PHP_URL_SCHEME) == "cloudinary";
     }
-
 }
