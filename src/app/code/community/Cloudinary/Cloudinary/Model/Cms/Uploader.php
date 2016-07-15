@@ -7,25 +7,59 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
 {
     use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
+    private $requiredParams = ['path', 'file', 'type'];
+
     protected function _afterSave($result)
     {
         parent::_afterSave($result);
 
-        if (!empty($result['path']) && !empty($result['file'])) {
-            $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
-
-            $imageProvider->upload(Image::fromPath($result['path'] . DIRECTORY_SEPARATOR . $result['file']));
-
-            $this->_trackSynchronisation($result['file']);
+        if ($this->shouldUpload($result)) {
+            $this->upload($result);
         }
 
         return $this;
     }
 
-    private function _trackSynchronisation($fileName)
+    private function upload($result)
     {
-        Mage::getModel('cloudinary_cloudinary/cms_synchronisation')
-            ->setValue($fileName)
-            ->tagAsSynchronized();
+        $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
+        $imageProvider->upload(Image::fromPath($result['path'] . DIRECTORY_SEPARATOR . $result['file']));
+        Mage::getModel('cloudinary_cloudinary/cms_synchronisation')->setValue($result['file'])->tagAsSynchronized();
+    }
+
+    /**
+     * @param  array $result
+     *
+     * @return boolean
+     */
+    private function shouldUpload($result)
+    {
+        return $this->hasRequiredParams($result) && $this->isImage($result);
+    }
+
+    /**
+     * @param  array  $result
+     *
+     * @return boolean
+     */
+    private function hasRequiredParams($result)
+    {
+        foreach ($this->requiredParams as $requiredParam) {
+            if (empty($result[$requiredParam])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param  array  $result
+     *
+     * @return boolean
+     */
+    private function isImage($result)
+    {
+        return strpos($result['type'], 'image') !== false;
     }
 }
