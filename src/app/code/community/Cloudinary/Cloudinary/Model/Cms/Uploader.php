@@ -7,46 +7,59 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
 {
     use Cloudinary_Cloudinary_Model_PreConditionsValidator;
 
+    private $requiredParams = ['path', 'file', 'type'];
+
     protected function _afterSave($result)
     {
         parent::_afterSave($result);
 
-        if ($this->canImageBeSynced($result)) {
-            $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
-            $imageProvider->upload(Image::fromPath($result['path'] . DIRECTORY_SEPARATOR . $result['file']));
-            $this->_trackSynchronisation($result['file']);
+        if ($this->shouldUpload($result)) {
+            $this->upload($result);
         }
 
         return $this;
     }
 
-    private function _trackSynchronisation($fileName)
+    private function upload($result)
     {
-        Mage::getModel('cloudinary_cloudinary/cms_synchronisation')
-            ->setValue($fileName)
-            ->tagAsSynchronized();
+        $imageProvider = CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
+        $imageProvider->upload(Image::fromPath($result['path'] . DIRECTORY_SEPARATOR . $result['file']));
+        Mage::getModel('cloudinary_cloudinary/cms_synchronisation')->setValue($result['file'])->tagAsSynchronized();
     }
 
     /**
-     * Make sure we only sync images
+     * @param  array $result
      *
-     * @param array $result
-     * @return bool
+     * @return boolean
      */
-    private function canImageBeSynced($result) {
-        if (empty($result['path'])) {
-            return false;
-        }
-        if (empty($result['file'])) {
-            return false;
-        }
-        if (empty($result['type'])) {
-            return false;
-        }
-        if (strpos($result['type'], 'image') === false) {
-            return false;
+    private function shouldUpload($result)
+    {
+        return $this->hasRequiredParams($result) && $this->isImage($result);
+    }
+
+    /**
+     * @param  array  $result
+     *
+     * @return boolean
+     */
+    private function hasRequiredParams($result)
+    {
+        foreach ($this->requiredParams as $requiredParam) {
+            if (empty($result[$requiredParam])) {
+                return false;
+            }
         }
 
         return true;
+    }
+
+    /**
+     * @param  array  $result
+     *
+     * @return boolean
+     */
+    private function isImage($result)
+    {
+        return strpos($result['type'], 'image') !== false;
     }
 }
