@@ -10,8 +10,6 @@ class Image
 
     private function __construct($imagePath, $relativePath = '')
     {
-        $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2];
-        \Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog("$imagePath, $relativePath, {$caller['class']}::{$caller['function']}");
         $this->imagePath = $imagePath;
         $this->relativePath = $relativePath;
         $this->pathInfo = pathinfo($this->imagePath);

@@ -62,25 +62,15 @@ class BatchUploader
         $apiImage = Image::fromPath($absolutePath, $relativePath);
 
         try {
-            $uploadResult = $this->imageProvider->upload($apiImage);
+            $this->imageProvider->upload($apiImage);
             $image->tagAsSynchronized();
             $this->countMigrated++;
-            $this->_debugLogResult($uploadResult);
             $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $absolutePath . ' - ' . $relativePath));
         } catch (\Exception $e) {
             $this->errors[] = $e;
             $this->countFailed++;
             $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $absolutePath . ' - ' . $relativePath));
         }
-    }
-
-    /**
-     * @param $uploadResult
-     */
-    private function _debugLogResult($uploadResult)
-    {
-        $extractedResult = ArrayUtils::arraySelect($uploadResult, ['url', 'public_id']);
-        $this->logger->debugLog(json_encode($extractedResult, JSON_PRETTY_PRINT) . "\n");
     }
 
     /**

@@ -20,15 +20,6 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         $this->save();
     }
 
-    public function isImageInCloudinary($imageName)
-    {
-        $coll = $this->getCollection();
-        $table = $coll->getMainTable();
-        // case sensitive check
-        $query = "select count(*) from $table where binary image_name = '$imageName' limit 1";
-        return $coll->getConnection()->query($query)->fetchColumn() > 0;
-    }
-
     public function getFilename()
     {
         if (!$this->getValue()) {
