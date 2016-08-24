@@ -6,17 +6,23 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
 
     public function warning($message, array $context = array())
     {
-        Mage::log($message, Zend_Log::WARN);
+        if ($this->isActive()) {
+            Mage::log($message, Zend_Log::WARN, $this->getFilename());
+        }
     }
 
     public function notice($message, array $context = array())
     {
-        Mage::log($message, Zend_Log::NOTICE);
+        if ($this->isActive()) {
+            Mage::log($message, Zend_Log::NOTICE, $this->getFilename());
+        }
     }
 
     public function error($message, array $context = array())
     {
-        Mage::log($message, Zend_Log::ERR);
+        if ($this->isActive()) {
+            Mage::log($message, Zend_Log::ERR, $this->getFilename());
+        }
     }
 
     public function debugLog($message)
@@ -44,5 +50,28 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
     public static function getInstance()
     {
         return Mage::getModel('cloudinary_cloudinary/logger');
+    }
+
+    /**
+     * check is logging is enabled
+     * @return bool
+     */
+    public function isActive()
+    {
+        return Mage::getStoreConfigFlag('cloudinary/log/actice');
+    }
+
+    /**
+     * return filename where to log data
+     * @return mixed|string
+     */
+    public function getFilename()
+    {
+        $filename = Mage::getStoreConfig('cloudinary/log/filename');
+        if (empty($filename)) {
+            $filename = Mage::getStoreConfig('dev/log/file');
+        }
+
+        return $filename;
     }
 }

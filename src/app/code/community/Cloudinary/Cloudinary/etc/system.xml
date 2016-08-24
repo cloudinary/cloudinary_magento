@@ -115,6 +115,25 @@
                         </cloudinary_image_dpr>
                     </fields>
                 </transformations>
+                <log>
+                    <active>
+                        <label>Enable Logging</label>
+                        <frontend_type>select</frontend_type>
+                        <sort_order>1</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                        <source_model>adminhtml/system_config_source_yesno</source_model>
+                    </active>
+                    <filename>
+                        <label>Filename for Logging (default system.xml)</label>
+                        <frontend_type>text</frontend_type>
+                        <sort_order>1</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>
+                    </filename>
+                </log>
             </groups>
         </cloudinary>
     </sections>

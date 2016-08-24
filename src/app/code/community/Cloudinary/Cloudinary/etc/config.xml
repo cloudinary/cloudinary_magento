@@ -149,6 +149,10 @@
             <configuration>
                 <cloudinary_cdn_subdomain>1</cloudinary_cdn_subdomain>
             </configuration>
+            <log>
+                <active>1</active>
+                <filename>cloudinary.log</filename>
+            </log>
         </cloudinary>
     </default>
     <crontab>
