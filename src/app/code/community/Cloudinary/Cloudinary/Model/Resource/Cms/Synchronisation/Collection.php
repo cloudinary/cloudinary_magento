@@ -15,7 +15,7 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
 
     public function __construct()
     {
-        $this->addTargetDir(Mage::helper('cms/wysiwyg_images')->getStorageRoot());
+        $this->addTargetDir(Mage::getBaseDir('media').DS.'wysiwyg'.DS);
         $this->setItemObjectClass('cloudinary_cloudinary/cms_synchronisation');
         $this->setFilesFilter(
             sprintf('#^[a-z0-9\.\-\_]+\.(?:%s)$#i', implode('|', $this->allowedImgExtensions))
