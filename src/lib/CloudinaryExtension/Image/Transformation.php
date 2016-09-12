@@ -78,6 +78,13 @@ class Transformation
         return $this;
     }
 
+    public function withCrop(Crop $crop)
+    {
+        $this->crop = $crop;
+
+        return $this;
+    }
+
     public function withOptimisationDisabled()
     {
         $this->withFetchFormat(FetchFormat::fromString(''));

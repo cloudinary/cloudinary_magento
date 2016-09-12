@@ -34,9 +34,22 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     private $folderTranslator;
 
+    private $isActive;
+
     public function __construct()
     {
+        $this->isActive = true;
         $this->folderTranslator = Mage::getModel('cloudinary_cloudinary/magentoFolderTranslator');
+    }
+
+    public function activate()
+    {
+        $this->isActive = true;
+    }
+
+    public function deactivate()
+    {
+        $this->isActive = false;
     }
 
     public function buildCredentials()
@@ -100,7 +113,7 @@ class Cloudinary_Cloudinary_Helper_Configuration extends Mage_Core_Helper_Abstra
 
     public function isEnabled()
     {
-        return (boolean)Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
+        return $this->isActive && (boolean)Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
     }
 
     public function enable()
