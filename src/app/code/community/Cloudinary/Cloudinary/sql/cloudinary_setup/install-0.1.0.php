@@ -18,6 +18,8 @@ $table = $installer->getConnection()
         'default' => null,
     ), 'Media Gallery ID')
     ->addColumn('image_name', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255)
+    ->addIndex($installer->getIdxName('cloudinary_cloudinary/synchronisation', array('image_name')),
+        array('image_name'))
     ->addForeignKey(
         'FK_MEDIA_GALLERY_ID_VALUE_ID',
         'media_gallery_id',
