@@ -15,6 +15,8 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
 
     public function __construct()
     {
+        $categoryImages = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'category';
+        $this->addTargetDir($categoryImages);
         $this->addTargetDir(Mage::helper('cms/wysiwyg_images')->getStorageRoot());
         $this->setItemObjectClass('cloudinary_cloudinary/cms_synchronisation');
         $this->setFilesFilter(
@@ -38,38 +40,34 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
 
     public function findUnsynchronisedImages()
     {
-        $helperConfig = Mage::helper('cloudinary_cloudinary/configuration');
+        $helperConfig = Mage::getModel('cloudinary_cloudinary/configuration');
         if ($helperConfig->isFolderedMigration()){
             $this->addFieldToFilter('filename', array('nin' => $this->_getSynchronisedImageNames()));
         } else {
             $this->addFieldToFilter('basename', array('nin' => $this->_getSynchronisedImageNames()));
         }
 
-        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(json_encode($this->toArray(), JSON_PRETTY_PRINT));
         return $this->getItems();
     }
 
     private function _getSynchronisedImageNames()
     {
-        $helperConfig = Cloudinary_Cloudinary_Helper_Configuration::getInstance();
         $result = array_map(
-            function ($itemData) use ($helperConfig) {
+            function ($itemData) {
                 $imageName = $itemData['image_name'];
-                return $helperConfig->reverseMigratedPathIfNeeded($imageName);
+                return Mage::getModel('cloudinary_cloudinary/configuration')->reverseMigratedPathIfNeeded($imageName);
             },
             $this->_getSynchronisedImageData()
         );
-        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog(print_r($result, true));
+
         return $result;
     }
 
     private function _getSynchronisedImageData()
     {
-        $result = Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
+        return Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection')
             ->addFieldToSelect('image_name')
             ->addFieldToFilter('media_gallery_id', array('null' => true))
             ->getData();
-        return $result;
     }
-
 }

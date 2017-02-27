@@ -9,6 +9,9 @@ tasks:
         webce:
           image: ${IMAGE_NAME}
           naming_strategy: sha1
+          environment:
+            - name: GITHUB_TOKEN
+              value: ${GITHUB_TOKEN}
 
   infrastructure:
     deploy:
@@ -78,6 +81,8 @@ tasks:
             environment_variables:
               - name: PUBLIC_ADDRESS
                 value: https://${SERVICE_WEBCE_PUBLIC_ENDPOINT}/
+              - name: GITHUB_TOKEN
+                value: ${GITHUB_TOKEN}
           deployment_strategy:
             readiness_probe:
               type: tcp

@@ -1,46 +1,76 @@
 <?php
 
-use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\ImageFactory;
+use CloudinaryExtension\UrlGenerator;
+use CloudinaryExtension\CloudinaryImageProvider;
+use CloudinaryExtension\ConfigurationInterface;
 
 class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Model_Wysiwyg_Images_Storage
 {
-    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
+    /**
+     * @var ImageFactory
+     */
+    private $_imageFactory;
 
-    public function getThumbnailUrl($filePath, $checkFile = false)
+    /**
+     * @var UrlGenerator
+     */
+    private $_urlGenerator;
+
+    /**
+     * @var ConfigurationInterface
+     */
+    private $_configuration;
+
+    public function __construct()
     {
-        if ($this->_imageShouldComeFromCloudinary($filePath)) {
-            $imageProvider = $this->_buildImageProvider();
-            $imageDimensions = $this->_buildImageDimensions();
-            $defaultTransformation = $this->_getConfigHelper()->buildConfiguration()->getDefaultTransformation();
+        $this->_configuration = Mage::getModel('cloudinary_cloudinary/configuration');
 
-            return (string)$imageProvider->transformImage(
-                Image::fromPath($filePath),
-                $defaultTransformation->withDimensions($imageDimensions)
-            );
-        }
-        return parent::getThumbnailUrl($filePath, $checkFile);
-    }
+        $this->_imageFactory = new ImageFactory(
+            $this->_configuration,
+            Mage::getModel('cloudinary_cloudinary/synchronizationChecker')
+        );
 
-    private function _buildImageProvider()
-    {
-        return CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
-    }
-
-    private function _buildImageDimensions()
-    {
-        return Dimensions::fromWidthAndHeight(
-            $this->getConfigData('resize_width'),
-            $this->getConfigData('resize_height')
+        $this->_urlGenerator = new UrlGenerator(
+            $this->_configuration,
+            CloudinaryImageProvider::fromConfiguration($this->_configuration)
         );
     }
 
+    /**
+     * @param string $filePath
+     * @param bool $checkFile
+     * @return string
+     */
+    public function getThumbnailUrl($filePath, $checkFile = false)
+    {
+        $image = $this->_imageFactory->build(
+            $filePath,
+            function() use($filePath, $checkFile) {
+                return parent::getThumbnailUrl($filePath, $checkFile);
+            }
+        );
+
+        return $this->_urlGenerator->generateWithDimensions(
+            $image,
+            Dimensions::fromWidthAndHeight(
+                $this->getConfigData('resize_width'),
+                $this->getConfigData('resize_height')
+            )
+        );
+    }
+
+    /**
+     * @param string $targetPath
+     * @param null|string $type
+     * @return array
+     */
     public function uploadFile($targetPath, $type = null)
     {
-
-        if(!$this->_getConfigHelper()->isEnabled()) {
+        if (!$this->_configuration->isEnabled()) {
            return parent::uploadFile($targetPath, $type);
         }
 
@@ -53,7 +83,7 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            Mage::throwException( Mage::helper('cms')->__('Cannot upload file.') );
+            Mage::throwException(Mage::helper('cms')->__('Cannot upload file.'));
         }
 
         // create thumbnail
@@ -69,5 +99,4 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
 
         return $result;
     }
-
 }

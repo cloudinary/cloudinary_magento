@@ -28,7 +28,6 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
 
     /**
      * Add extra information to a log entry: class and funcion name from which the log is called
-     * @param $message
      * @return string
      */
     public static function getSignature()
@@ -36,13 +35,5 @@ class Cloudinary_Cloudinary_Model_Logger extends Mage_Core_Model_Abstract implem
         $parentTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2];
         $logSignature = sprintf(self::SIGNATURE_TEMPLATE, $parentTrace['class'], $parentTrace['function']);
         return $logSignature;
-    }
-
-    /**
-     * @return Cloudinary_Cloudinary_Model_Logger
-     */
-    public static function getInstance()
-    {
-        return Mage::getModel('cloudinary_cloudinary/logger');
     }
 }

@@ -1,69 +1,108 @@
 <?php
 
+use CloudinaryExtension\CloudinaryImageProvider;
+use CloudinaryExtension\CredentialValidator;
+use CloudinaryExtension\Exception\InvalidCredentials;
+use CloudinaryExtension\Image;
+use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
+use Mage_Adminhtml_Model_Config_Data as ConfigData;
+use Mage_Catalog_Model_Product as Product;
+use Varien_Event_Observer as EventObserver;
+
 class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
 {
-
     const CLOUDINARY_CONFIG_SECTION = 'cloudinary';
+    const ERROR_WRONG_CREDENTIALS = 'There was a problem validating your Cloudinary credentials.';
 
-    public function loadCustomAutoloaders(Varien_Event_Observer $event)
+    /**
+     * @param  EventObserver $event
+     *
+     * @return EventObserver
+     */
+    public function loadCustomAutoloaders(EventObserver $event)
     {
         Mage::helper('cloudinary_cloudinary/autoloader')->register();
 
         return $event;
     }
 
-    public function uploadImagesToCloudinary(Varien_Event_Observer $event)
+    /**
+     * @param  EventObserver $event
+     */
+    public function uploadImagesToCloudinary(EventObserver $event)
     {
-        if (Mage::helper('cloudinary_cloudinary/configuration')->isEnabled()) {
+        if (Mage::getModel('cloudinary_cloudinary/configuration')->isEnabled()) {
             $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
 
-            foreach ($this->_getImagesToUpload($event->getProduct()) as $image) {
+            foreach ($this->getImagesToUpload($event->getProduct()) as $image) {
                 $cloudinaryImage->upload($image);
             }
         }
     }
 
-    public function validateCloudinaryCredentials(Varien_Event_Observer $observer)
+    /**
+     * @param  EventObserver $event
+     */
+    public function deleteImagesFromCloudinary(EventObserver $event)
     {
-        $configObject = $observer->getEvent()->getObject();
-        if ($this->_isNotCloudinaryConfigurationSection($configObject)) {
-            return;
-        }
-
-        try {
-            $this->_validateEnvironmentVariableFromConfigObject($configObject);
-        } catch (Exception $e) {
-            $this->_addErrorMessageToAdminSession($e);
-            $this->_logException($e);
+        $cloudinaryImagePovider = CloudinaryImageProvider::fromConfiguration(
+            Mage::getModel('cloudinary_cloudinary/configuration')
+        );
+        foreach ($this->getImagesToDelete($event->getProduct()) as $image) {
+            $cloudinaryImagePovider->delete(Image::fromPath($image['file']));
         }
     }
 
-    private function _getImagesToUpload(Mage_Catalog_Model_Product $product)
+    /**
+     * @param  EventObserver $observer
+     */
+    public function validateCloudinaryCredentials(EventObserver $observer)
+    {
+        $credentialValidator = new CredentialValidator();
+
+        $configObject = $observer->getEvent()->getObject();
+        if ($configObject->getSection() == self::CLOUDINARY_CONFIG_SECTION) {
+            $configData = $this->flattenConfigData($configObject);
+
+            $environmentVariable = CloudinaryEnvironmentVariable::fromString($configData['cloudinary_environment_variable']);
+            if (!$credentialValidator->validate($environmentVariable->getCredentials())) {
+                Mage::getSingleton('adminhtml/session')->addError(self::ERROR_WRONG_CREDENTIALS);
+            }
+        }
+    }   
+
+    /**
+     * @param  Product $product
+     *
+     * @return array
+     */
+    private function getImagesToUpload(Product $product)
     {
         return Mage::getModel('cloudinary_cloudinary/catalog_product_media')->newImagesForProduct($product);
     }
 
-    public function deleteImagesFromCloudinary(Varien_Event_Observer $event)
-    {
-        $cloudinaryImage = Mage::getModel('cloudinary_cloudinary/image');
-
-        foreach ($this->_getImagesToDelete($event->getProduct()) as $image) {
-            $cloudinaryImage->deleteImage($image['file']);
-        }
-    }
-
-    private function _getImagesToDelete(Mage_Catalog_Model_Product $product)
+    /**
+     * @param  Product $product
+     *
+     * @return array
+     */
+    private function getImagesToDelete(Product $product)
     {
         $productMedia = Mage::getModel('cloudinary_cloudinary/catalog_product_media');
         return $productMedia->removedImagesForProduct($product);
     }
 
-    private function _flattenConfigData(Mage_Adminhtml_Model_Config_Data $configObject)
+    /**
+     * @param  ConfigData $configObject
+     *
+     * @return array
+     */
+    private function flattenConfigData(ConfigData $configObject)
     {
         $configData = array();
         $groups = $configObject->getGroups();
 
-        if ($this->_containsSetup($groups)) {
+        if (array_key_exists('setup', $groups)) {
             $configData = array_map(
                 function($field) {
                     return $field['value'];
@@ -72,35 +111,5 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
             );
         }
         return $configData;
-    }
-
-    private function _isNotCloudinaryConfigurationSection(Mage_Adminhtml_Model_Config_Data $configObject)
-    {
-        return $configObject->getSection() != self::CLOUDINARY_CONFIG_SECTION;
-    }
-
-    private function _validateEnvironmentVariableFromConfigObject(Mage_Adminhtml_Model_Config_Data $configObject)
-    {
-        $configData = $this->_flattenConfigData($configObject);
-        $cloudinaryConfiguration = Mage::helper('cloudinary_cloudinary/configuration_validation');
-
-        $cloudinaryConfiguration->validateEnvironmentVariable(
-            $configData['cloudinary_environment_variable']
-        );
-    }
-
-    private function _addErrorMessageToAdminSession($e)
-    {
-        Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-    }
-
-    private function _logException($e)
-    {
-        Mage::logException($e);
-    }
-
-    private function _containsSetup($groups)
-    {
-        return array_key_exists('setup', $groups);
     }
 }

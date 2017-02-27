@@ -2,7 +2,9 @@
 
 use CloudinaryExtension\Image\Synchronizable;
 
-class Cloudinary_Cloudinary_Model_Cms_Synchronisation extends Mage_Core_Model_Abstract implements Synchronizable
+class Cloudinary_Cloudinary_Model_Cms_Synchronisation
+    extends Mage_Core_Model_Abstract
+    implements Synchronizable
 {
 
     protected function _construct()
@@ -15,15 +17,8 @@ class Cloudinary_Cloudinary_Model_Cms_Synchronisation extends Mage_Core_Model_Ab
         return $this->getData('filename');
     }
 
-    public function setValue($fileName)
-    {
-        $this->setData('basename', basename($fileName));
-        return $this;
-    }
-
     public function getRelativePath(){
-        $helperConfig = Mage::helper('cloudinary_cloudinary/configuration');
-        return $helperConfig->getMigratedPath($this->getFilename());
+        return Mage::getModel('cloudinary_cloudinary/configuration')->getMigratedPath($this->getFilename());
     }
 
     public function tagAsSynchronized()
@@ -31,8 +26,7 @@ class Cloudinary_Cloudinary_Model_Cms_Synchronisation extends Mage_Core_Model_Ab
         $this->setData('media_gallery_id', null);
         $this->setData('cloudinary_synchronisation_id', null);
         $this->setData('image_name', $this->getRelativePath());
-        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog( json_encode($this->toArray(), JSON_PRETTY_PRINT));
+
         $this->save();
     }
-
 }
