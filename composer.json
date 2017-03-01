@@ -37,6 +37,11 @@
     "autoload": {
         "psr-0": {
             "": [
+                "/app/public/app",
+                "/app/public/app/code/local",
+                "/app/public/app/code/community",
+                "/app/public/app/code/core",
+                "/app/public/lib",
                 "src/app/code/community",
                 "features/bootstrap",
                 "src/lib/Cloudinary/src",

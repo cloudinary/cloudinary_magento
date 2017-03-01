@@ -2,6 +2,8 @@
 
 class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtml_Controller_Action
 {
+    const CRON_INTERVAL = 300;
+
     private $_migrationTask;
     /**
      * @var Cloudinary_Cloudinary_Helper_Configuration
@@ -29,6 +31,13 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
         if ($this->_migrationTask->hasStarted()) {
             $layout->_addContent($this->_buildMetaRefreshBlock());
+        }
+
+        $cronMigrationValid = Mage::helper('cloudinary_cloudinary/cron')
+            ->validate($this->_migrationTask, self::CRON_INTERVAL);
+
+        if (!$cronMigrationValid) {
+            $this->_displayCronFailureMessage();
         }
 
         $this->renderLayout();
@@ -91,4 +100,14 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         return $this->getLayout()->createBlock('core/text')->setText('<meta http-equiv="refresh" content="5">');
     }
 
+    private function _displayCronFailureMessage()
+    {
+        $this->_getSession()->addError(
+            sprintf(
+                '%s You can find details how to enable cron <a href="%s" target="_blank">here</a>',
+                'Error: cron is not running, so no migration will occur.',
+                'https://support.cloudinary.com/hc/en-us/articles/203188781-Why-is-the-migration-process-stuck-on-zero-'
+            )
+        );
+    }
 }
