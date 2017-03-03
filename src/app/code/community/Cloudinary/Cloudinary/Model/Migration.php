@@ -48,6 +48,8 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract imp
         if ($this->hasStarted()) {
             $this->setBatchCount($this->getBatchCount() + 1)->save();
         }
+
+        return $this;
     }
 
     /**
