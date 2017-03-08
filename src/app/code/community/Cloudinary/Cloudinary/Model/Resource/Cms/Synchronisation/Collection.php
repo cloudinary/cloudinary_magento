@@ -17,7 +17,7 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
     {
         $categoryImages = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'category';
         $this->addTargetDir($categoryImages);
-        $this->addTargetDir(Mage::helper('cms/wysiwyg_images')->getStorageRoot());
+        $this->addTargetDir(Mage::getBaseDir('media').DS.Mage_Cms_Model_Wysiwyg_Config::IMAGE_DIRECTORY);
         $this->setItemObjectClass('cloudinary_cloudinary/cms_synchronisation');
         $this->setFilesFilter(
             sprintf('#^[a-z0-9\.\-\_]+\.(?:%s)$#i', implode('|', $this->allowedImgExtensions))
