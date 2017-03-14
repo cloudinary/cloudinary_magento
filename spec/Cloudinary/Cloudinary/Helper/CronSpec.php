@@ -26,6 +26,7 @@ class Cloudinary_Cloudinary_Helper_CronSpec extends ObjectBehavior
     {
         $migration->hasStarted()->willReturn(true);
         $migration->timeElapsed()->willReturn(1);
+        $migration->hasProgress()->willReturn(false);
         $this->validate($migration, 10)->shouldReturn(true);
     }
 
@@ -47,5 +48,32 @@ class Cloudinary_Cloudinary_Helper_CronSpec extends ObjectBehavior
         $migration->timeElapsed()->willReturn(9999);
         $migration->hasProgress()->willReturn(true);
         $this->validate($migration, 10)->shouldReturn(true);
+    }
+
+    function it_confirms_migration_is_not_initialising_when_migration_has_not_started(
+        \Cloudinary_Cloudinary_Model_Migration $migration
+    )
+    {
+        $migration->hasStarted()->willReturn(false);
+        $migration->hasProgress()->willReturn(false);
+        $this->isInitialising($migration, 10)->shouldReturn(false);
+    }
+
+    function it_confirms_migration_is_not_initialising_when_batches_have_been_processed(
+        \Cloudinary_Cloudinary_Model_Migration $migration
+    )
+    {
+        $migration->hasStarted()->willReturn(true);
+        $migration->hasProgress()->willReturn(true);
+        $this->isInitialising($migration, 10)->shouldReturn(false);
+    }
+
+    function it_confirms_migration_initialising_when_migration_started_and_there_is_no_progress(
+        \Cloudinary_Cloudinary_Model_Migration $migration
+    )
+    {
+        $migration->hasStarted()->willReturn(true);
+        $migration->hasProgress()->willReturn(false);
+        $this->isInitialising($migration, 10)->shouldReturn(true);
     }
 }
