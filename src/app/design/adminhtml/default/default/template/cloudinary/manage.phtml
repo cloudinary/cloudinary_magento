@@ -1,3 +1,41 @@
+<script type="text/javascript">
+
+    function openCloudinaryMigrationPopup() {
+
+        if ($('browser_window') && typeof(Windows) != 'undefined') {
+            Windows.focus('browser_window');
+            return;
+        }
+
+        var dialogWindow = Dialog.info(null, {
+            closable:true,
+            resizable:false,
+            draggable:true,
+            className:'magento',
+            windowClassName:'popup-window',
+            title:'Start image migration to Cloudinary',
+            width:400,
+            height:100,
+            zIndex:1000,
+            recenterAuto:true,
+            hideEffect:Element.hide,
+            showEffect:Element.show,
+            id:'browser_window'
+        });
+
+        dialogWindow.setHTMLContent('<p style="margin-top: 10px;">A cron job has to be configured for a successful migration. Are you sure you have configured a cron job?</p><div class="form-buttons" style="position: absolute; bottom: 10px; right: 10px;"><button title="No" type="button" class="scalable" onclick="closeCloudinaryMigrationPopup();" style="margin-right: 10px;"><span><span><span>No</span></span></span></button><button title="Yes - start migration" type="button" class="scalable" onclick="startCloudinaryMigration();"><span><span><span>Yes - start migration</span></span></span></button></div>');
+    }
+
+    function closeCloudinaryMigrationPopup() {
+        Windows.close('browser_window');
+    }
+
+    function startCloudinaryMigration() {
+        setLocation("<?php echo $this->getStartMigrationUrl(); ?>");
+    }
+
+</script>
+
 <div class="content-header">
     <table cellspacing="0"><tbody>
         <tr>

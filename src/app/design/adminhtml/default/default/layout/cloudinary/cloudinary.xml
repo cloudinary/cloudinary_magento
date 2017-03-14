@@ -4,5 +4,14 @@
         <reference name="content">
             <block type="cloudinary_cloudinary/adminhtml_manage" name="cloudinary_manage" template="cloudinary/manage.phtml"></block>
         </reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>js_css</type>
+                <name>prototype/windows/themes/default.css</name>
+            </action>
+            <action method="addCss">
+                <name>lib/prototype/windows/themes/magento.css</name>
+            </action>
+        </reference>
     </adminhtml_cloudinary_index>
 </layout>
