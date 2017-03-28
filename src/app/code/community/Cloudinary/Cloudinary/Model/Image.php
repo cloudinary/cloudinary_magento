@@ -58,17 +58,6 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     }
 
     /**
-     * @param string $imageName
-     */
-    public function deleteImage($imageName)
-    {
-        $configuration = Mage::getModel('cloudinary_cloudinary/configuration');
-        $imageProvider = CloudinaryImageProvider::fromConfiguration($configuration);
-        $migratedPath = $configuration->isFolderedMigration() ? $configuration->getMigratedPath($imageName) : '';
-        $imageProvider->deleteImage(Image::fromPath($imageName, ltrim($migratedPath, '/')));
-    }
-
-    /**
      * @param string $imagePath
      * @return string
      */

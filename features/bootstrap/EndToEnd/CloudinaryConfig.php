@@ -3,7 +3,7 @@
 namespace EndToEnd;
 
 use \Mage;
-use \Cloudinary_Cloudinary_Helper_Configuration as Cloudinary_Helper;
+use \Cloudinary_Cloudinary_Model_Configuration as Configuration;
 use Facade\Magento as MagentoFacade;
 
 trait CloudinaryConfig
@@ -23,7 +23,7 @@ trait CloudinaryConfig
             throw new \Exception('The CLOUDINARY_URL environment variable is not defined');
         }
 
-        $this->getMagentoFacade()->setConfigEncrypted(Cloudinary_Helper::CONFIG_PATH_ENVIRONMENT_VARIABLE, $env);
+        $this->getMagentoFacade()->setConfigEncrypted(Configuration::CONFIG_PATH_ENVIRONMENT_VARIABLE, $env);
     }
 
     /**
@@ -32,8 +32,8 @@ trait CloudinaryConfig
     public function theCloudinaryModuleIntegrationIsEnabled()
     {
         $this->getMagentoFacade()->setConfig(
-            Cloudinary_Helper::CONFIG_PATH_ENABLED,
-            Cloudinary_Helper::STATUS_ENABLED
+            Configuration::CONFIG_PATH_ENABLED,
+            Configuration::STATUS_ENABLED
         );
     }
 
@@ -43,8 +43,8 @@ trait CloudinaryConfig
     public function theCloudinaryModuleFolderedModeIsActive()
     {
         $this->getMagentoFacade()->setConfig(
-            Cloudinary_Helper::CONFIG_FOLDERED_MIGRATION,
-            Cloudinary_Helper::STATUS_ENABLED
+            Configuration::CONFIG_FOLDERED_MIGRATION,
+            Configuration::STATUS_ENABLED
         );
     }
 
@@ -54,8 +54,8 @@ trait CloudinaryConfig
     public function theCloudinaryModuleFolderedModeIsInactive()
     {
         $this->getMagentoFacade()->setConfig(
-            Cloudinary_Helper::CONFIG_FOLDERED_MIGRATION,
-            Cloudinary_Helper::STATUS_DISABLED
+            Configuration::CONFIG_FOLDERED_MIGRATION,
+            Configuration::STATUS_DISABLED
         );
     }
 }

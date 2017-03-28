@@ -194,7 +194,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
         if (Mage::getStoreConfigFlag(self::CONFIG_DEFAULT_FETCH_FORMAT)) {
             return FetchFormat::FETCH_FORMAT_AUTO;
         }
-        return null;
+        return '';
     }
 
     private function getImageQuality()
