@@ -1,5 +1,6 @@
 <?php
 
+use CloudinaryExtension\Image\Synchronizable;
 use CloudinaryExtension\Migration\SynchronizedMediaRepository;
 
 class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
@@ -38,6 +39,9 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
         }
     }
 
+    /**
+     * @return [Cloudinary_Cloudinary_Model_Synchronisation]
+     */
     public function findUnsynchronisedImages()
     {
         $helperConfig = Mage::getModel('cloudinary_cloudinary/configuration');
@@ -69,5 +73,56 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
             ->addFieldToSelect('image_name')
             ->addFieldToFilter('media_gallery_id', array('null' => true))
             ->getData();
+    }
+
+    private function _getSynchronisedRawImageNames()
+    {
+        $result = array_map(
+            function ($itemData) {
+                return $itemData['image_name'];
+            },
+            $this->_getSynchronisedImageData()
+        );
+
+        return $result;
+    }
+
+    /**
+     * @return [Cloudinary_Cloudinary_Model_Synchronisation]
+     */
+    public function findOrphanedSynchronisedImages()
+    {
+        return $this->_synchronisationCollectionFromImageNames(
+            array_diff(
+                $this->_getSynchronisedRawImageNames(),
+                $this->_extractRelativePaths($this->getItems())
+            )
+        );
+    }
+
+    /**
+     * @param [string] $imageNames
+     * @return [Cloudinary_Cloudinary_Model_Synchronisation]
+     */
+    private function _synchronisationCollectionFromImageNames(array $imageNames)
+    {
+        return Mage::getModel('cloudinary_cloudinary/synchronisation')
+            ->getCollection()
+            ->addFieldToFilter('image_name', ['in' => $imageNames])
+            ->getItems();
+    }
+
+    /**
+     * @param [Synchronizable] $items
+     * @return [string]
+     */
+    private function _extractRelativePaths(array $items)
+    {
+        return array_map(
+            function(Synchronizable $syncItem) {
+                return $syncItem->getRelativePath();
+            },
+            $items
+        );
     }
 }

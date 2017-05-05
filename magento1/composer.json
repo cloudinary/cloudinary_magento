@@ -5,9 +5,9 @@
     "description": "Cloudinary Magento Integration.",
     "require": {
         "php": ">=5.4.0",
-        "cloudinary/cloudinary_php": "~1.6.0",
-        "inviqa/cloudinary-core": "~1.1.0",
-        "inviqa/cloudinary-m1-testcard": "~1.1.1"
+        "cloudinary/cloudinary_php": "1.6.2",
+        "inviqa/cloudinary-core": "1.3.1",
+        "inviqa/cloudinary-m1-testcard": "1.1.2"
     },
     "require-dev": {
         "phpspec/phpspec": "2.1.0-RC1",

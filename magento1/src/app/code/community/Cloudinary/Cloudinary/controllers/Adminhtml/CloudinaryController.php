@@ -4,6 +4,9 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 {
     const CRON_INTERVAL = 300;
 
+    /**
+     * @var Cloudinary_Cloudinary_Model_Migration
+     */
     private $_migrationTask;
 
     /**
@@ -21,6 +24,8 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function indexAction()
     {
+        $this->removeOrphanSyncEntries();
+
         $this->_displayMigrationMessages();
 
         $layout = $this->loadLayout();
@@ -41,6 +46,22 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         }
 
         $this->renderLayout();
+    }
+
+    public function removeOrphanSyncEntries()
+    {
+        $combinedMediaRepository = Mage::getModel(
+            'cloudinary_cloudinary/synchronisedMediaUnifier',
+            [
+                Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
+                Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')
+            ]
+        );
+
+        foreach ($combinedMediaRepository->findOrphanedSynchronisedImages() as $orphanImage) {
+            Mage::getModel('cloudinary_cloudinary/migrationError')->orphanRemoved($orphanImage)->save();
+            $orphanImage->delete();
+        }
     }
 
     public function configAction()

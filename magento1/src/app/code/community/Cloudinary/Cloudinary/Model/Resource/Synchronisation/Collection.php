@@ -60,4 +60,13 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
         $select->where('media_gallery_value is not null');
         return $select->columns('media_gallery_value');
     }
+
+    /**
+     * Only applicable for cms instance
+     * @return [Cloudinary_Cloudinary_Model_Synchronisation]
+     */
+    public function findOrphanedSynchronisedImages()
+    {
+        return [];
+    }
 }
