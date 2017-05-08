@@ -1,0 +1,7 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="index">
+        <job name="cloudinary_upload_unsynchronised_images" instance="Cloudinary\Cloudinary\Model\BatchUploader.php" method="uploadUnsynchronisedImages">
+            <schedule>*/3 * * * *</schedule>
+        </job>
+    </group>
+</config>

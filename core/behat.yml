@@ -1,0 +1,27 @@
+default:
+  suites:
+    domain:
+      filters: { tags: '~@not-automated&&~@ui' }
+      contexts:
+        - Domain\DomainContext
+        - Domain\TransformationContext
+        - Domain\DeleteImageDomainContext
+        - Domain\ConfigurationContext
+
+  extensions:
+    SensioLabs\Behat\PageObjectExtension: ~
+    Behat\MinkExtension\ServiceContainer\MinkExtension:
+      base_url: 'http://cloudinary-test-environment.dev/'
+      goutte:
+        guzzle_parameters:
+          curl.options:
+            CURLOPT_SSL_VERIFYPEER: false
+            CURLOPT_CERTINFO: false
+            CURLOPT_TIMEOUT: 120
+          ssl.certificate_authority: false
+      selenium2:
+        wd_host: http://localhost:4444/wd/hub
+        browser: phantomjs
+#   command to open the failing html pages:
+      show_cmd: echo '%s'
+      show_tmp_dir: /vagrant
