@@ -17,7 +17,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         $this->_migrationTask = Mage::getModel('cloudinary_cloudinary/migration')
             ->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
 
-        $this->_cloudinaryConfig = Mage::helper('cloudinary_cloudinary/configuration');
+        $this->_cloudinaryConfig = Mage::getModel('cloudinary_cloudinary/configuration');
 
         parent::__construct();
     }

@@ -5,8 +5,9 @@
     "description": "Cloudinary Magento Integration.",
     "require": {
         "php": ">=5.4.0",
-        "magento-hackathon/magento-composer-installer":"*",
-        "cloudinary/cloudinary_php": "~1.1.1"
+        "cloudinary/cloudinary_php": "~1.6.0",
+        "inviqa/cloudinary-core": "~1.1.0",
+        "inviqa/cloudinary-m1-testcard": "~1.1.1"
     },
     "require-dev": {
         "phpspec/phpspec": "2.1.0-RC1",
@@ -25,22 +26,21 @@
         "theseer/fxsl": "1.0.*@dev",
         "phpunit/phpunit": "3.7.*",
         "covex-nn/phpcb": "1.0.*@dev",
-        "bossa/phpspec2-expect": "dev-master",
+        "bossa/phpspec2-expect": "1.0.3",
         "symfony/dependency-injection": "2.6.4"
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "secure-http": false,
+        "magento-deploystrategy": "copy"
     },
     "autoload": {
         "psr-0": {
             "": [
-                "../../../public/app",
-                "../../../public/app/code/local",
-                "../../../public/app/code/community",
-                "../../../public/app/code/core",
-                "../../../public/lib",
+                "src/app/code/community",
                 "features/bootstrap",
-                "src/lib/Cloudinary/src"
+                "src/lib/Cloudinary/src",
+                "src/lib"
             ]
         }
     },
@@ -48,9 +48,17 @@
         {
             "type": "composer",
             "url": "http://packages.firegento.com"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/inviqa/cloudinary-core.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/inviqa/cloudinary-m1-testcard.git"
         }
     ],
     "extra": {
-        "magento-root-dir": "./"
+        "magento-root-dir": "/app/public"
     }
 }

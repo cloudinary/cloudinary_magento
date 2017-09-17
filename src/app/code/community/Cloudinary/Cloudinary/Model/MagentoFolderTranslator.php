@@ -27,7 +27,6 @@ class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements \Cloudinary
     {
         $baseName = basename($path);
         $result = $this->unifiedDirName($path);
-        $debug = $result;
 
         $baseDir = Mage::getBaseDir();
 
@@ -50,7 +49,7 @@ class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements \Cloudinary
             $result = $this->mediaDir . $result;
         }
         $result .= $baseName;
-        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog("$path => $debug => $result");
+
         return $result;
     }
 
