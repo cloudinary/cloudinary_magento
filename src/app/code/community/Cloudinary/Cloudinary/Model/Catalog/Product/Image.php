@@ -20,4 +20,9 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
         Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog($result);
         return $result;
     }
+
+    public function getKeepFrameState()
+    {
+        return $this->_keepFrame;
+    }
 }

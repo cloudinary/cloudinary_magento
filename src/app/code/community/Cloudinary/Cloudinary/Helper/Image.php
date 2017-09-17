@@ -4,6 +4,7 @@ use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation\Dimensions;
+use CloudinaryExtension\Image\Transformation\Crop;
 
 class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
 {
@@ -34,7 +35,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
     public function resize($width, $height = null)
     {
         if ($this->_imageShouldComeFromCloudinary($this->_getRequestedImageFile())) {
-            $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height ?: $width);
+            $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height);
             return $this;
         }
 
@@ -54,8 +55,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         if ($this->_imageShouldComeFromCloudinary($imageFile)) {
             $image = Cloudinary_Cloudinary_Helper_Image::newApiImage($imageFile);
 
-            $transformation = $this->_configuration->getDefaultTransformation()
-                ->withDimensions($this->_dimensions);
+            $transformation = $this->createTransformation();
 
             $result = (string)$this->_imageProvider->transformImage($image, $transformation);
         } else {
@@ -69,4 +69,16 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         return Image::fromPath($path, $migratedPath);
     }
 
+    private function createTransformation()
+    {
+        if ($this->_getModel()->getKeepFrameState()) {
+            return $this->_configuration->getDefaultTransformation()
+                ->withDimensions(Dimensions::squareMissingDimension($this->_dimensions))
+                ->withCrop(Crop::fromString('pad'));
+        } else {
+            return $this->_configuration->getDefaultTransformation()
+                ->withDimensions($this->_dimensions)
+                ->withCrop(Crop::fromString('fit'));
+        }
+    }
 }
