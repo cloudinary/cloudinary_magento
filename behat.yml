@@ -1,7 +1,7 @@
 default:
   suites:
     domain:
-      filters: { tags: '~@not-automated&&~@ui' }
+      filters: { tags: '~@not-automated&&~@ui&&~@e2e' }
       contexts:
         - Domain\DomainContext
         - Domain\TransformationContext
@@ -12,6 +12,10 @@ default:
       contexts:
         - Ui\AdminCredentialsContext
         - Ui\ModuleEnableContext
+    e2e:
+      filters: { tags: '@e2e' }
+      contexts:
+        - EndToEnd\Context:
 
   extensions:
     MageTest\MagentoExtension\Extension: ~
