@@ -16,7 +16,7 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         $this->setData('media_gallery_id', $this['value_id']);
         $this->setData('media_gallery_value', $this['value']);
         $this->unsetData('value_id');
-        Cloudinary_Cloudinary_Model_Logger::getInstance()->debugLog( json_encode($this->toArray(), JSON_PRETTY_PRINT));
+
         $this->save();
     }
 
@@ -31,8 +31,8 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
 
     public function getRelativePath()
     {
-        $helperConfig = Mage::helper('cloudinary_cloudinary/configuration');
-        return $helperConfig->getMigratedPath($this->getFilename());
+        return Mage::getModel('cloudinary_cloudinary/configuration')
+            ->getMigratedPath($this->getFilename());
     }
 
     private function _baseMediaPath()

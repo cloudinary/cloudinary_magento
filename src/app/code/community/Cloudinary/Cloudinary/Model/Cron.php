@@ -16,7 +16,9 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             ->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
 
         $batchUploader = new BatchUploader(
-            CloudinaryImageProvider::fromConfiguration(Mage::helper('cloudinary_cloudinary/configuration')->buildConfiguration()),
+            CloudinaryImageProvider::fromConfiguration(
+                Mage::getModel('cloudinary_cloudinary/configuration')
+            ),
             $migrationTask,
             Mage::getModel('cloudinary_cloudinary/logger'),
             null

@@ -2,22 +2,20 @@
 
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
+use Cloudinary_Cloudinary_Model_Exception_BadFilePathException as BadFilePathException;
 
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
-    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
-
-    private $_folder;
-
     public function upload(array $imageDetails)
     {
-        if ($this->_getConfigHelper()->isFolderedMigration()) {
-            $this->_folder = $this->_getConfigHelper()->getMigratedPath($imageDetails['file']);
-        }
+        $configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+        $imageManager = CloudinaryImageProvider::fromConfiguration($configuration);
 
-        $imageManager = $this->_getImageProvider();
-        $imageManager->upload(Image::fromPath($this->_imageFullPathFromImageDetails($imageDetails), $this->_folder));
+        $fullPath = $this->_imageFullPathFromImageDetails($imageDetails);
+        $relativePath = $configuration->isFolderedMigration() ? $configuration->getMigratedPath($fullPath) : '';
+
+        $imageManager->upload(Image::fromPath($fullPath, $relativePath));
 
         Mage::getModel('cloudinary_cloudinary/synchronisation')
             ->setValueId($imageDetails['value_id'])
@@ -33,7 +31,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     private function _getImageDetailFromKey(array $imageDetails, $key)
     {
         if (!array_key_exists($key, $imageDetails)) {
-            throw new Cloudinary_Cloudinary_Model_Exception_BadFilePathException("Invalid image data structure. Missing " . $key);
+            throw new BadFilePathException("Invalid image data structure. Missing " . $key);
         }
         return $imageDetails[$key];
     }
@@ -41,22 +39,5 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
     private function _getMediaBasePath()
     {
         return Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
-    }
-
-    public function deleteImage($imageName)
-    {
-        $this->_getImageProvider()->deleteImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($imageName));
-    }
-
-    public function getUrl($imagePath)
-    {
-        $imageProvider = $this->_getImageProvider();
-
-        return (string)$imageProvider->transformImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($imagePath));
-    }
-
-    private function _getImageProvider()
-    {
-        return CloudinaryImageProvider::fromConfiguration($this->_getConfigHelper()->buildConfiguration());
     }
 }

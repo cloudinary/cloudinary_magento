@@ -4,4 +4,6 @@ COPY . /app/module
 COPY tools/docker/usr/ /usr/
 COPY tools/docker/etc/ /etc/
 
+ARG GITHUB_TOKEN=
+
 RUN bash /app/module/tools/docker/usr/local/share/container/plan.sh

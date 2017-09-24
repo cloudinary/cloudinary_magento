@@ -3,34 +3,38 @@
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Image;
+use CloudinaryExtension\Image\ImageFactory;
+use CloudinaryExtension\UrlGenerator;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config
 {
-    use Cloudinary_Cloudinary_Model_PreConditionsValidator;
+    private $_configuration;
+    private $_imageProvider;
+    private $_urlGenerator;
+
+    public function __construct()
+    {
+        $this->_configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+        $this->_imageFactory = new ImageFactory(
+            $this->_configuration,
+            Mage::getModel('cloudinary_cloudinary/synchronizationChecker')
+        );
+        $this->_imageProvider = CloudinaryImageProvider::fromConfiguration($this->_configuration);
+        $this->_urlGenerator = new UrlGenerator($this->_configuration, $this->_imageProvider);
+
+    }
 
     public function getMediaUrl($file)
     {
-        if ($this->_imageShouldComeFromCloudinary($file)) {
-            return $this->_getUrlForImage($file);
-        }
+        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getMediaUrl($file);});
 
-        return parent::getMediaUrl($file);
+        return $this->_urlGenerator->generateFor($image);
     }
 
     public function getTmpMediaUrl($file)
     {
-        if ($this->_imageShouldComeFromCloudinary($file)) {
-            return $this->_getUrlForImage($file);
-        }
+        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getTmpMediaUrl($file);});
 
-        return parent::getTmpMediaUrl($file);
-    }
-
-    private function _getUrlForImage($file)
-    {
-        $config = Cloudinary_Cloudinary_Helper_Configuration::getInstance();
-        $imageProvider = CloudinaryImageProvider::fromConfiguration($config->buildConfiguration());
-
-        return (string)$imageProvider->transformImage(Cloudinary_Cloudinary_Helper_Image::newApiImage($file));
+        return $this->_urlGenerator->generateFor($image);
     }
 }

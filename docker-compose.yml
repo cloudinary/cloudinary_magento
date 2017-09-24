@@ -4,6 +4,8 @@ services:
   webce:
     build:
       context: .
+      args:
+        - GITHUB_TOKEN
     environment:
       - APP_HOSTNAME=dockerm1demo_webce.docker
       - PUBLIC_ADDRESS=https://dockerm1demo_webce.docker/
@@ -14,7 +16,8 @@ services:
       - DATABASE_PASSWORD=magento
       - DATABASE_ROOT_PASSWORD=magento
       - MAGENTO_CRYPT_KEY=VElJzTQztEttxRfSyVn5w4sAqOjWvWFa
-      - FORCE_DATABASE_DROP=true
+      - FORCE_DATABASE_DROP=false
+      - GITHUB_TOKEN
     links:
       - database
       - redis
