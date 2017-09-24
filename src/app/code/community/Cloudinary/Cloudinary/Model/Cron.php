@@ -13,7 +13,8 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
     public function migrateImages()
     {
         $migrationTask = Mage::getModel('cloudinary_cloudinary/migration')
-            ->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
+            ->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID)
+            ->recordBatchProgress();
 
         $batchUploader = new BatchUploader(
             CloudinaryImageProvider::fromConfiguration(

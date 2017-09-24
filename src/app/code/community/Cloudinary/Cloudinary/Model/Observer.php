@@ -45,11 +45,12 @@ class Cloudinary_Cloudinary_Model_Observer extends Mage_Core_Model_Abstract
      */
     public function deleteImagesFromCloudinary(EventObserver $event)
     {
-        $cloudinaryImagePovider = CloudinaryImageProvider::fromConfiguration(
-            Mage::getModel('cloudinary_cloudinary/configuration')
-        );
+        $configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+        $imageProvider = CloudinaryImageProvider::fromConfiguration($configuration);
+
         foreach ($this->getImagesToDelete($event->getProduct()) as $image) {
-            $cloudinaryImagePovider->delete(Image::fromPath($image['file']));
+            $migratedPath = $configuration->isFolderedMigration() ? $configuration->getMigratedPath($image['file']) : '';
+            $imageProvider->delete(Image::fromPath($image['file'], ltrim($migratedPath, '/')));
         }
     }
 

@@ -89,12 +89,23 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         if ($this->_migrationTask->hasStarted()) {
             $startLabel = 'Stop Migration';
             $startAction = 'stopMigration';
-        } else {
-            $startLabel = 'Start Migration';
-            $startAction = 'startMigration';
+            return $this->_makeButton($startLabel, $startAction, $this->allImagesSynced());
         }
 
-        return $this->_makeButton($startLabel, $startAction, $this->allImagesSynced());
+        return $this->getLayout()
+            ->createBlock('adminhtml/widget_button')
+            ->setData(array(
+                'id' => 'cloudinary_migration_start',
+                'label' => $this->helper('adminhtml')->__('Start Migration'),
+                'disabled' => $this->allImagesSynced(),
+                'onclick' => 'openCloudinaryMigrationPopup();'
+            ))
+            ->toHtml();
+    }
+
+    public function getStartMigrationUrl()
+    {
+        return $this->getUrl('*/cloudinary/startMigration');
     }
 
     public function getClearErrorsButton()
