@@ -24,6 +24,22 @@ class Dimensions
         return $this->height;
     }
 
+    public static function square($length)
+    {
+        return new Dimensions($length, $length);
+    }
+
+    public static function squareMissingDimension(Dimensions $dimensions)
+    {
+        if (!$dimensions->getWidth()) {
+            return Dimensions::square($dimensions->getHeight());
+        } else if (!$dimensions->getHeight()) {
+            return Dimensions::square($dimensions->getWidth());
+        }
+
+        return $dimensions;
+    }
+
     public static function fromWidthAndHeight($width, $height)
     {
         return new Dimensions($width, $height);
