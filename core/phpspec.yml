@@ -1,0 +1,3 @@
+suites:
+  cloudinary:
+    src_path: lib

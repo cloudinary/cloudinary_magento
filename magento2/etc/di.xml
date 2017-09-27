@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="cloudinary_upload_images" xsi:type="object">Cloudinary\Cloudinary\Command\UploadImages</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="CloudinaryExtension\ImageProvider"
+                type="CloudinaryExtension\CloudinaryImageProvider" />
+
+    <preference for="Cloudinary\Cloudinary\Api\SynchronisationRepositoryInterface"
+                type="Cloudinary\Cloudinary\Model\SynchronisationRepository" />
+
+    <preference for="CloudinaryExtension\SynchroniseAssetsRepositoryInterface"
+                type="Cloudinary\Cloudinary\Model\SynchronisationRepository" />
+
+    <preference for="CloudinaryExtension\ConfigurationInterface"
+                type="Cloudinary\Cloudinary\Model\Configuration" />
+
+    <preference for="CloudinaryExtension\Image\Synchronizable"
+                type="Cloudinary\Cloudinary\Model\Synchronisation" />
+
+    <preference for="CloudinaryExtension\Image\SynchronizationChecker"
+                type="Cloudinary\Cloudinary\Model\SynchronisationChecker" />
+
+    <preference for="Magento\Widget\Model\Template\Filter"
+                type="Cloudinary\Cloudinary\Model\Template\Filter" />
+
+    <type name="Magento\Catalog\Helper\Image">
+        <plugin name="cloudinary_image_helper_plugin" type="Cloudinary\Cloudinary\Plugin\ImageHelper" />
+    </type>
+
+    <type name="Magento\Catalog\Model\Product\Media\Config">
+        <plugin name="cloudinary_product_media_config_plugin" type="Cloudinary\Cloudinary\Plugin\MediaConfig" />
+    </type>
+
+    <type name="Magento\Framework\File\Uploader">
+        <plugin name="cloudinary_file_uploader_plugin" type="Cloudinary\Cloudinary\Plugin\FileUploader" />
+    </type>
+
+    <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
+        <plugin name="cloudinary_file_remover_plugin" type="Cloudinary\Cloudinary\Plugin\FileRemover" />
+    </type>
+
+</config>

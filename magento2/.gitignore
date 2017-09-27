@@ -1,0 +1,6 @@
+bin/
+vendor/
+composer.phar
+src/lib/Cloudinary/.gitignore
+.cp-remote-env-settings.yml
+cp-remote-logs/
