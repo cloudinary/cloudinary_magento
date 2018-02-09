@@ -2,8 +2,8 @@
 
 namespace Cloudinary\Cloudinary\Plugin;
 
-use CloudinaryExtension\Image\ImageFactory;
-use CloudinaryExtension\UrlGenerator;
+use Cloudinary\Cloudinary\Core\Image\ImageFactory;
+use Cloudinary\Cloudinary\Core\UrlGenerator;
 use Magento\Catalog\Model\Product\Media\Config as CatalogMediaConfig;
 
 class MediaConfig

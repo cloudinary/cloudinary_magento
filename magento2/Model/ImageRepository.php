@@ -2,8 +2,8 @@
 
 namespace Cloudinary\Cloudinary\Model;
 
-use CloudinaryExtension\Image;
-use CloudinaryExtension\Image\SynchronizationChecker;
+use Cloudinary\Cloudinary\Core\Image;
+use Cloudinary\Cloudinary\Core\Image\SynchronizationCheck;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -22,14 +22,14 @@ class ImageRepository
     private $mediaDirectory;
 
     /**
-     * @var SynchronizationChecker
+     * @var SynchronizationCheck
      */
     private $synchronizationChecker;
 
     /**
      * @param Filesystem  $filesystem
      */
-    public function __construct(Filesystem $filesystem, SynchronizationChecker $synchronizationChecker)
+    public function __construct(Filesystem $filesystem, SynchronizationCheck $synchronizationChecker)
     {
         $this->mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->synchronizationChecker = $synchronizationChecker;

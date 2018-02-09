@@ -5,7 +5,7 @@
     "description": "Cloudinary Core.",
     "require": {
         "php": ">=5.4.0",
-        "cloudinary/cloudinary_php": "~1.6.0"
+        "cloudinary/cloudinary_php": "1.8.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^2.4.0",
@@ -26,6 +26,9 @@
                 "features/bootstrap",
                 "lib"
             ]
+        },
+        "psr-4": {
+            "Cloudinary\\Cloudinary\\Core\\": "lib/Cloudinary/Cloudinary/Core"
         }
     }
 }

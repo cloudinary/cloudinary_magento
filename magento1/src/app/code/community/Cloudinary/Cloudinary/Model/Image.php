@@ -6,6 +6,8 @@ use Cloudinary_Cloudinary_Model_Exception_BadFilePathException as BadFilePathExc
 
 class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
 {
+    const UPLOAD_MESSAGE = 'uploaded product image to Cloudinary: %s';
+
     /**
      * @param array $imageDetails
      */
@@ -18,6 +20,8 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
         $relativePath = $configuration->isFolderedMigration() ? $configuration->getMigratedPath($fullPath) : '';
 
         $imageProvider->upload(Image::fromPath($fullPath, $relativePath));
+
+        Mage::getModel('cloudinary_cloudinary/logger')->notice(sprintf(self::UPLOAD_MESSAGE, $relativePath));
 
         Mage::getModel('cloudinary_cloudinary/synchronisation')
             ->setValueId($imageDetails['value_id'])

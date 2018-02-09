@@ -62,6 +62,11 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         return $this->_cloudinaryConfig->isEnabled();
     }
 
+    public function isAutoUploadMappingEnabled()
+    {
+        return $this->_cloudinaryConfig->hasAutoUploadMapping();
+    }
+
     public function allImagesSynced()
     {
         try {
@@ -69,19 +74,6 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         } catch (Exception $e) {
             return false;
         }
-    }
-
-    public function getEnableButton()
-    {
-        if ($this->_cloudinaryConfig->isEnabled()) {
-            $enableLabel = 'Disable Cloudinary';
-            $enableAction = 'disableCloudinary';
-        } else {
-            $enableLabel = 'Enable Cloudinary';
-            $enableAction = 'enableCloudinary';
-        }
-
-        return $this->_makeButton($enableLabel, $enableAction);
     }
 
     public function getMigrateButton()
@@ -125,6 +117,11 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
             ));
 
         return $button->toHtml();
+    }
+
+    public function getCloudinaryConfigurationLink()
+    {
+        return Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/cloudinary");
     }
 
     public function getErrors()

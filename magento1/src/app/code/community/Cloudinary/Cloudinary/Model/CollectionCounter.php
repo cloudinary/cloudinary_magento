@@ -2,7 +2,7 @@
 
 class Cloudinary_Cloudinary_Model_CollectionCounter implements Countable
 {
-    private $_collections = [];
+    private $_collections = array();
 
     public function addCollection(Varien_Data_Collection $collection)
     {

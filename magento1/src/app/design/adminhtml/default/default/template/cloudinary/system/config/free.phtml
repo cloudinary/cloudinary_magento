@@ -1,0 +1,101 @@
+<p class="note">
+    <span>
+        Custom transformations will be added to the default image transformations settings chosen above.<br />
+        For information about the full range of transforms available see the
+        <a href="http://cloudinary.com/documentation/image_transformation_reference" target="_blank">Cloudinary documentation</a>.
+        <br />
+        You may need to clear or rebuild the Magento block and full page caches to see the changes in the front end.
+    </span>
+</p>
+
+<button id="cloudinary_custom_transform_preview_button" title="Preview" type="button" class="scalable" onclick="cloudinary.updatePreview()" style="margin-top: 10px;">
+    <span><span><span>Preview custom transformation</span></span></span>
+</button>
+
+<div id="cloudinary_custom_transform_preview" style="margin-top: 10px;"></div>
+
+<script language="javascript">
+
+    window.cloudinary = {
+
+        currentTransform: '',
+
+        secret: '<?php echo $this->ajaxSampleSecretKey(); ?>',
+
+        getTransformText: function() {
+            return $('cloudinary_transformations_cloudinary_free_transform_global').value
+        },
+
+        getSampleImageUrl: function() {
+            return '/admin/cloudinaryajax/sample/key/' + this.secret;
+        },
+
+        getImageHtml: function(src) {
+            var id = 'cloudinary_custom_transform_preview_image',
+                style = 'width: auto; height: auto; max-width: 500px; max-height: 500px; min-height: 50px;',
+                footer = '<p>Image size restricted for viewing purposes</p>';
+            return '<img id="' + id + '" src="' + src + '" style="' + style + '" />' + footer;
+        },
+
+        getErrorHtml: function(message) {
+            return '<ul class="messages"><li class="error-msg">' + message + '</li></ul>';
+        },
+
+        updatePreviewImage: function(url) {
+            var $image = $('cloudinary_custom_transform_preview_image');
+
+            if (!$image) {
+                $('cloudinary_custom_transform_preview').update(this.getImageHtml(url));
+            } else {
+                $image.writeAttribute('src', url);
+            }
+        },
+
+        updatePreview: function() {
+            var self = this;
+
+            if (!self.isPreviewActive()) {
+                return;
+            }
+
+            self.currentTransform = self.getTransformText();
+            self.setPreviewActiveState(false);
+
+            new Ajax.Request(this.getSampleImageUrl(), {
+                method: 'post',
+                parameters: { free: this.getTransformText() },
+                onSuccess: function(response) {
+                    self.updatePreviewImage(response.responseJSON.url);
+                },
+                onFailure: function(response) {
+                    $('cloudinary_custom_transform_preview').update(self.getErrorHtml(response.responseJSON.error));
+                }
+            });
+        },
+
+        setPreviewActiveState: function(state) {
+            if (state && (this.currentTransform !== this.getTransformText())) {
+                $('cloudinary_custom_transform_preview_button').removeClassName('disabled');
+            } else {
+                $('cloudinary_custom_transform_preview_button').addClassName('disabled');
+            }
+        },
+
+        isPreviewActive: function() {
+            return !$('cloudinary_custom_transform_preview_button').hasClassName('disabled');
+        },
+
+        addPreviewListener: function(id) {
+            var self = this;
+
+            $(id).on('change', function() { self.setPreviewActiveState(true); })
+            $(id).on('keydown', function() { self.setPreviewActiveState(true); })
+            $(id).on('paste', function() { self.setPreviewActiveState(true); })
+            $(id).on('input', function() { self.setPreviewActiveState(true); })
+        }
+
+    };
+
+    window.cloudinary.addPreviewListener('cloudinary_transformations_cloudinary_free_transform_global');
+
+</script>

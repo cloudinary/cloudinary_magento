@@ -16,9 +16,9 @@
             <group id="setup" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Cloudinary Setup</label>
                 <field id="cloudinary_environment_variable" translate="label comment" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cloudinary Account Credentials (CLOUDINARY_URL)</label>
-                    <comment>Set the credentials of your Cloudinary account. Copy the credentials string from the dashboard of Cloudinary's Management Console. It is available as the Environment variable of CLOUDINARY_URL.</comment>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <label>Cloudinary Account Credentials</label>
+                    <comment>Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.</comment>
+                    <backend_model>Cloudinary\Cloudinary\Model\Config\Backend\Credentials</backend_model>
                 </field>
             </group>
             <group id="configuration" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -26,6 +26,11 @@
                 <field id="cloudinary_cdn_subdomain" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Image Delivery Domain Sharding</label>
                     <comment>Enable multiple sub-domains of image delivery URLs for faster page load speed.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="cloudinary_auto_upload_mapping_request" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Use auto upload mapping to upload images</label>
+                    <comment>When enabled, Cloudinary will fetch images it does not have from your site automatically without requiring the manual migration process.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -50,6 +55,11 @@
                     <label>Image Device Pixel Ratio (DPR)</label>
                     <comment>Use DPR value higher than 1.0 to generate and deliver hi-res images for better visual result on HiDPI devices, such as Retina Display devices (e.g., 2.0).</comment>
                     <source_model>Cloudinary\Cloudinary\Model\Config\Source\Dropdown\Dpr</source_model>
+                </field>
+                <field id="cloudinary_free_transform_global" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Global custom transform</label>
+                    <backend_model>Cloudinary\Cloudinary\Model\Config\Backend\Free</backend_model>
+                    <frontend_model>Cloudinary\Cloudinary\Block\Adminhtml\Form\Field\Free</frontend_model>
                 </field>
             </group>
         </section>

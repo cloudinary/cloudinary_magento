@@ -41,6 +41,10 @@ class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Quality
                 'value' => '100',
                 'label' => '100%',
             ),
+            array(
+                'value' => 'auto',
+                'label' => 'Auto',
+            ),
         );
     }
 }

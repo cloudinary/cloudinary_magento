@@ -2,7 +2,6 @@
 
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Configuration;
-use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Transformation;
 use CloudinaryExtension\Image\Transformation\Dimensions;
 use CloudinaryExtension\Image\Transformation\Crop;
@@ -41,6 +40,11 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
      */
     private $_urlGenerator;
 
+    /**
+     * @var Cloudinary_Cloudinary_Model_Transformation
+     */
+    private $_transformation;
+
     public function __construct()
     {
         $this->_configuration = Mage::getModel('cloudinary_cloudinary/configuration');
@@ -51,8 +55,15 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         $this->_imageProvider = CloudinaryImageProvider::fromConfiguration($this->_configuration);
         $this->_dimensions = Dimensions::null();
         $this->_urlGenerator = new UrlGenerator($this->_configuration, $this->_imageProvider);
+        $this->_transformation = Mage::getModel('cloudinary_cloudinary/transformation');
     }
 
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param $attributeName
+     * @param string|null $imageFile
+     * @return $this
+     */
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile = null)
     {
         if ($this->_configuration->isEnabled()) {
@@ -63,6 +74,11 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         return parent::init($product, $attributeName, $imageFile);
     }
 
+    /**
+     * @param $width
+     * @param null $height
+     * @return $this
+     */
     public function resize($width, $height = null)
     {
         $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height);
@@ -70,6 +86,10 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         return parent::resize($width, $height);
     }
 
+    /**
+     * @param Mage_Catalog_Model_Category $category
+     * @return string
+     */
     public function getImageUrlForCategory(Mage_Catalog_Model_Category $category)
     {
         $imagePath = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'category' . DS . $category->getImage();
@@ -79,6 +99,9 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         return $this->_urlGenerator->generateFor($image);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $image = $this->_imageFactory->build(
@@ -86,7 +109,13 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
             function() { return parent::__toString();}
         );
 
-        return $this->_urlGenerator->generateFor($image, $this->createTransformation());
+        return $this->_urlGenerator->generateFor(
+            $image,
+            $this->_transformation->addFreeformTransformationForImage(
+                $this->createTransformation(),
+                $this->_getRequestedImageFile()
+            )
+        );
     }
 
     /**
@@ -97,6 +126,9 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         return $this->getImageFile() ?: $this->getProduct()->getData($this->_attributeName);
     }
 
+    /**
+     * @return Transformation
+     */
     private function createTransformation()
     {
         if ($this->_getModel()->getKeepFrameState()) {

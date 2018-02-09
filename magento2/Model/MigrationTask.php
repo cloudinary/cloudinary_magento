@@ -2,7 +2,7 @@
 
 namespace Cloudinary\Cloudinary\Model;
 
-use CloudinaryExtension\Migration\Task;
+use Cloudinary\Cloudinary\Core\Migration\Task;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 

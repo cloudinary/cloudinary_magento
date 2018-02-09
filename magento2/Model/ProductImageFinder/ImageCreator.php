@@ -2,7 +2,7 @@
 
 namespace Cloudinary\Cloudinary\Model\ProductImageFinder;
 
-use CloudinaryExtension\Image;
+use Cloudinary\Cloudinary\Core\Image;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
 use Magento\Framework\Filesystem;
@@ -44,10 +44,12 @@ class ImageCreator
     public function __invoke(array $imageData)
     {
         $fullPath = $this->baseMediaPath . $imageData['file'];
+        $relativePath = 'media' . DIRECTORY_SEPARATOR . $fullPath;
 
         return Image::fromPath(
             $this->mediaDirectory->getAbsolutePath($fullPath),
-            $fullPath
+            $relativePath
         );
     }
 }
+

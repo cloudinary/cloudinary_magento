@@ -2,19 +2,24 @@
 
 namespace Cloudinary\Cloudinary\Model;
 
-use CloudinaryExtension\Cloud;
-use CloudinaryExtension\ConfigurationInterface;
-use CloudinaryExtension\Credentials;
-use CloudinaryExtension\Image\Transformation;
-use CloudinaryExtension\Image\Transformation\Dpr;
-use CloudinaryExtension\Image\Transformation\FetchFormat;
-use CloudinaryExtension\Image\Transformation\Gravity;
-use CloudinaryExtension\Image\Transformation\Quality;
-use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
-use CloudinaryExtension\UploadConfig;
+use Cloudinary\Cloudinary\Core\Cloud;
+use Cloudinary\Cloudinary\Core\ConfigurationInterface;
+use Cloudinary\Cloudinary\Core\AutoUploadMapping\AutoUploadConfigurationInterface;
+use Cloudinary\Cloudinary\Core\Credentials;
+use Cloudinary\Cloudinary\Core\Exception\InvalidCredentials;
+use Cloudinary\Cloudinary\Core\Image\Transformation;
+use Cloudinary\Cloudinary\Core\Image\Transformation\Dpr;
+use Cloudinary\Cloudinary\Core\Image\Transformation\FetchFormat;
+use Cloudinary\Cloudinary\Core\Image\Transformation\Freeform;
+use Cloudinary\Cloudinary\Core\Image\Transformation\Gravity;
+use Cloudinary\Cloudinary\Core\Image\Transformation\Quality;
+use Cloudinary\Cloudinary\Core\Security\CloudinaryEnvironmentVariable;
+use Cloudinary\Cloudinary\Core\UploadConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Psr\Log\LoggerInterface;
 
 class Configuration implements ConfigurationInterface
 {
@@ -26,7 +31,7 @@ class Configuration implements ConfigurationInterface
     const CONFIG_DEFAULT_QUALITY = 'cloudinary/transformations/cloudinary_image_quality';
     const CONFIG_DEFAULT_DPR = 'cloudinary/transformations/cloudinary_image_dpr';
     const CONFIG_DEFAULT_FETCH_FORMAT = 'cloudinary/transformations/cloudinary_fetch_format';
-    const CONFIG_FOLDERED_MIGRATION = 'cloudinary/configuration/cloudinary_foldered_migration';
+    const CONFIG_GLOBAL_FREEFORM = 'cloudinary/transformations/cloudinary_free_transform_global';
     const USE_FILENAME = true;
     const UNIQUE_FILENAME = false;
     const OVERWRITE = false;
@@ -54,18 +59,28 @@ class Configuration implements ConfigurationInterface
     private $environmentVariable;
 
     /**
+     * @var AutoUploadConfigurationInterface
+     */
+    private $autoUploadConfiguration;
+
+    /**
      * @param ScopeConfigInterface $configReader
-     * @param WriterInterface      $configWriter
-     * @param EncryptorInterface   $decryptor
+     * @param WriterInterface $configWriter
+     * @param EncryptorInterface $decryptor
+     * @param AutoUploadConfigurationInterface $autoUploadConfiguration
      */
     public function __construct(
         ScopeConfigInterface $configReader,
         WriterInterface $configWriter,
-        EncryptorInterface $decryptor
+        EncryptorInterface $decryptor,
+        AutoUploadConfigurationInterface $autoUploadConfiguration,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
         $this->decryptor = $decryptor;
+        $this->autoUploadConfiguration = $autoUploadConfiguration;
+        $this->logger = $logger;
     }
 
     /**
@@ -92,7 +107,17 @@ class Configuration implements ConfigurationInterface
         return Transformation::builder()
             ->withGravity(Gravity::fromString($this->getDefaultGravity()))
             ->withQuality(Quality::fromString($this->getImageQuality()))
+            ->withFetchFormat(FetchFormat::fromString($this->getFetchFormat()))
+            ->withFreeform(Freeform::fromString($this->getDefaultGlobalFreeform()))
             ->withDpr(Dpr::fromString($this->getImageDpr()));
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefaultGlobalFreeform()
+    {
+        return (string) $this->configReader->getValue(self::CONFIG_GLOBAL_FREEFORM);
     }
 
     /**
@@ -108,7 +133,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getUserPlatform()
     {
-        return sprintf(self::USER_PLATFORM_TEMPLATE, '1.0.0', '2.0.0');
+        return sprintf(self::USER_PLATFORM_TEMPLATE, '1.5.1', '2.0.0');
     }
 
     /**
@@ -124,7 +149,7 @@ class Configuration implements ConfigurationInterface
      */
     public function isEnabled()
     {
-        return $this->configReader->isSetFlag(self::CONFIG_PATH_ENABLED);
+        return $this->hasEnvironmentVariable() && $this->configReader->isSetFlag(self::CONFIG_PATH_ENABLED);
     }
 
     public function enable()
@@ -145,9 +170,13 @@ class Configuration implements ConfigurationInterface
         return ['png', 'webp', 'gif', 'svg'];
     }
 
+    /**
+     * @param string $file
+     * @return string
+     */
     public function getMigratedPath($file)
     {
-        return $file;
+        return $this->autoUploadConfiguration->isActive() ? sprintf('%s/%s', DirectoryList::MEDIA, $file) : $file;
     }
 
     /**
@@ -163,10 +192,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getFetchFormat()
     {
-        if ($this->configReader->isSetFlag(self::CONFIG_DEFAULT_FETCH_FORMAT)) {
-            return FetchFormat::FETCH_FORMAT_AUTO;
-        }
-        return '';
+        return $this->configReader->isSetFlag(self::CONFIG_DEFAULT_FETCH_FORMAT) ? FetchFormat::FETCH_FORMAT_AUTO : '';
     }
 
     /**
@@ -186,16 +212,28 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasEnvironmentVariable()
+    {
+        return (bool)$this->configReader->getValue(self::CONFIG_PATH_ENVIRONMENT_VARIABLE);
+    }
+
+    /**
      * @return CloudinaryEnvironmentVariable
      */
     private function getEnvironmentVariable()
     {
         if (is_null($this->environmentVariable)) {
-            $this->environmentVariable = CloudinaryEnvironmentVariable::fromString(
-                $this->decryptor->decrypt(
-                    $this->configReader->getValue(self::CONFIG_PATH_ENVIRONMENT_VARIABLE)
-                )
-            );
+            try {
+                $this->environmentVariable = CloudinaryEnvironmentVariable::fromString(
+                    $this->decryptor->decrypt(
+                        $this->configReader->getValue(self::CONFIG_PATH_ENVIRONMENT_VARIABLE)
+                    )
+                );
+            } catch (InvalidCredentials $invalidConfigException) {
+                $this->logger->critical($invalidConfigException);
+            }
         }
         return $this->environmentVariable;
     }

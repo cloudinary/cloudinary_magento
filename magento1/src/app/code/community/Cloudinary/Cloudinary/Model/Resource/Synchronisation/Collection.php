@@ -67,6 +67,6 @@ class Cloudinary_Cloudinary_Model_Resource_Synchronisation_Collection
      */
     public function findOrphanedSynchronisedImages()
     {
-        return [];
+        return array();
     }
 }

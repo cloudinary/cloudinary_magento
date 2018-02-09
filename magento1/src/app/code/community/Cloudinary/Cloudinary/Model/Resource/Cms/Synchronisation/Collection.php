@@ -12,7 +12,7 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
      * @link http://cloudinary.com/documentation/image_transformations#format_conversion
      * @link http://cloudinary.com/documentation/upload_images
      */
-    private $allowedImgExtensions = ['JPG', 'PNG', 'GIF', 'BMP', 'TIFF', 'EPS', 'PSD', 'SVG', 'WebP'];
+    private $allowedImgExtensions = array('JPG', 'PNG', 'GIF', 'BMP', 'TIFF', 'EPS', 'PSD', 'SVG', 'WebP');
 
     public function __construct()
     {
@@ -108,7 +108,7 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
     {
         return Mage::getModel('cloudinary_cloudinary/synchronisation')
             ->getCollection()
-            ->addFieldToFilter('image_name', ['in' => $imageNames])
+            ->addFieldToFilter('image_name', array('in' => $imageNames))
             ->getItems();
     }
 

@@ -3,6 +3,9 @@
 class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtml_Controller_Action
 {
     const CRON_INTERVAL = 300;
+    const MIGRATION_START_MESSAGE = 'migration start requested.';
+    const MIGRATION_STOP_MESSAGE = 'migration stop requested.';
+    const MIGRATION_CRON_WARNING = 'cron is not running, so no migration will occur.';
 
     /**
      * @var Cloudinary_Cloudinary_Model_Migration
@@ -13,6 +16,12 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
      * @var Cloudinary_Cloudinary_Helper_Configuration
      */
     private $_cloudinaryConfig;
+
+    private function configurePage()
+    {
+        $this->_title($this->__('Manual Migration'))
+            ->_setActiveMenu('cloudinary_cloudinary/manage');
+    }
 
     public function preDispatch()
     {
@@ -29,6 +38,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
         $this->_displayMigrationMessages();
 
         $layout = $this->loadLayout();
+        $this->configurePage();
 
         if (!$this->_cloudinaryConfig->validateCredentials()) {
             $this->_displayValidationFailureMessage();
@@ -52,14 +62,16 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $combinedMediaRepository = Mage::getModel(
             'cloudinary_cloudinary/synchronisedMediaUnifier',
-            [
+            array(
                 Mage::getResourceModel('cloudinary_cloudinary/synchronisation_collection'),
                 Mage::getResourceModel('cloudinary_cloudinary/cms_synchronisation_collection')
-            ]
+            )
         );
 
         foreach ($combinedMediaRepository->findOrphanedSynchronisedImages() as $orphanImage) {
-            Mage::getModel('cloudinary_cloudinary/migrationError')->orphanRemoved($orphanImage)->save();
+            $error = Mage::getModel('cloudinary_cloudinary/migrationError')->orphanRemoved($orphanImage);
+            Mage::getModel('cloudinary_cloudinary/logger')->notice($error->getMessage());
+            $error->save();
             $orphanImage->delete();
         }
     }
@@ -73,6 +85,8 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $this->_migrationTask->start();
 
+        Mage::getModel('cloudinary_cloudinary/logger')->notice(self::MIGRATION_START_MESSAGE);
+
         $this->_redirectToManageCloudinary();
     }
 
@@ -80,22 +94,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
     {
         $this->_migrationTask->stop();
 
-        $this->_redirectToManageCloudinary();
-    }
-
-    public function enableCloudinaryAction()
-    {
-        if (!$this->_cloudinaryConfig->validateCredentials()) {
-            $this->_getSession()->addError('Validating credentials failed. Cloudinary stays disabled');
-        } else {
-            $this->_cloudinaryConfig->enable();
-        }
-        $this->_redirectToManageCloudinary();
-    }
-
-    public function disableCloudinaryAction()
-    {
-        $this->_cloudinaryConfig->disable();
+        Mage::getModel('cloudinary_cloudinary/logger')->notice(self::MIGRATION_STOP_MESSAGE);
 
         $this->_redirectToManageCloudinary();
     }
@@ -148,13 +147,25 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
                 'https://support.cloudinary.com/hc/en-us/articles/203188781-Why-is-the-migration-process-stuck-on-zero-'
             )
         );
+
+        Mage::getModel('cloudinary_cloudinary/logger')->error(self::MIGRATION_CRON_WARNING);
     }
 
     private function _displayValidationFailureMessage()
     {
-        $link = '<a href="/admin/system_config/edit/section/cloudinary/">here</a>';
         $this->_getSession()->addError(
-            "Please enter your Cloudinary Credentials $link to Activate Cloudinary"
+            sprintf(
+                'Please enter your Cloudinary Credentials <a href="%s">here</a> to Activate Cloudinary',
+                Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/cloudinary")
+            )
         );
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('cloudinary_cloudinary/cloudinary');
     }
 }

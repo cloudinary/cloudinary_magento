@@ -5,27 +5,32 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cloudinary_upload_images" xsi:type="object">Cloudinary\Cloudinary\Command\UploadImages</item>
+                <item name="cloudinary_upload_stop" xsi:type="object">Cloudinary\Cloudinary\Command\StopMigration</item>
+                <item name="cloudinary_reset" xsi:type="object">Cloudinary\Cloudinary\Command\ResetAll</item>
             </argument>
         </arguments>
     </type>
 
-    <preference for="CloudinaryExtension\ImageProvider"
-                type="CloudinaryExtension\CloudinaryImageProvider" />
+    <preference for="Cloudinary\Cloudinary\Core\ImageProvider"
+                type="Cloudinary\Cloudinary\Core\CloudinaryImageProvider" />
 
     <preference for="Cloudinary\Cloudinary\Api\SynchronisationRepositoryInterface"
                 type="Cloudinary\Cloudinary\Model\SynchronisationRepository" />
 
-    <preference for="CloudinaryExtension\SynchroniseAssetsRepositoryInterface"
+    <preference for="Cloudinary\Cloudinary\Core\SynchroniseAssetsRepositoryInterface"
                 type="Cloudinary\Cloudinary\Model\SynchronisationRepository" />
 
-    <preference for="CloudinaryExtension\ConfigurationInterface"
+    <preference for="Cloudinary\Cloudinary\Core\ConfigurationInterface"
                 type="Cloudinary\Cloudinary\Model\Configuration" />
 
-    <preference for="CloudinaryExtension\Image\Synchronizable"
+    <preference for="Cloudinary\Cloudinary\Core\Image\Synchronizable"
                 type="Cloudinary\Cloudinary\Model\Synchronisation" />
 
-    <preference for="CloudinaryExtension\Image\SynchronizationChecker"
+    <preference for="Cloudinary\Cloudinary\Core\Image\SynchronizationCheck"
                 type="Cloudinary\Cloudinary\Model\SynchronisationChecker" />
+
+    <preference for="Cloudinary\Cloudinary\Core\AutoUploadMapping\AutoUploadConfigurationInterface"
+                type="Cloudinary\Cloudinary\Model\AutoUploadMapping\AutoUploadConfiguration" />
 
     <preference for="Magento\Widget\Model\Template\Filter"
                 type="Cloudinary\Cloudinary\Model\Template\Filter" />
@@ -44,6 +49,10 @@
 
     <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
         <plugin name="cloudinary_file_remover_plugin" type="Cloudinary\Cloudinary\Plugin\FileRemover" />
+    </type>
+
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="cloudinary_validate_product_transform" type="Cloudinary\Cloudinary\Plugin\ValidateProductTransform" />
     </type>
 
 </config>

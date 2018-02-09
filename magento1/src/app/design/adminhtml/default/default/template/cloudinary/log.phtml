@@ -1,0 +1,50 @@
+<?php
+
+$logSize = $error ? 'File does not exist' : $this->formatBytes($logSizeInBytes);
+
+?>
+
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody>
+            <tr>
+                <td style="width:50%;"><h3 class="icon-head">Download log file</h3></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<?php if ($error): ?>
+    <ul class="messages">
+        <li class="error-msg"><?php echo $error; ?></li>
+    </ul>
+<?php endif ?>
+
+<div class="grid">
+    <table cellspacing="0" class="data" style="width: 600px;">
+        <tbody>
+            <tr class="even">
+                <td>Cloudinary logging enabled</td>
+                <td><?php echo $isActive ? 'Yes' : 'No'; ?></td>
+            </tr>
+
+            <tr>
+                <td>Cloudinary logfile name</td>
+                <td><?php echo $name; ?></td>
+            </tr>
+
+            <tr class="even">
+                <td>Cloudinary logfile size</td>
+                <td><?php echo $logSize; ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<?php if (!$error && $logSizeInBytes): ?>
+<div style="margin-top: 5px;">
+    <a class="form-button" href="<?php echo $downloadUrl; ?>" style="text-decoration: none;">
+        Download <?php echo $name; ?>
+    </a>
+</div>
+<?php endif ?>

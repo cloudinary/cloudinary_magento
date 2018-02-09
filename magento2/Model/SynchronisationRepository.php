@@ -2,7 +2,7 @@
 
 namespace Cloudinary\Cloudinary\Model;
 
-use CloudinaryExtension\SynchroniseAssetsRepositoryInterface;
+use Cloudinary\Cloudinary\Core\SynchroniseAssetsRepositoryInterface;
 
 use Cloudinary\Cloudinary\Api\SynchronisationRepositoryInterface;
 use Cloudinary\Cloudinary\Model\SynchronisationFactory;

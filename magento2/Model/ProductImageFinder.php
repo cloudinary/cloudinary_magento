@@ -30,7 +30,7 @@ class ProductImageFinder
     /**
      * @param Product $product
      *
-     * @return \CloudinaryExtension\Image[]
+     * @return \Cloudinary\Cloudinary\Core\Image[]
      */
     public function findNewImages(Product $product)
     {
@@ -40,7 +40,7 @@ class ProductImageFinder
     /**
      * @param Product $product
      *
-     * @return \CloudinaryExtension\Image[]
+     * @return \Cloudinary\Cloudinary\Core\Image[]
      */
     public function findDeletedImages(Product $product)
     {
@@ -51,7 +51,7 @@ class ProductImageFinder
      * @param Product $product
      * @param ImageFilter $filter
      *
-     * @return \CloudinaryExtension\Image[]
+     * @return \Cloudinary\Cloudinary\Core\Image[]
      */
     private function find(Product $product, ImageFilter $filter)
     {

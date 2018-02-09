@@ -6,8 +6,8 @@ $installer->startSetup();
 
 $installer->getConnection()->addIndex(
     $installer->getTable('cloudinary_synchronisation'),
-    $installer->getIdxName('cloudinary_synchronisation', ['image_name']),
-    ['image_name']
+    $installer->getIdxName('cloudinary_synchronisation', array('image_name')),
+    array('image_name')
 );
 
 $installer->endSetup();

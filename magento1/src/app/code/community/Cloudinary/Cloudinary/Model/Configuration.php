@@ -1,4 +1,5 @@
 <?php
+
 use CloudinaryExtension\Cloud;
 use CloudinaryExtension\ConfigurationBuilder;
 use CloudinaryExtension\ConfigurationInterface;
@@ -8,12 +9,13 @@ use CloudinaryExtension\Image\Transformation\Dpr;
 use CloudinaryExtension\Image\Transformation\FetchFormat;
 use CloudinaryExtension\Image\Transformation\Gravity;
 use CloudinaryExtension\Image\Transformation\Quality;
+use CloudinaryExtension\Image\Transformation\Freeform;
 use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 use CloudinaryExtension\UploadConfig;
 
 class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterface
 {
-    const CONFIG_PATH_ENABLED = 'cloudinary/cloud/cloudinary_enabled';
+    const CONFIG_PATH_ENABLED = 'cloudinary/setup/cloudinary_enabled';
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;
     const USER_PLATFORM_TEMPLATE = 'CloudinaryMagento/%s (Magento %s)';
@@ -25,6 +27,9 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     const CONFIG_DEFAULT_FETCH_FORMAT = 'cloudinary/transformations/cloudinary_fetch_format';
     const CONFIG_CDN_SUBDOMAIN = 'cloudinary/configuration/cloudinary_cdn_subdomain';
     const CONFIG_FOLDERED_MIGRATION = 'cloudinary/configuration/cloudinary_foldered_migration';
+    const CONFIG_GLOBAL_FREEFORM = 'cloudinary/transformations/cloudinary_free_transform_global';
+    const CONFIG_LOG_ACTIVE = 'cloudinary/log/cloudinary_log_active';
+    const CONFIG_LOG_FILENAME = 'cloudinary/log/cloudinary_log_filename';
 
     private $environmentVariable;
 
@@ -60,11 +65,12 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
             ->withGravity(Gravity::fromString($this->getDefaultGravity()))
             ->withFetchFormat(FetchFormat::fromString($this->getFetchFormat()))
             ->withQuality(Quality::fromString($this->getImageQuality()))
-            ->withDpr(Dpr::fromString($this->getImageDpr()));
+            ->withDpr(Dpr::fromString($this->getImageDpr()))
+            ->withFreeform(Freeform::fromString($this->getDefaultGlobalFreeform()));
 
         if ($this->isSmartServing()){
             $transformation
-                ->addFlags(['lossy'])
+                ->addFlags(array('lossy'))
                 ->withFetchFormat(FetchFormat::fromString(FetchFormat::FETCH_FORMAT_AUTO))
                 ->withoutFormat();
         }
@@ -118,7 +124,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     }
 
     public function getFormatsToPreserve() {
-        return ['png', 'webp', 'gif', 'svg'];
+        return array('png', 'webp', 'gif', 'svg');
     }
 
     public function validateCredentials()
@@ -152,7 +158,31 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
 
     public function isFolderedMigration()
     {
-        return Mage::getStoreConfigFlag(self::CONFIG_FOLDERED_MIGRATION);
+        return $this->hasAutoUploadMapping() || Mage::getStoreConfigFlag(self::CONFIG_FOLDERED_MIGRATION);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAutoUploadMapping()
+    {
+        return Mage::getModel('cloudinary_cloudinary/autoUploadMapping_configuration')->isActive();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLoggingActive()
+    {
+        return Mage::getStoreConfig(self::CONFIG_LOG_ACTIVE) == "1";
+    }
+
+    /**
+     * @return string
+     */
+    public function getLoggingFilename()
+    {
+        return Mage::getStoreConfig(self::CONFIG_LOG_FILENAME);
     }
 
     private function setStoreConfig($configPath, $value)
@@ -205,5 +235,10 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     private function getImageDpr()
     {
         return Mage::getStoreConfig(self::CONFIG_DEFAULT_DPR);
+    }
+
+    private function getDefaultGlobalFreeform()
+    {
+        return Mage::getStoreConfig(self::CONFIG_GLOBAL_FREEFORM);
     }
 }

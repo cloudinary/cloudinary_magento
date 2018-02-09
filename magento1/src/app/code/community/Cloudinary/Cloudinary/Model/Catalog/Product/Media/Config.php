@@ -1,39 +1,57 @@
 <?php
 
-use CloudinaryExtension\Cloud;
 use CloudinaryExtension\CloudinaryImageProvider;
-use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\ImageFactory;
 use CloudinaryExtension\UrlGenerator;
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Catalog_Model_Product_Media_Config
 {
-    private $_configuration;
-    private $_imageProvider;
+    /**
+     * @var ImageFactory
+     */
+    private $_imageFactory;
+
+    /**
+     * @var UrlGenerator
+     */
     private $_urlGenerator;
 
     public function __construct()
     {
-        $this->_configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+        $configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+
         $this->_imageFactory = new ImageFactory(
-            $this->_configuration,
+            $configuration,
             Mage::getModel('cloudinary_cloudinary/synchronizationChecker')
         );
-        $this->_imageProvider = CloudinaryImageProvider::fromConfiguration($this->_configuration);
-        $this->_urlGenerator = new UrlGenerator($this->_configuration, $this->_imageProvider);
 
+        $this->_urlGenerator = new UrlGenerator(
+            $configuration,
+            CloudinaryImageProvider::fromConfiguration($configuration)
+        );
     }
 
+    /**
+     * @param string $file relative image filepath
+     * @return string
+     */
     public function getMediaUrl($file)
     {
-        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getMediaUrl($file);});
+        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getMediaUrl($file); });
 
-        return $this->_urlGenerator->generateFor($image);
+        return $this->_urlGenerator->generateFor(
+            $image,
+            Mage::getModel('cloudinary_cloudinary/transformation')->transformationForImage($file)
+        );
     }
 
+    /**
+     * @param string $file relative image filepath
+     * @return string
+     */
     public function getTmpMediaUrl($file)
     {
-        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getTmpMediaUrl($file);});
+        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getTmpMediaUrl($file); });
 
         return $this->_urlGenerator->generateFor($image);
     }
