@@ -2,7 +2,7 @@
 
 namespace Cloudinary\Cloudinary\Model\Observer;
 
-use CloudinaryExtension\CloudinaryImageManager;
+use Cloudinary\Cloudinary\Core\CloudinaryImageManager;
 use Cloudinary\Cloudinary\Model\ProductImageFinder;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;

@@ -3,8 +3,8 @@
 namespace Cloudinary\Cloudinary\Model\Template;
 
 use Magento\Widget\Model\Template\Filter as WidgetFilter;
-use CloudinaryExtension\Image\ImageFactory;
-use CloudinaryExtension\UrlGenerator;
+use Cloudinary\Cloudinary\Core\Image\ImageFactory;
+use Cloudinary\Cloudinary\Core\UrlGenerator;
 
 class Filter extends WidgetFilter
 {

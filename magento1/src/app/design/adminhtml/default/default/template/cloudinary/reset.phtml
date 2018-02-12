@@ -1,0 +1,74 @@
+<?php echo $this->getFormInitScripts() ?>
+<div class="content-header">
+    <?php echo $this->getHeaderHtml() ?>
+</div>
+<div class="box-left">
+    <p style="font-weight:bold;">Remove all Cloudinary synchronisation data and reset all configuration
+        back to the default settings?</p>
+    <p>In order for images to be served from Cloudinary after a reset, you will need to:
+        <ul style="list-style-type: disc;">
+            <li style="margin-left: 2em;">Clear Cloudinary cache (if enabled)</li>
+            <li style="margin-left: 2em;">Reconfigure module</li>
+            <li style="margin-left: 2em;">Enable the module</li>
+            <li style="margin-left: 2em;">Enable auto upload mapping or perform a manual migration</li>
+            <li style="margin-left: 2em;">Clear the block and layout caches</li>
+        </ul>
+    </p>
+    <p class="error-msg" style="padding: 10px 10px 10px 30px; margin: 20px 0;">The configuration cache will be cleared after the module data is reset.
+        We recommend that you back up your database before proceeding and run this process when your site
+        traffic is low.</p>
+<?php echo $this->getFormHtml() ?>
+<?php if ($this->hasFooterButtons()): ?>
+    <div class="content-footer">
+        <p class="form-buttons"><?php echo $this->getButtonsHtml('footer') ?></p>
+    </div>
+<?php endif; ?>
+</div>
+<script type="text/javascript">
+
+    function disablePasswordFieldEnterKey(evt) {
+        var evt = (evt) ? evt : ((event) ? event : null);
+        var elem = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if ((evt.keyCode == 13) && (elem.type=='password'))  {return false;}
+    }
+
+    document.onkeypress = disablePasswordFieldEnterKey;
+
+    function openCloudinaryResetConfirmation() {
+
+        if ($('browser_window') && typeof(Windows) != 'undefined') {
+            Windows.focus('browser_window');
+            return;
+        }
+
+        var dialogWindow = Dialog.info(null, {
+            closable:true,
+            resizable:false,
+            draggable:true,
+            className:'magento',
+            windowClassName:'popup-window',
+            title:'Reset module data',
+            width:400,
+            height:100,
+            zIndex:1000,
+            recenterAuto:true,
+            hideEffect:Element.hide,
+            showEffect:Element.show,
+            id:'browser_window'
+        });
+
+        dialogWindow.setHTMLContent('<p style="margin-top: 10px;">Are you sure you wish to remove all Cloudinary data?</p><div class="form-buttons" style="position: absolute; bottom: 10px; right: 10px;"><button title="No" type="button" class="scalable" onclick="closeCloudinaryResetConfirmation();" style="margin-right: 10px;"><span><span><span>No</span></span></span></button><button title="Yes - remove all data" type="button" class="scalable" onclick="submitCloudinaryReset();"><span><span><span>Yes - remove all data</span></span></span></button></div>');
+    }
+
+    function closeCloudinaryResetConfirmation() {
+        Windows.close('browser_window');
+    }
+
+    function submitCloudinaryReset() {
+        editForm.submit();
+    }
+
+    editForm = new varienForm('edit_form', '<?php echo $this->getValidationUrl() ?>');
+
+</script>
+<?php echo $this->getFormScripts() ?>

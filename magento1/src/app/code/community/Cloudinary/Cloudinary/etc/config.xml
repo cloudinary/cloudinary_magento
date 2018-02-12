@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>2.2.0</version>
+            <version>2.8.2</version>
         </Cloudinary_Cloudinary>
     </modules>
     <global>
@@ -47,6 +47,9 @@
                     <migrationError>
                       <table>cloudinary_migration_error</table>
                     </migrationError>
+                    <transformation>
+                        <table>cloudinary_transformation</table>
+                    </transformation>
                 </entities>
             </cloudinary_resource>
         </models>
@@ -76,7 +79,6 @@
             </catalog>
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Helper</class>
-
             </cloudinary_cloudinary>
         </helpers>
         <events>
@@ -84,7 +86,7 @@
                 <observers>
                     <upload_images_to_cloudinary>
                         <type>singleton</type>
-                        <class>cloudinary_cloudinary/observer</class>
+                        <class>cloudinary_cloudinary/observer_product</class>
                         <method>uploadImagesToCloudinary</method>
                     </upload_images_to_cloudinary>
                 </observers>
@@ -93,7 +95,7 @@
                 <observers>
                     <delete_images_from_cloudinary>
                         <type>singleton</type>
-                        <class>cloudinary_cloudinary/observer</class>
+                        <class>cloudinary_cloudinary/observer_product</class>
                         <method>deleteImagesFromCloudinary</method>
                     </delete_images_from_cloudinary>
                 </observers>
@@ -102,7 +104,7 @@
                 <observers>
                     <load_custom_autoloaders>
                         <type>singleton</type>
-                        <class>cloudinary_cloudinary/observer</class>
+                        <class>cloudinary_cloudinary/observer_system</class>
                         <method>loadCustomAutoloaders</method>
                     </load_custom_autoloaders>
                 </observers>
@@ -115,17 +117,42 @@
                 </setup>
             </cloudinary_setup>
         </resources>
+        <cache>
+            <types>
+                <cloudinary translate="label,description" module="cloudinary">
+                    <label>Cloudinary</label>
+                    <description>Cache of all product image transformations and all images migrated to Cloudinary.</description>
+                    <tags>CLOUDINARY</tags>
+                </cloudinary>
+            </types>
+        </cache>
     </global>
     <adminhtml>
         <events>
             <model_config_data_save_before>
                 <observers>
-                    <validate_cloudinary_credentials>
-                        <class>cloudinary_cloudinary/observer</class>
-                        <method>validateCloudinaryCredentials</method>
-                    </validate_cloudinary_credentials>
+                    <config_save>
+                        <class>cloudinary_cloudinary/observer_config</class>
+                        <method>configSave</method>
+                    </config_save>
                 </observers>
             </model_config_data_save_before>
+            <admin_system_config_changed_section_cloudinary>
+                <observers>
+                    <cloudinary_config_changed>
+                        <class>cloudinary_cloudinary/observer_config</class>
+                        <method>cloudinaryConfigChanged</method>
+                    </cloudinary_config_changed>
+                </observers>
+            </admin_system_config_changed_section_cloudinary>
+            <catalog_product_save_before>
+                <observers>
+                    <product_before_save>
+                        <class>cloudinary_cloudinary/adminProductObserver</class>
+                        <method>beforeProductSave</method>
+                    </product_before_save>
+                </observers>
+            </catalog_product_save_before>
         </events>
     </adminhtml>
     <admin>
@@ -143,12 +170,17 @@
         <cloudinary>
             <transformations>
                 <cloudinary_fetch_format>1</cloudinary_fetch_format>
-                <cloudinary_image_quality>80</cloudinary_image_quality>
+                <cloudinary_image_quality>auto</cloudinary_image_quality>
                 <cloudinary_image_dpr>1.0</cloudinary_image_dpr>
             </transformations>
             <configuration>
                 <cloudinary_cdn_subdomain>1</cloudinary_cdn_subdomain>
+                <cloudinary_foldered_migration>1</cloudinary_foldered_migration>
             </configuration>
+            <log>
+                <cloudinary_log_active>0</cloudinary_log_active>
+                <cloudinary_log_filename>cloudinary</cloudinary_log_filename>
+            </log>
         </cloudinary>
     </default>
     <crontab>

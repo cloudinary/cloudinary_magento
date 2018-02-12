@@ -26,8 +26,8 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <cloudinary_environment_variable translate="label comment">
-                            <label>Cloudinary Account Credentials (CLOUDINARY_URL)</label>
-                            <comment>Set the credentials of your Cloudinary account. Copy the credentials string from the dashboard of Cloudinary's Management Console. It is available as the Environment variable of CLOUDINARY_URL.</comment>
+                            <label>Cloudinary Account Credentials</label>
+                            <comment>Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.</comment>
                             <frontend_type>password</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <sort_order>1</sort_order>
@@ -35,6 +35,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </cloudinary_environment_variable>
+                        <cloudinary_enabled>
+                            <label>Enable Cloudinary</label>
+                            <comment>When Cloudinary is enabled, images will be served from Cloudinary (where available). When disabled, images will be served locally.</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </cloudinary_enabled>
                     </fields>
                 </setup>
                 <configuration translate="label">
@@ -54,16 +64,16 @@
                             <show_in_store>1</show_in_store>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                         </cloudinary_cdn_subdomain>
-                        <cloudinary_foldered_migration>
-                            <label>Migrate images to folders relative to the magento root folder</label>
-                            <comment>When enabled, cloudinary migration will clone the folder structure of the images relative to the magento root folder</comment>
+                        <cloudinary_auto_upload_mapping_request>
+                            <label>Use auto upload mapping to upload images</label>
+                            <comment>When enabled, Cloudinary will fetch images it does not have from your site automatically without requiring the manual migration process. Please clear the block and page cache to start this process.</comment>
                             <frontend_type>select</frontend_type>
-                            <sort_order>5</sort_order>
+                            <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </cloudinary_foldered_migration>
+                        </cloudinary_auto_upload_mapping_request>
                     </fields>
                 </configuration>
                 <transformations translate="label">
@@ -113,8 +123,46 @@
                             <show_in_store>1</show_in_store>
                             <source_model>cloudinary_cloudinary/system_config_source_dropdown_dpr</source_model>
                         </cloudinary_image_dpr>
+                        <cloudinary_free_transform_global>
+                            <label>Global custom transform</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_model>cloudinary_cloudinary/adminhtml_system_config_form_free</frontend_model>
+                            <backend_model>cloudinary_cloudinary/system_config_free</backend_model>
+                        </cloudinary_free_transform_global>
                     </fields>
                 </transformations>
+                <log translate="label">
+                    <label>Logging</label>
+                    <show_in_default>1</show_in_default>
+                    <sort_order>4</sort_order>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <cloudinary_log_active>
+                            <label>Enable Logging</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </cloudinary_log_active>
+                        <cloudinary_log_filename>
+                            <label>Filename for Logging</label>
+                            <comment>Leave blank to use system default.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-alphanum</validate>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cloudinary_log_filename>
+                    </fields>
+                </log>
             </groups>
         </cloudinary>
     </sections>

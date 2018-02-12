@@ -39,45 +39,30 @@
 <div class="content-header">
     <table cellspacing="0"><tbody>
         <tr>
-            <td style="width:50%;"><h3 class="icon-head">Manage Cloudinary Images</h3></td>
+            <td style="width:50%;"><h3 class="icon-head">Migrate images to Cloudinary</h3></td>
             <td class="form-buttons">
-
                 <?php echo $this->getMigrateButton() ?>
-
-                <?php echo $this->getEnableButton() ?>
-
             </td>
         </tr>
     </tbody></table>
 </div>
 
 <p>
-    <p>
-        <p>
+        Manual migration is only required if auto upload mapping cannot be used. New images will be automatically
+        uploaded to Cloudinary when they are added to products or CMS pages.
+</p>
+<p>
+    <strong>
+        <?php if ($this->isAutoUploadMappingEnabled()): ?>
+            You have auto upload mapping enabled, and do not need to perform a manual migration.
+        <?php else: ?>
+            You can enable auto upload mapping in the
+        <a href="<?php echo $this->getCloudinaryConfigurationLink(); ?>">Cloudinary Configuration</a> section.
+        <?php endif; ?>
+    </strong>
+</p>
 
-        Foldered migration: <strong><?php echo $this->isFolderedMigration() ? "Enabled" : "Disabled" ?> </strong><br>
-
-        Foldered migration now available! (don't start migration if you want foldered migration before doing the below tasks) <br> <br>
-        To set up foldered migration you need to: <br> <br>
-
-         - <a target="_blank" href="https://cloudinary.com/console/settings/upload">https://cloudinary.com/console/settings/upload</a>
-        and set 'Auto-create folders' - Enabled <br>
-
-         - <a target="_blank" href="https://cloudinary.com/console/settings/upload">https://cloudinary.com/console/settings/upload</a>
-        and set 'Use file name in Media Library' - Yes <br>
-
-         - <a href="<?php echo $this->getUrl('adminhtml/system_config/edit/section/cloudinary'); ?>"><?php echo $this->__('Go to the Cloudinary configuration section'); ?></a>
-         and set 'Migrate images to folders relative to the magento root folder' - Yes <br>
-        <br>
-
-        If you already use simple migration, you will have deprecated information which you can fold: <br>
-         - `cloudinary_synchronisation` table entries (you can wipe the table clean before starting foldered migration) <br>
-         - all previously migrated images to cloudinary are not touched and will remain in the unfoldered structure
-        (they all are in the cloudinary root folder and can be erased safely, since all images migrated with folders
-        will take place in the /media/... folder) <br> <br> <br>
-        </p>
-
-    </p>
+<p>
     <?php if ($this->allImagesSynced()): ?>
         <div id="messages"><ul class="messages"><li class="notice-msg"><ul><li><span>All images have been successfully migrated to Cloudinary</span></li></ul></li></ul></div>
     <?php else: ?>

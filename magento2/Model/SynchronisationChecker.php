@@ -2,10 +2,11 @@
 
 namespace Cloudinary\Cloudinary\Model;
 
-use CloudinaryExtension\Image\SynchronizationChecker as SynchronisationCheckerInterface;
+use Cloudinary\Cloudinary\Core\Image\SynchronizationCheck;
 use Cloudinary\Cloudinary\Api\SynchronisationRepositoryInterface;
+use Cloudinary\Cloudinary\Core\AutoUploadMapping\AutoUploadConfigurationInterface;
 
-class SynchronisationChecker implements SynchronisationCheckerInterface
+class SynchronisationChecker implements SynchronizationCheck
 {
     /**
      * @var SynchronisationRepositoryInterface
@@ -13,11 +14,20 @@ class SynchronisationChecker implements SynchronisationCheckerInterface
     private $synchronisationRepository;
 
     /**
-     * @param SynchronisationRepositoryInterface $synchronisationRepository
+     * @var Configuration
      */
-    public function __construct(SynchronisationRepositoryInterface $synchronisationRepository)
-    {
+    private $autoUploadConfiguration;
+
+    /**
+     * @param SynchronisationRepositoryInterface $synchronisationRepository
+     * @param AutoUploadConfigurationInterface $autoUploadConfiguration
+     */
+    public function __construct(
+        SynchronisationRepositoryInterface $synchronisationRepository,
+        AutoUploadConfigurationInterface $autoUploadConfiguration
+    ) {
         $this->synchronisationRepository = $synchronisationRepository;
+        $this->autoUploadConfiguration = $autoUploadConfiguration;
     }
 
     /**
@@ -28,6 +38,10 @@ class SynchronisationChecker implements SynchronisationCheckerInterface
     {
         if (!$imageName) {
             return false;
+        }
+
+        if ($this->autoUploadConfiguration->isActive()) {
+            return true;
         }
         
         return $this->synchronisationRepository->getListByImagePath($imageName)->getTotalCount() > 0;

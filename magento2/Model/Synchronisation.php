@@ -2,7 +2,7 @@
 
 namespace Cloudinary\Cloudinary\Model;
 
-use CloudinaryExtension\Image\Synchronizable;
+use Cloudinary\Cloudinary\Core\Image\Synchronizable;
 use Cloudinary\Cloudinary\Model\ResourceModel\Synchronisation as SynchronisationResourceModel;
 use Magento\Framework\Model\AbstractModel;
 

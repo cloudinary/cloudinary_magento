@@ -11,7 +11,7 @@ class Gravity implements OptionSourceInterface
         return array(
             array(
                 'value' => '',
-                'label' => 'Default',
+                'label' => 'Magento\'s Default',
             ),
             array(
                 'value' => 'face',

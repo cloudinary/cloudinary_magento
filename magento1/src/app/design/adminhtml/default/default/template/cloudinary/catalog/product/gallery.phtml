@@ -1,0 +1,222 @@
+<?php $images = $this->getImages(); ?>
+<div class="entry-edit custom-options product-custom-options">
+    <div class="entry-edit-head">
+        <h4>Cloudinary product specific image transformations</h4>
+    </div>
+
+    <div class="box">
+
+        <div style="width: 60%;">
+
+            <?php if (count($images) && $this->isCloudinaryEnabled()): ?>
+
+            <div class="grid">
+                <table cellspacing="0" class="data border" id="media_gallery_content_grid" style="margin-top: 10px;">
+                    <col width="250" />
+                    <col width="200" />
+                    <col />
+                    <col width="100" />
+                    <thead>
+                    <tr class="headings">
+                        <th><?php echo Mage::helper('catalog')->__('Image') ?></th>
+                        <th><?php echo Mage::helper('catalog')->__('Label') ?></th>
+                        <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Cloudinary free transform') ?></th>
+                        <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Action') ?></th>
+                    </tr>
+                    </thead>
+                    <tbody id="media_gallery_content_list">
+                    <?php foreach($this->getImages() as $image): ?>
+                        <tr>
+                            <td class="cell-image" id="cloudinary_preview_container_<?php echo $image->getValueId(); ?>">
+                            </td>
+                            <td class="cell-label"><?php echo $image->getLabel(); ?></td>
+                            <td>
+                                <input type="text"
+                                       id="cloudinary_input_<?php echo $image->getValueId(); ?>"
+                                       name="cloudinary_free[<?php echo $image->getValueId(); ?>]"
+                                       value="<?php echo $image->getFreeTransformation(); ?>"
+                                       style="width: 80%;" />
+                                <input type="hidden"
+                                       id="cloudinary_input_updated_<?php echo $image->getValueId(); ?>"
+                                       name="cloudinary_free_updated[<?php echo $image->getValueId(); ?>]"
+                                       value="" />
+                            </td>
+                            <td>
+                                <button id="cloudinary_preview_button_<?php echo $image->getValueId(); ?>"
+                                        class="cloudinary_preview_button"
+                                        type="button"
+                                        data-file="<?php echo $image->getFile(); ?>"
+                                        data-id="<?php echo $image->getValueId(); ?>">
+                                    Preview
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?php else: ?>
+
+            <ul class="messages">
+                <li class="notice-msg" style="background-image: none !important; margin: 10px 0;">
+                    <?php if ($this->isCloudinaryEnabled()): ?>
+                    <p>No product images are available</p>
+                    <?php else: ?>
+                    <p>
+                        The Cloudinary module has not been configured. To use this feature please visit the
+                        <a href="<?php echo $this->getCloudinaryConfigurationLink(); ?>">
+                            Cloudinary Configuration page
+                        </a>
+                        and add an environment variable, then enable auto upload mapping or perform a
+                        manual migration.
+                    </p>
+                    <?php endif; ?>
+                </li>
+            </ul>
+
+            <?php endif; ?>
+
+            <p>
+                Product image transformations will be added to the the site-wide default image transformation options
+                chosen from dropdowns on the Cloudinary config page. Product image transformations will override any
+                free form transformation options that have been specified in the 'Global custom transform' field
+                of the Cloudinary config page.
+            </p>
+            <p>
+                For information about the full range of transforms available see the
+                <a href="http://cloudinary.com/documentation/image_transformation_reference" target="_blank">
+                    Cloudinary documentation
+                </a>.
+            </p>
+            <p>
+                You may need to clear or rebuild the Magento block, full page and Cloudinary caches to see the changes in the front end.
+            </p>
+
+        </div>
+
+    </div>
+</div>
+
+<script language="javascript">
+
+    window.cloudinary = {
+
+        currentTransform: {},
+
+        secret: '<?php echo $this->ajaxSampleSecretKey(); ?>',
+
+        getTransformText: function(id) {
+            return $('cloudinary_input_' + id).value
+        },
+
+        getAjaxImageUrl: function() {
+            return '/admin/cloudinaryajax/image/key/' + this.secret;
+        },
+
+        getImageId: function(id) {
+            return 'cloudinary_preview_' + id;
+        },
+
+        getImageContainerId: function(id) {
+            return 'cloudinary_preview_container_' + id;
+        },
+
+        getPreviewButtonId: function(id) {
+            return 'cloudinary_preview_button_' + id;
+        },
+
+        getInputUpdatedId: function(id) {
+            return 'cloudinary_input_updated_' + id;
+        },
+
+        setInputUpdated: function(id) {
+            $(this.getInputUpdatedId(id)).value = '1';
+        },
+
+        getImageFile: function(id) {
+            return $(this.getPreviewButtonId(id)).getAttribute('data-file');
+        },
+
+        getImageHtml: function(id, src) {
+            var id = this.getImageId(id),
+                style = 'width: auto; height: auto; max-width: 250px; max-height: 250px; min-height: 50px;';
+            return '<img id="' + id + '" src="' + src + '" style="' + style + '" />';
+        },
+
+        getErrorHtml: function(message) {
+            return '<ul class="messages"><li class="error-msg">' + message + '</li></ul>';
+        },
+
+        updatePreviewImage: function(id, url) {
+            var $image = $(this.getImageId(id));
+
+            if (!$image) {
+                $(this.getImageContainerId(id)).update(this.getImageHtml(id, url));
+            } else {
+                $image.writeAttribute('src', url);
+            }
+        },
+
+        updatePreview: function(id) {
+            var self = this;
+
+            if (!self.isPreviewActive(id)) {
+                return;
+            }
+
+            self.currentTransform[id] = self.getTransformText(id);
+            self.setPreviewActiveState(id, false);
+
+            new Ajax.Request(this.getAjaxImageUrl(), {
+                method: 'post',
+                parameters: { free: self.currentTransform[id], image: self.getImageFile(id) },
+                onSuccess: function(response) {
+                    self.updatePreviewImage(id, response.responseJSON.url);
+                },
+                onFailure: function(response) {
+                    $(self.getImageContainerId(id)).update(self.getErrorHtml(response.responseJSON.error));
+                }
+            });
+        },
+
+        setPreviewActiveState: function(id, state) {
+            if (state && (this.currentTransform[id] !== this.getTransformText(id))) {
+                this.setInputUpdated(id);
+                $(this.getPreviewButtonId(id)).removeClassName('disabled');
+            } else {
+                $(this.getPreviewButtonId(id)).addClassName('disabled');
+            }
+        },
+
+        isPreviewActive: function(id) {
+            return !$(this.getPreviewButtonId(id)).hasClassName('disabled');
+        },
+
+        addPreviewButtonListener: function(button) {
+            var self = this;
+
+            button.on('click', function() {
+                self.updatePreview(button.getAttribute('data-id'));
+            });
+        },
+
+        addTextChangeListener: function(id) {
+            var self = this,
+                input = $('cloudinary_input_' + id);
+
+            input.on('change', function() { self.setPreviewActiveState(id, true); });
+            input.on('keydown', function() { self.setPreviewActiveState(id, true); });
+            input.on('paste', function() { self.setPreviewActiveState(id, true); });
+            input.on('input', function() { self.setPreviewActiveState(id, true); });
+        }
+
+    };
+
+    $$('.cloudinary_preview_button').each(function(button) {
+        window.cloudinary.updatePreview(button.getAttribute('data-id'));
+        window.cloudinary.addPreviewButtonListener(button);
+        window.cloudinary.addTextChangeListener(button.getAttribute('data-id'));
+    });
+
+</script>

@@ -7,7 +7,7 @@ class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Gravity
         return array(
             array(
                 'value' => '',
-                'label' => 'Default',
+                'label' => 'Magento\'s Default',
             ),
             array(
                 'value' => 'face',

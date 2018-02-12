@@ -1,12 +1,19 @@
 {
-    "name": "inviqa/cloudinary-magento2",
+    "name": "cloudinary/cloudinary",
     "description": "Cloudinary Magento 2 Integration.",
     "type": "magento2-module",
-    "version": "1.0.0",
+    "version": "1.5.1",
     "minimum-stability": "dev",
+    "repositories": {
+        "0": {
+            "type": "git",
+            "url": "git@github.com:inviqa/cloudinary-core.git"
+        }
+    },
     "require": {
         "php": ">=5.5",
-        "inviqa/cloudinary-core": "1.1.0"
+        "cloudinary/cloudinary_php": "1.8.0",
+        "inviqa/cloudinary-core": "1.7.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^3.0",
@@ -31,12 +38,6 @@
         "bin-dir": "bin",
         "use-include-path": true
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git@github.com:inviqa/cloudinary-core.git"
-        }
-    ],
     "autoload-dev": {
         "psr-0": {
             "": [
@@ -48,6 +49,14 @@
         "psr-4": {
             "Magento\\Framework\\": "/app/vendor/magento/framework/",
             "Magento\\Catalog\\": "/app/vendor/magento/module-catalog"
+        }
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Cloudinary\\Cloudinary\\": ""
         }
     }
 }

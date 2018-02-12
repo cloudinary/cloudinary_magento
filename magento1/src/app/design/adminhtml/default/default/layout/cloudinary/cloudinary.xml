@@ -14,4 +14,51 @@
             </action>
         </reference>
     </adminhtml_cloudinary_index>
+
+    <adminhtml_cloudinarylog_index>
+        <reference name="content">
+            <block type="cloudinary_cloudinary/adminhtml_log" name="cloudinary_log" template="cloudinary/log.phtml"></block>
+        </reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>js_css</type>
+                <name>prototype/windows/themes/default.css</name>
+            </action>
+            <action method="addCss">
+                <name>lib/prototype/windows/themes/magento.css</name>
+            </action>
+        </reference>
+    </adminhtml_cloudinarylog_index>
+
+    <adminhtml_cloudinaryreset_index>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="cloudinary_cloudinary/adminhtml_reset_edit" name="cloudinary_reset"></block>
+        </reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>js_css</type>
+                <name>prototype/windows/themes/default.css</name>
+            </action>
+            <action method="addCss">
+                <name>lib/prototype/windows/themes/magento.css</name>
+            </action>
+        </reference>
+    </adminhtml_cloudinaryreset_index>
+
+    <adminhtml_catalog_product_edit>
+        <reference name="product_tabs">
+            <action method="addTab">
+                <name>Cloudinary</name>
+                <block>cloudinary_cloudinary/adminhtml_catalog_product_edit_tab</block>
+            </action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+
+    <adminhtml_cloudinaryproduct_gallery>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="cloudinary_cloudinary/adminhtml_catalog_product_edit_gallery" name="cloudinary_product_gallery" template="cloudinary/catalog/product/gallery.phtml"></block>
+        </block>
+    </adminhtml_cloudinaryproduct_gallery>
+
 </layout>

@@ -45,6 +45,10 @@ class Quality implements OptionSourceInterface
                 'value' => '100',
                 'label' => '100%',
             ),
+            array(
+                'value' => 'auto',
+                'label' => 'Auto',
+            )
         );
     }
 }

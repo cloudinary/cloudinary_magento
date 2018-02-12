@@ -5,6 +5,8 @@ use CloudinaryExtension\Image;
 
 class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uploader
 {
+    const UPLOAD_MESSAGE = 'Uploaded cms image: %s';
+
     protected function _afterSave($result)
     {
         parent::_afterSave($result);
@@ -19,6 +21,8 @@ class Cloudinary_Cloudinary_Model_Cms_Uploader extends Mage_Core_Model_File_Uplo
 
             $image = Image::fromPath($fullPath, $relativePath);
             $imageProvider->upload($image);
+
+            Mage::getModel('cloudinary_cloudinary/logger')->notice(sprintf(self::UPLOAD_MESSAGE, $relativePath));
 
             $this->_trackSynchronisation((string)$image);
         }
