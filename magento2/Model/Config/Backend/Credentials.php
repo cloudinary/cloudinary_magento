@@ -79,11 +79,6 @@ class Credentials extends Encrypted
 
         parent::beforeSave();
 
-        if (!$this->isModuleActiveInFormData()) {
-            $this->_dataSaveAllowed = true;
-            return;
-        }
-
         if (!$rawValue) {
             throw new ValidatorException(__(self::CREDENTIALS_CHECK_MISSING));
         }

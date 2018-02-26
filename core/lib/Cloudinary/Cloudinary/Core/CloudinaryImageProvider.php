@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Cloudinary\Cloudinary\Core;
 
 use Cloudinary;
@@ -13,20 +12,32 @@ use Cloudinary\Cloudinary\Core\Image\Transformation\FetchFormat;
 
 class CloudinaryImageProvider implements ImageProvider
 {
+    /**
+     * @var ConfigurationInterface
+     */
     private $configuration;
+
     /**
      * @var UploadResponseValidator
      */
     private $uploadResponseValidator;
+
     /**
      * @var ConfigurationBuilder
      */
     private $configurationBuilder;
+
     /**
      * @var CredentialValidator
      */
     private $credentialValidator;
 
+    /**
+     * @param ConfigurationInterface $configuration
+     * @param ConfigurationBuilder $configurationBuilder
+     * @param UploadResponseValidator $uploadResponseValidator
+     * @param CredentialValidator $credentialValidator
+     */
     public function __construct(
         ConfigurationInterface $configuration,
         ConfigurationBuilder $configurationBuilder,
@@ -42,6 +53,10 @@ class CloudinaryImageProvider implements ImageProvider
         }
     }
 
+    /**
+     * @param ConfigurationInterface $configuration
+     * @return CloudinaryImageProvider
+     */
     public static function fromConfiguration(ConfigurationInterface $configuration){
         return new CloudinaryImageProvider(
             $configuration,
@@ -51,22 +66,32 @@ class CloudinaryImageProvider implements ImageProvider
         );
     }
 
+    /**
+     * @param Image $image
+     * @return mixed
+     */
     public function upload(Image $image)
     {
-        $uploadResult = null;
+        if (!$this->configuration->isEnabled()) {
+            return false;
+        }
 
         try {
             $uploadResult = Uploader::upload(
                 (string)$image,
                 $this->configuration->getUploadConfig()->toArray() + [ "folder" => $image->getRelativeFolder()]
             );
+            return $this->uploadResponseValidator->validateResponse($image, $uploadResult);
         } catch (\Exception $e) {
             ApiError::throwWith($image, $e->getMessage());
         }
-
-        return $this->uploadResponseValidator->validateResponse($image, $uploadResult);
     }
 
+    /**
+     * @param Image $image
+     * @param Transformation $transformation
+     * @return Image
+     */
     public function retrieveTransformed(Image $image, Transformation $transformation)
     {
         return Image::fromPath(
@@ -75,16 +100,29 @@ class CloudinaryImageProvider implements ImageProvider
         );
     }
 
+    /**
+     * @param Image $image
+     * @return Image
+     */
     public function retrieve(Image $image)
     {
         return $this->retrieveTransformed($image, $this->configuration->getDefaultTransformation());
     }
 
+    /**
+     * @param Image $image
+     * @return bool
+     */
     public function delete(Image $image)
     {
-        Uploader::destroy($image->getIdWithoutExtension());
+        if ($this->configuration->isEnabled()) {
+            Uploader::destroy($image->getIdWithoutExtension());
+        }
     }
 
+    /**
+     * @return bool
+     */
     public function validateCredentials()
     {
         return $this->credentialValidator->validate($this->configuration->getCredentials());

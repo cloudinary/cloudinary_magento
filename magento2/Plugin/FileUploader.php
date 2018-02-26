@@ -38,9 +38,9 @@ class FileUploader
      */
     public function afterSave(Uploader $uploader, $result)
     {
-        $filepath = $this->absolutePath($result);
+        $filepath = $this->absoluteFilePath($result);
 
-        if (!$this->isTemporaryPath($filepath)) {
+        if ($this->isMediaFilePath($filepath) && !$this->isMediaTmpFilePath($filepath)) {
 
             $this->cloudinaryImageManager->uploadAndSynchronise(
                 Image::fromPath($filepath, $this->mediaRelativePath($filepath))
@@ -55,7 +55,16 @@ class FileUploader
      * @param string $filepath
      * @return bool
      */
-    protected function isTemporaryPath($filepath)
+    protected function isMediaFilePath($filepath)
+    {
+        return strpos($filepath, $this->directoryList->getPath('media')) === 0;
+    }
+
+    /**
+     * @param string $filepath
+     * @return string
+     */
+    protected function isMediaTmpFilePath($filepath)
     {
         return strpos($filepath, sprintf('%s/tmp', $this->directoryList->getPath('media'))) === 0;
     }
@@ -64,7 +73,7 @@ class FileUploader
      * @param array $result
      * @return string
      */
-    protected function absolutePath(array $result)
+    protected function absoluteFilePath(array $result)
     {
         return sprintf('%s%s%s', $result['path'], DIRECTORY_SEPARATOR, $result['file']);
     }

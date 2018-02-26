@@ -132,7 +132,7 @@ class Product extends AbstractModifier
             $this->injectImageUrls(
                 $this->injectFreeTransformations(
                     $this->filterNonImageTypes(
-                        $product->getMediaGalleryEntries()
+                        $product->getMediaGalleryEntries() ?: []
                     )
                 )
             )
