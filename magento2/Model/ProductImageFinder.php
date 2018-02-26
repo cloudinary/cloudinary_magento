@@ -56,7 +56,7 @@ class ProductImageFinder
     private function find(Product $product, ImageFilter $filter)
     {
         return array_map($this->imageCreator, array_filter(
-            $product->getMediaGallery('images'),
+            $product->getMediaGallery('images') ?: [],
             $filter
         ));
     }
