@@ -1,7 +1,4 @@
 bin/
 vendor/
 composer.phar
-src/lib/Cloudinary/samples/
-src/lib/Cloudinary/.gitignore
-src/lib/Cloudinary/tests/
-src/lib/Cloudinary/phpunit.xml.dist
+src/lib/Cloudinary*

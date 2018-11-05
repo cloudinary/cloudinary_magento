@@ -54,6 +54,16 @@
                             <show_in_store>1</show_in_store>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                         </cloudinary_cdn_subdomain>
+                        <cloudinary_foldered_migration>
+                            <label>Migrate images to folders relative to the magento root folder</label>
+                            <comment>When enabled, cloudinary migration will clone the folder structure of the images relative to the magento root folder</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </cloudinary_foldered_migration>
                     </fields>
                 </configuration>
                 <transformations translate="label">

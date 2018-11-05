@@ -2,13 +2,15 @@
 
 namespace CloudinaryExtension\Migration;
 
+use CloudinaryExtension\Exception\MigrationError;
 use CloudinaryExtension\Image;
 use CloudinaryExtension\Image\Synchronizable;
 use CloudinaryExtension\ImageProvider;
+use \Cloudinary_Cloudinary_Helper_Util_ArrayUtils as ArrayUtils;
 
 class BatchUploader
 {
-    const MESSAGE_STATUS = 'Cloudinary migration: %s images migrated';
+    const MESSAGE_STATUS = 'Cloudinary migration: %s images migrated, %s failed';
 
     const MESSAGE_UPLOADED = 'Cloudinary migration: uploaded %s';
 
@@ -25,6 +27,9 @@ class BatchUploader
     private $migrationTask;
 
     private $countMigrated = 0;
+    private $countFailed = 0;
+
+    private $errors = [];
 
     public function __construct(ImageProvider $imageProvider, Task $migrationTask, Logger $logger, $baseMediaPath)
     {
@@ -37,7 +42,6 @@ class BatchUploader
     public function uploadImages(array $images)
     {
         $this->countMigrated = 0;
-
         foreach ($images as $image) {
 
             if ($this->migrationTask->hasBeenStopped()) {
@@ -45,8 +49,7 @@ class BatchUploader
             }
             $this->uploadImage($image);
         }
-
-        $this->logger->notice(sprintf(self::MESSAGE_STATUS, $this->countMigrated));
+        $this->logger->notice(sprintf(self::MESSAGE_STATUS, $this->countMigrated, $this->countFailed));
     }
 
     private function getAbsolutePath(Synchronizable $image)
@@ -56,8 +59,12 @@ class BatchUploader
 
     private function uploadImage(Synchronizable $image)
     {
+        $absolutePath = $this->getAbsolutePath($image);
+        $relativePath = $image->getRelativePath();
+        $apiImage = Image::fromPath($absolutePath, $relativePath);
+
         try {
-            $this->imageProvider->upload(Image::fromPath($this->getAbsolutePath($image)));
+            $this->imageProvider->upload($apiImage);
             $image->tagAsSynchronized();
             $this->countMigrated++;
             $this->logger->notice(sprintf(self::MESSAGE_UPLOADED, $image->getFilename()));
@@ -66,8 +73,25 @@ class BatchUploader
             $this->countMigrated++;
             $this->logger->notice(sprintf(self::MESSAGE_UPLOADED_EXISTS, $image->getFilename()));
         } catch (\Exception $e) {
-            $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $image->getFilename()));
+            $this->errors[] = $e;
+            $this->countFailed++;
+            $this->logger->error(sprintf(self::MESSAGE_UPLOAD_ERROR, $e->getMessage(), $absolutePath . ' - ' . $relativePath));
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function getMigrationErrors()
+    {
+        return array_filter($this->errors, function ($val) {
+            return $val instanceof MigrationError;
+        });
     }
 
 }
