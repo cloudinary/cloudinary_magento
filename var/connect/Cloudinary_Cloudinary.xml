@@ -1,6 +1,5 @@
 <_>
-   <form_key>mhayUwa3f6I41M5S</form_key>
-   <_create/>
+   <form_key>YQGfYoejAYki9zM5</form_key>
    <name>Cloudinary_Cloudinary</name>
    <channel>community</channel>
    <version_ids>
@@ -42,7 +41,7 @@
             <max/>
          </max>
          <files>
-            <files>            </files>
+            <files>              </files>
          </files>
       </package>
       <extension>
@@ -76,7 +75,7 @@
          <path>Cloudinary</path>
          <path>adminhtml/default/default/layout/cloudinary</path>
          <path>adminhtml/default/default/template/cloudinary</path>
-         <path>skin/adminhtml/default/default/images/cloudinary</path>
+         <path>adminhtml/default/default/images/cloudinary</path>
       </path>
       <type>
          <type>file</type>
