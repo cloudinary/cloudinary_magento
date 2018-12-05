@@ -1,0 +1,7 @@
+app/code/community/Cloudinary/Cloudinary app/code/community/Cloudinary/Cloudinary
+app/etc/modules/Cloudinary_Cloudinary.xml app/etc/modules/Cloudinary_Cloudinary.xml
+lib/CloudinaryExtension lib/CloudinaryExtension
+lib/Cloudinary lib/Cloudinary
+app/design/adminhtml/default/default/layout/cloudinary app/design/adminhtml/default/default/layout/cloudinary
+app/design/adminhtml/default/default/template/cloudinary app/design/adminhtml/default/default/template/cloudinary
+skin/adminhtml/default/default/images/cloudinary skin/adminhtml/default/default/images/cloudinary
