@@ -51,8 +51,12 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
      */
     public function getTmpMediaUrl($file)
     {
+        //Comment this line & uncomment the next paragraph if you insist on using cloudinary for tmp media images
+        return parent::getTmpMediaUrl($file);
+        /*
+        $file = DS . ltrim($this->getBaseTmpMediaUrlAddition(), DS) . $file;
         $image = $this->_imageFactory->build($file, function() use($file) { return parent::getTmpMediaUrl($file); });
-
         return $this->_urlGenerator->generateFor($image);
+        */
     }
 }
