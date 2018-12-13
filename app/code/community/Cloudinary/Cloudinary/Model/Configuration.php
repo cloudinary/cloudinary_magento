@@ -36,6 +36,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     //= Advanced
     const CONFIG_PATH_REMOVE_VERSION_NUMBER = 'cloudinary/advanced/remove_version_number';
     const CONFIG_PATH_USE_ROOT_PATH = 'cloudinary/advanced/use_root_path';
+    const CONFIG_PATH_USE_SIGNED_URLS = 'cloudinary/advanced/use_signed_urls';
 
     private $environmentVariable;
 
@@ -250,8 +251,8 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     }
 
     /**
- * @return bool
- */
+     * @return bool
+     */
     public function getRemoveVersionNumber()
     {
         return (bool) Mage::getStoreConfig(self::CONFIG_PATH_REMOVE_VERSION_NUMBER);
@@ -262,5 +263,13 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     public function getUseRootPath()
     {
         return (bool) Mage::getStoreConfig(self::CONFIG_PATH_REMOVE_VERSION_NUMBER);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseSignedUrls()
+    {
+        return (bool) Mage::getStoreConfig(self::CONFIG_PATH_USE_SIGNED_URLS);
     }
 }
