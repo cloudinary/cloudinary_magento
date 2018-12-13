@@ -14,7 +14,7 @@ class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements \Cloudinary
         $this->absolutePathRegex = "#^$baseDir/.*#"; //anything starting with the magento base dir
         $this->mediaPathRegex = "#^$mediaDir/.*#"; //anything starting with the media folder
         $this->wysiwygPathRegex = "#^/wysiwyg/.*#"; // anything starting with the /wysiwyg folder
-        $this->productPathRegex = "#(^/cache/.*|^/(\\w/){2})#"; // any path that has '/cache/' prefix, or '/l/l/' structure, where l is a single letter
+        $this->productPathRegex = "#(^/cache/.*|^/([\\w-]/){2})#"; // any path that has '/cache/' prefix, or '/l/l/' structure, where l is a single letter
     }
 
     /**
