@@ -202,6 +202,16 @@
                             <show_in_store>0</show_in_store>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                         </use_root_path>
+                        <use_signed_urls>
+                            <label>Use signed URLs</label>
+                            <comment>A signed Cloudinary image delivery URL is a dynamic URL that has its signature validated before making it available for view</comment>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </use_signed_urls>
                     </fields>
                 </advanced>
             </groups>
