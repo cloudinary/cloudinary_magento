@@ -262,7 +262,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
      */
     public function getUseRootPath()
     {
-        return (bool) Mage::getStoreConfig(self::CONFIG_PATH_REMOVE_VERSION_NUMBER);
+        return (bool) Mage::getStoreConfig(self::CONFIG_PATH_USE_ROOT_PATH);
     }
 
     /**
