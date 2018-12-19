@@ -3,6 +3,7 @@
 use CloudinaryExtension\CredentialValidator;
 use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 use CloudinaryExtension\AutoUploadMapping\RequestProcessor;
+use CloudinaryExtension\AutoUploadMapping\Configuration;
 use CloudinaryExtension\AutoUploadMapping\ApiClient;
 
 class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstract
@@ -38,6 +39,7 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
     public function cloudinaryConfigChanged(Varien_Event_Observer $observer)
     {
         //Clear config cache before mapping
+        Mage::getModel('cloudinary_cloudinary/autoUploadMapping_configuration')->setState(Configuration::INACTIVE);
         Mage::app()->getCacheInstance()->cleanType("config");
         Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => "config"));
 
