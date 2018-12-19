@@ -3,6 +3,7 @@
 use CloudinaryExtension\CredentialValidator;
 use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
 use CloudinaryExtension\AutoUploadMapping\RequestProcessor;
+use CloudinaryExtension\AutoUploadMapping\Configuration;
 use CloudinaryExtension\AutoUploadMapping\ApiClient;
 
 class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstract
@@ -45,7 +46,7 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
             return;
         }
 
-        if (!$this->autoUploadRequestProcessor()->handle('media', Mage::getBaseUrl('media'))) {
+        if (!$this->autoUploadRequestProcessor()->handle('media', Mage::getBaseUrl('media'), true)) {
             Mage::getSingleton('adminhtml/session')->addError(self::AUTO_UPLOAD_SETUP_FAIL_MESSAGE);
             Mage::getModel('cloudinary_cloudinary/logger')->error(self::AUTO_UPLOAD_SETUP_FAIL_MESSAGE);
         } else {
