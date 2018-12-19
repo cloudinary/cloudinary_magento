@@ -39,7 +39,6 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
     public function cloudinaryConfigChanged(Varien_Event_Observer $observer)
     {
         //Clear config cache before mapping
-        Mage::getModel('cloudinary_cloudinary/autoUploadMapping_configuration')->setState(Configuration::INACTIVE);
         Mage::app()->getCacheInstance()->cleanType("config");
         Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => "config"));
 
@@ -47,7 +46,7 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
             return;
         }
 
-        if (!$this->autoUploadRequestProcessor()->handle('media', Mage::getBaseUrl('media'))) {
+        if (!$this->autoUploadRequestProcessor()->handle('media', Mage::getBaseUrl('media'), true)) {
             Mage::getSingleton('adminhtml/session')->addError(self::AUTO_UPLOAD_SETUP_FAIL_MESSAGE);
             Mage::getModel('cloudinary_cloudinary/logger')->error(self::AUTO_UPLOAD_SETUP_FAIL_MESSAGE);
         } else {
