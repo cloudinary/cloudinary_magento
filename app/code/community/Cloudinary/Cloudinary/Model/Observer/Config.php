@@ -28,8 +28,11 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
 
         $data = Mage::helper('cloudinary_cloudinary/config')->flatten('cloudinary', $config->getGroups());
         if ($data[self::ENABLED_FIELD] == '1') {
+            Mage::register('cloudinaryIsEnabled', true);
             $this->validateEnvironmentVariable($data);
             $this->logConfigChange($data);
+        } else {
+            Mage::register('cloudinaryIsEnabled', false);
         }
     }
 
@@ -42,7 +45,7 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
         Mage::app()->getCacheInstance()->cleanType("config");
         Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => "config"));
 
-        if (!Mage::getModel('cloudinary_cloudinary/configuration')->isEnabled()) {
+        if (!Mage::registry('cloudinaryIsEnabled')) {
             return;
         }
 
@@ -62,12 +65,18 @@ class Cloudinary_Cloudinary_Model_Observer_Config extends Mage_Core_Model_Abstra
      */
     private function validateEnvironmentVariable(array $data)
     {
+        $value = (string) $data[self::ENVIRONMENT_FIELD];
+        if (preg_match('/^\*+$/', $value)) {
+            $value = Mage::helper('core')->decrypt($value);
+        }
         $credentialValidator = new CredentialValidator();
-        $environmentVariable = CloudinaryEnvironmentVariable::fromString($data[self::ENVIRONMENT_FIELD]);
+        $environmentVariable = CloudinaryEnvironmentVariable::fromString($value);
 
         if (!$credentialValidator->validate($environmentVariable->getCredentials())) {
+            Mage::register('cloudinaryEnvironmentVariableIsValid', false);
             throw new Mage_Core_Exception(self::ERROR_WRONG_CREDENTIALS);
         }
+        Mage::register('cloudinaryEnvironmentVariableIsValid', true);
     }
 
     /**

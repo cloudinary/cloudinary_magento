@@ -41,7 +41,7 @@
                             <label>Cloudinary Account Credentials</label>
                             <comment>Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.</comment>
                             <frontend_type>password</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <backend_model>cloudinary_cloudinary/system_config_credentials</backend_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -136,7 +136,7 @@
                             <source_model>cloudinary_cloudinary/system_config_source_dropdown_dpr</source_model>
                         </cloudinary_image_dpr>
                         <cloudinary_free_transform_global>
-                            <label>Global custom transform</label>
+                            <label>Global custom transformation</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
