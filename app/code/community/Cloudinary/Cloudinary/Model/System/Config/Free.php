@@ -98,7 +98,7 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
      */
     public function hasAccountConfigured()
     {
-        return Mage::registry('cloudinaryEnvironmentVariableIsValid');
+        return (Mage::registry('cloudinaryEnvironmentVariableIsValid') || (is_null(Mage::registry('cloudinaryEnvironmentVariableIsValid')) && (string)$this->configuration->getCloud() !== ''))? true : false;
     }
 
     /**
