@@ -204,7 +204,11 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     private function getEnvironmentVariable()
     {
         if (is_null($this->environmentVariable)) {
-            $value = Mage::helper('core')->decrypt(Mage::getStoreConfig(self::CONFIG_PATH_ENVIRONMENT_VARIABLE));
+            if (Mage::registry('cloudinaryEnvironmentVariable')) {
+                $value = Mage::helper('core')->decrypt(Mage::registry('cloudinaryEnvironmentVariable'));
+            } else {
+                $value = Mage::helper('core')->decrypt(Mage::getStoreConfig(self::CONFIG_PATH_ENVIRONMENT_VARIABLE));
+            }
             $this->environmentVariable = CloudinaryEnvironmentVariable::fromString($value);
         }
         return $this->environmentVariable;
