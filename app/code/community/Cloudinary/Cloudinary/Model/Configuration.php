@@ -201,7 +201,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     /**
      * @return CloudinaryEnvironmentVariable
      */
-    private function getEnvironmentVariable()
+    public function getEnvironmentVariable()
     {
         if (is_null($this->environmentVariable)) {
             if (Mage::registry('cloudinaryEnvironmentVariable')) {

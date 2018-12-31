@@ -10,14 +10,6 @@ class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Gravity
                 'label' => 'Magento\'s Default',
             ),
             array(
-                'value' => 'face',
-                'label' => 'Face',
-            ),
-            array(
-                'value' => 'faces',
-                'label' => 'Faces',
-            ),
-            array(
                 'value' => 'north_west',
                 'label' => 'North West',
             ),
@@ -52,14 +44,6 @@ class Cloudinary_Cloudinary_Model_System_Config_Source_Dropdown_Gravity
             array(
                 'value' => 'south_east',
                 'label' => 'South East',
-            ),
-            array(
-                'value' => 'face:center',
-                'label' => 'Face (Center)',
-            ),
-            array(
-                'value' => 'faces:center',
-                'label' => 'Faces (Center)',
             ),
         );
     }
