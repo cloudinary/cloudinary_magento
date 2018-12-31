@@ -22,4 +22,24 @@ class Cloudinary_Cloudinary_Helper_Cms_Wysiwyg_Images extends Mage_Cms_Helper_Wy
         }
         return $this->_storageRoot;
     }
+
+    /**
+     * Return URL based on current selected directory or root directory for startup
+     *
+     * @return string
+     */
+    public function getCurrentUrl()
+    {
+        if (!Mage::getModel('cloudinary_cloudinary/configuration')->isEnabled()) {
+            return parent::getCurrentUrl();
+        }
+        if (!$this->_currentUrl) {
+            $mediaPath = Mage::getConfig()->getOptions()->getMediaDir();
+            $path = str_replace($mediaPath, '', $this->getCurrentPath());
+            $path = trim($path, DS);
+            $this->_currentUrl = Mage::app()->getStore($this->_storeId)->getBaseUrl('media') .
+                                 $this->convertPathToUrl($path) . '/';
+        }
+        return $this->_currentUrl;
+    }
 }

@@ -42,7 +42,9 @@ class Cloudinary_Cloudinary_Model_Cms_Adminhtml_Template_Filter extends Mage_Cms
         if (ini_get('allow_url_fopen')) {
             $image = $this->imageFactory->build(
                 $this->imagePath($construction),
-                function() use($construction) { return parent::mediaDirective($construction); }
+                function () use ($construction) {
+                    return parent::mediaDirective($construction);
+                }
             );
 
             return $this->urlGenerator->generateFor($image);

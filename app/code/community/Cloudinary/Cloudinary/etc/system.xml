@@ -49,7 +49,7 @@
                         </cloudinary_enabled>
                         <cloudinary_environment_variable translate="label comment">
                             <label>Cloudinary Account Credentials</label>
-                            <comment>Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.</comment>
+                            <comment><![CDATA[Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.<br>Format should be: cloudinary://API_Key:API_Secret@Cloud_Name]]></comment>
                             <frontend_type>password</frontend_type>
                             <backend_model>cloudinary_cloudinary/system_config_credentials</backend_model>
                             <sort_order>2</sort_order>
