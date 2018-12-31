@@ -134,14 +134,6 @@
     </global>
     <adminhtml>
         <events>
-            <model_config_data_save_before>
-                <observers>
-                    <config_save>
-                        <class>cloudinary_cloudinary/observer_config</class>
-                        <method>configSave</method>
-                    </config_save>
-                </observers>
-            </model_config_data_save_before>
             <admin_system_config_changed_section_cloudinary>
                 <observers>
                     <cloudinary_config_changed>

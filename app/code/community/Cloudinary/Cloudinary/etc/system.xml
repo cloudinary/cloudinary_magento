@@ -37,26 +37,26 @@
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
-                        <cloudinary_environment_variable translate="label comment">
-                            <label>Cloudinary Account Credentials</label>
-                            <comment>Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.</comment>
-                            <frontend_type>password</frontend_type>
-                            <backend_model>cloudinary_cloudinary/system_config_credentials</backend_model>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </cloudinary_environment_variable>
                         <cloudinary_enabled>
                             <label>Enable Cloudinary</label>
                             <comment>When Cloudinary is enabled, images will be served from Cloudinary (where available). When disabled, images will be served locally.</comment>
                             <frontend_type>select</frontend_type>
-                            <sort_order>2</sort_order>
+                            <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                         </cloudinary_enabled>
+                        <cloudinary_environment_variable translate="label comment">
+                            <label>Cloudinary Account Credentials</label>
+                            <comment>Set the credentials of your Cloudinary account. Copy the "Environment variable" string from the dashboard of Cloudinary's Management Console.</comment>
+                            <frontend_type>password</frontend_type>
+                            <backend_model>cloudinary_cloudinary/system_config_credentials</backend_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cloudinary_environment_variable>
                     </fields>
                 </setup>
                 <configuration translate="label comment">
