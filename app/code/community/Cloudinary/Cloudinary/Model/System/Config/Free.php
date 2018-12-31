@@ -30,6 +30,11 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
      */
     protected function _beforeSave()
     {
+        //Clear config cache before mapping
+        Mage::app()->getCacheInstance()->cleanType("config");
+        Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => "config"));
+        Mage::getConfig()->reinit();
+
         if (!$this->hasAccountConfigured()) {
             return parent::_beforeSave();
         }
@@ -98,7 +103,7 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
      */
     public function hasAccountConfigured()
     {
-        return (Mage::registry('cloudinaryEnvironmentVariableIsValid') || (is_null(Mage::registry('cloudinaryEnvironmentVariableIsValid')) && (string)$this->configuration->getCloud() !== ''))? true : false;
+        return (string)$this->configuration->getCloud() !== '';
     }
 
     /**

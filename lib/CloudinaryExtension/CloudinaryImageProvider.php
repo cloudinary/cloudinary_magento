@@ -22,21 +22,15 @@ class CloudinaryImageProvider implements ImageProvider
      * @var ConfigurationBuilder
      */
     private $configurationBuilder;
-    /**
-     * @var CredentialValidator
-     */
-    private $credentialValidator;
 
     public function __construct(
         ConfigurationInterface $configuration,
         ConfigurationBuilder $configurationBuilder,
-        UploadResponseValidator $uploadResponseValidator,
-        CredentialValidator $credentialValidator
+        UploadResponseValidator $uploadResponseValidator
     ) {
         $this->configuration = $configuration;
         $this->uploadResponseValidator = $uploadResponseValidator;
         $this->configurationBuilder = $configurationBuilder;
-        $this->credentialValidator = $credentialValidator;
         $this->authorise();
     }
 
@@ -45,8 +39,7 @@ class CloudinaryImageProvider implements ImageProvider
         return new CloudinaryImageProvider(
             $configuration,
             new ConfigurationBuilder($configuration),
-            new UploadResponseValidator(),
-            new CredentialValidator()
+            new UploadResponseValidator()
         );
     }
 
@@ -99,9 +92,21 @@ class CloudinaryImageProvider implements ImageProvider
         Uploader::destroy($image->getIdWithoutExtension());
     }
 
+    /**
+     * @return bool
+     */
     public function validateCredentials()
     {
-        return $this->credentialValidator->validate($this->configuration->getCredentials());
+        try {
+            $pingValidation = $this->api->ping();
+            if (!(isset($pingValidation["status"]) && $pingValidation["status"] === "ok")) {
+                return false;
+                //throw new ValidatorException(__(self::CREDENTIALS_CHECK_UNSURE));
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
     }
 
     private function authorise()
