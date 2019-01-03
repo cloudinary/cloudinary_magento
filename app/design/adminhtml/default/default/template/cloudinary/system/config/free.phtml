@@ -27,7 +27,7 @@
         },
 
         getSampleImageUrl: function() {
-            return '/admin/cloudinaryajax/sample/key/' + this.secret;
+            return '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/cloudinaryajax/sample/key/'); ?>' + this.secret;
         },
 
         getImageHtml: function(src) {
