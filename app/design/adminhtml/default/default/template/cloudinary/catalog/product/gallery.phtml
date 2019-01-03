@@ -25,7 +25,7 @@
                     </tr>
                     </thead>
                     <tbody id="media_gallery_content_list">
-                    <?php foreach($this->getImages() as $image): ?>
+                    <?php foreach ($this->getImages() as $image): ?>
                         <tr>
                             <td class="cell-image" id="cloudinary_preview_container_<?php echo $image->getValueId(); ?>">
                             </td>
@@ -111,7 +111,7 @@
         },
 
         getAjaxImageUrl: function() {
-            return '/admin/cloudinaryajax/image/key/' + this.secret;
+            return '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/cloudinaryajax/image/key/'); ?>' + this.secret;
         },
 
         getImageId: function(id) {
