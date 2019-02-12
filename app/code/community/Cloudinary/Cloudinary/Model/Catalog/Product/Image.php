@@ -24,7 +24,10 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Image extends Mage_Catalog_Mod
     public function getUrl()
     {
         return (string) $this->_imageFactory->build(
-            $this->_newFile, function() { return parent::getUrl();}
+            $this->_newFile,
+            function () {
+                return parent::getUrl();
+            }
         );
     }
 
