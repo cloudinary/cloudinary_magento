@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>2.9.5</version>
+            <version>2.9.7</version>
         </Cloudinary_Cloudinary>
     </modules>
     <global>
@@ -119,6 +119,7 @@
             <cloudinary_setup>
                 <setup>
                     <module>Cloudinary_Cloudinary</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
                 </setup>
             </cloudinary_setup>
         </resources>

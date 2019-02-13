@@ -16,19 +16,26 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
      */
     private $_urlGenerator;
 
+    /**
+     * @var Configuration
+     */
+    private $_configuration;
+
     public function __construct()
     {
-        $configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+        $this->_configuration = Mage::getModel('cloudinary_cloudinary/configuration');
 
-        $this->_imageFactory = new ImageFactory(
-            $configuration,
-            Mage::getModel('cloudinary_cloudinary/synchronizationChecker')
-        );
+        if ($this->_configuration->isEnabled()) {
+            $this->_imageFactory = new ImageFactory(
+                $this->_configuration,
+                Mage::getModel('cloudinary_cloudinary/synchronizationChecker')
+            );
 
-        $this->_urlGenerator = new UrlGenerator(
-            $configuration,
-            CloudinaryImageProvider::fromConfiguration($configuration)
-        );
+            $this->_urlGenerator = new UrlGenerator(
+                $this->_configuration,
+                CloudinaryImageProvider::fromConfiguration($this->_configuration)
+            );
+        }
     }
 
     /**
@@ -37,7 +44,13 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
      */
     public function getMediaUrl($file)
     {
-        $image = $this->_imageFactory->build($file, function() use($file) { return parent::getMediaUrl($file); });
+        if (!$this->_configuration->isEnabled()) {
+            return parent::getMediaUrl($file);
+        }
+
+        $image = $this->_imageFactory->build($file, function () use ($file) {
+            return parent::getMediaUrl($file);
+        });
 
         return $this->_urlGenerator->generateFor(
             $image,

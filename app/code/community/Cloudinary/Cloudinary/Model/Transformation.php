@@ -28,33 +28,65 @@ class Cloudinary_Cloudinary_Model_Transformation extends Mage_Core_Model_Abstrac
      * @param string $imageFile
      * @return Transformation
      */
-    public function transformationForImage($imageFile)
+    public function transformationForImage($imageFile, Mage_Catalog_Model_Product $product = null)
     {
         return $this->addFreeformTransformationForImage(
             $this->configuration->getDefaultTransformation(),
-            $imageFile
+            $imageFile,
+            $product
         );
     }
 
     /**
      * @param Transformation $transformation
      * @param string $imageFile
+     * @param Mage_Catalog_Model_Product|null $product
      * @return Transformation
      */
-    public function addFreeformTransformationForImage(Transformation $transformation, $imageFile)
+    public function addFreeformTransformationForImage(Transformation $transformation, $imageFile, Mage_Catalog_Model_Product $product = null)
     {
-        $transformationString = $this->cache->loadCache(
-            $this->getTransformCacheKeyFromImageFile($imageFile),
-            function () use ($imageFile) {
-                $this->warmTransformationCache();
+        $transformationString = false;
+        if ($product) {
+            $cloudinaryData = json_decode((string)$product->getCloudinaryData(), true) ?: array();
+            if (isset($cloudinaryData['transformation']) && isset($cloudinaryData['transformation'][md5($imageFile)])) {
+                $transformationString = $cloudinaryData['transformation'][md5($imageFile)];
+            } else {
+                $updateProduct = true;
+                $transformationString = $this->cache->loadCache(
+                    $this->getTransformCacheKeyFromImageFile($imageFile),
+                    function () use ($imageFile) {
+                        $this->warmTransformationCache();
 
-                $this->load($imageFile);
-                if (($this->getImageName() === $imageFile) && $this->hasFreeTransformation()) {
-                    return $this->getFreeTransformation();
-                }
-                return '';
+                        $this->load($imageFile);
+                        if (($this->getImageName() === $imageFile) && $this->hasFreeTransformation()) {
+                            return $this->getFreeTransformation();
+                        }
+                        return '';
+                    }
+                );
             }
-        );
+        } else {
+            /*$transformationString = $this->cache->loadCache(
+                $this->getTransformCacheKeyFromImageFile($imageFile),
+                function () use ($imageFile) {
+                    $this->warmTransformationCache();
+
+                    $this->load($imageFile);
+                    if (($this->getImageName() === $imageFile) && $this->hasFreeTransformation()) {
+                        return $this->getFreeTransformation();
+                    }
+                    return '';
+                }
+            );*/
+        }
+
+        if (isset($updateProduct)) {
+            //$initialEnvironmentInfo = Mage::getSingleton('core/app_emulation')->startEnvironmentEmulation(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $cloudinaryData['transformation'][md5($imageFile)] = $transformationString;
+            $product->setCloudinaryData(json_encode($cloudinaryData));
+            $product->getResource()->saveAttribute($product, 'cloudinary_data');
+            //Mage::getSingleton('core/app_emulation')->stopEnvironmentEmulation($initialEnvironmentInfo);
+        }
 
         if ($transformationString != false) {
             $transformation->withFreeform(Freeform::fromString($transformationString));
