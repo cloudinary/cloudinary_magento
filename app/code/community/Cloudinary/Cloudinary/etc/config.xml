@@ -20,6 +20,7 @@
                 <rewrite>
                     <product_image>Cloudinary_Cloudinary_Model_Catalog_Product_Image</product_image>
                     <product_media_config>Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config</product_media_config>
+                    <template_filter>Cloudinary_Cloudinary_Model_Catalog_Template_Filter</template_filter>
                 </rewrite>
             </catalog>
             <cms>
