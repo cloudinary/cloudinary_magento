@@ -1,5 +1,5 @@
 <_>
-   <form_key>Eij95mpfQEtkC7Y2</form_key>
+   <form_key>sYNY6KfwpHEJpnWx</form_key>
    <name>Cloudinary_Cloudinary</name>
    <channel>community</channel>
    <version_ids>
@@ -41,7 +41,7 @@
             <max/>
          </max>
          <files>
-            <files>                          </files>
+            <files>                           </files>
          </files>
       </package>
       <extension>
@@ -108,8 +108,4 @@
          <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>
