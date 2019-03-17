@@ -2,12 +2,11 @@
 
 class Cloudinary_Cloudinary_Model_Catalog_Product_Media extends Mage_Core_Model_Abstract
 {
-
     private $_newImages;
 
     public function newImagesForProduct(Mage_Catalog_Model_Product $product)
     {
-        $this->_setNewImages($product->getData('media_gallery'));
+        $this->_setNewImages((array)$product->getData('media_gallery'));
         return $this->_getNewImages($product);
     }
 
