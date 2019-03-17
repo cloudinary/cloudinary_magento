@@ -37,7 +37,7 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
     {
         return array_filter(
             $imageData,
-            function($id) use ($imageUpdated) {
+            function ($id) use ($imageUpdated) {
                 return $imageUpdated[$id];
             },
             ARRAY_FILTER_USE_KEY
@@ -71,12 +71,32 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
     {
         $mediaImages = $this->getMediaGalleryImages($product);
 
+        // TODO: Should be removed on future releases
         foreach ($imageData as $id => $freeTransform) {
             Mage::getModel('cloudinary_cloudinary/transformation')
                 ->setImageName($this->getImageNameForId($id, $mediaImages))
                 ->setFreeTransformation($freeTransform)
                 ->save();
+
+            $cloudinaryData = json_decode((string)$product->getCloudinaryData(), true) ?: array();
+            $cloudinaryData['transformation'] = (isset($cloudinaryData['transformation']))? (array) $cloudinaryData['transformation'] : array();
+            $cloudinaryData['transformation'][md5($this->getImageNameForId($id, $mediaImages))] = (string) $freeTransform;
+            $product->setCloudinaryData(json_encode($cloudinaryData));
         }
+
+
+        /*foreach ($mediaImages as &$image) {
+            if (isset($imageData[$image["value_id"]])) {
+                $image['cloudinary_transformation'] = $imageData[$image["value_id"]];
+            }
+        }
+
+        $productPost = Mage::app()->getRequest()->getPost("product");
+        $productPost['media_gallery']['images'] = json_encode($mediaImages);
+        Mage::app()->getRequest()->setPost("product", $productPost);
+        $mediaGallery = $product->getMediaGallery();
+        $mediaGallery['images'] = $productPost['media_gallery']['images'];
+        $product->setData('media_gallery', $mediaGallery);*/
     }
 
     /**

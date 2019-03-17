@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>2.9.5</version>
+            <version>2.9.7</version>
         </Cloudinary_Cloudinary>
     </modules>
     <global>
@@ -20,6 +20,7 @@
                 <rewrite>
                     <product_image>Cloudinary_Cloudinary_Model_Catalog_Product_Image</product_image>
                     <product_media_config>Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config</product_media_config>
+                    <template_filter>Cloudinary_Cloudinary_Model_Catalog_Template_Filter</template_filter>
                 </rewrite>
             </catalog>
             <cms>
@@ -119,6 +120,7 @@
             <cloudinary_setup>
                 <setup>
                     <module>Cloudinary_Cloudinary</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
                 </setup>
             </cloudinary_setup>
         </resources>

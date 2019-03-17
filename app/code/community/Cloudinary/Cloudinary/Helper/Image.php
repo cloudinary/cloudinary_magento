@@ -81,7 +81,9 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
      */
     public function resize($width, $height = null)
     {
-        $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height);
+        if ($this->_configuration->isEnabled()) {
+            $this->_dimensions = Dimensions::fromWidthAndHeight($width, $height);
+        }
 
         return parent::resize($width, $height);
     }
@@ -104,16 +106,22 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
      */
     public function __toString()
     {
+        if (!$this->_configuration->isEnabled()) {
+            return parent::__toString();
+        }
         $image = $this->_imageFactory->build(
             $this->_getRequestedImageFile(),
-            function() { return parent::__toString();}
+            function () {
+                return parent::__toString();
+            }
         );
 
         return $this->_urlGenerator->generateFor(
             $image,
             $this->_transformation->addFreeformTransformationForImage(
                 $this->createTransformation(),
-                $this->_getRequestedImageFile()
+                $this->_getRequestedImageFile(),
+                $this->getProduct()
             )
         );
     }
