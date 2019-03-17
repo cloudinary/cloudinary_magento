@@ -8,7 +8,7 @@ use CloudinaryExtension\Image\Transformation\Freeform;
 
 class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Config_Data
 {
-    const ERROR_FORMAT = 'Incorrect custom transform - %s';
+    const ERROR_FORMAT = 'Incorrect Cloudinary Transformation - %s';
     const ERROR_DEFAULT = 'please update';
 
     /**
@@ -43,25 +43,41 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
             ->getDefaultTransformation()
             ->withFreeform(Freeform::fromString($this->getValue()));
 
-        $this->validateImageUrl($this->sampleImageUrl($transform));
+        $this->validateImageUrl($this->sampleImageUrl($transform), false);
 
         return $this;
     }
 
     /**
      * @param string $url
+     * @param bool   $strict Throw exception on errors
+     * @return bool
      */
-    public function validateImageUrl($url)
+    public function validateImageUrl($url, $strict = true)
     {
         try {
             $response = $this->httpRequest($url);
         } catch (Exception $e) {
-            throw new Mage_Core_Exception(sprintf(self::ERROR_FORMAT, self::ERROR_DEFAULT));
+            $this->setValue(null);
+            if ($strict) {
+                throw new Mage_Core_Exception(sprintf(self::ERROR_FORMAT, self::ERROR_DEFAULT));
+            } else {
+                Mage::getSingleton('adminhtml/session')->addError(sprintf(self::ERROR_FORMAT, self::ERROR_DEFAULT));
+            }
+            return false;
         }
 
-        if ($response->isError()) {
-            throw new Mage_Core_Exception($this->formatError($response));
+        if (is_object($response) && ($response->error || !in_array($response->code, [200,301,302]))) {
+            $this->setValue(null);
+            if ($strict) {
+                throw new Mage_Core_Exception($this->formatError($response));
+            } else {
+                Mage::getSingleton('adminhtml/session')->addError($this->formatError($response));
+            }
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -79,11 +95,11 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
      * @param Zend_Http_Response $response
      * @return string
      */
-    public function formatError(Zend_Http_Response $response)
+    public function formatError($response)
     {
         return sprintf(
             self::ERROR_FORMAT,
-            $response->getStatus() == 400 ? $response->getHeader('x-cld-error') : self::ERROR_DEFAULT
+            (is_object($response) && isset($response->headers['x-cld-error']) && $response->headers['x-cld-error']) ? $response->headers['x-cld-error'] : self::ERROR_DEFAULT
         );
     }
 
@@ -93,9 +109,16 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
      */
     public function httpRequest($url)
     {
-        $client = new Varien_Http_Client($url);
-        $client->setMethod(Varien_Http_Client::GET);
-        return $client->request();
+        $curl = new Varien_Http_Adapter_Curl();
+        $curl->write(Zend_Http_Client::GET, $url);
+        $response = $curl->read();
+        $response = (object)[
+            "code" => Zend_Http_Response::extractCode($response),
+            "body" => Zend_Http_Response::extractBody($response),
+            "headers" => (array) Zend_Http_Response::extractHeaders($response),
+            "error" => $curl->getError()
+        ];
+        return $response;
     }
 
     /**
