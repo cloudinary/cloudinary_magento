@@ -4,6 +4,11 @@ Magento 1 module for integration with Cloudinary.
 
 ---
 
+## Install From Magento Admin (Using Magento Connect Manager)
+1. Log into your Magento admin panel & navigate to System > Magento Connect > Magento Connect Manager.
+2. Under "Direct package file upload", upload the package file that's included in this repository (var/connect/Cloudinary_Cloudinary-\*.tgz).
+3. Install the package...
+
 ## Install Manually
 1. Download & copy/drag the directories `app`, `lib` & `skin` into your Magento 1 root dir.
 2. Clear cache from Magento admin panel or by running `rm -rf var/cache/* var/full_page_cache/*` under your Magento 1 root dir.
