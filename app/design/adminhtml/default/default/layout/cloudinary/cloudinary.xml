@@ -61,4 +61,9 @@
         </block>
     </adminhtml_cloudinaryproduct_gallery>
 
+    <adminhtml_system_config_edit>
+        <reference name="head">
+            <action method="addJs"><file>jscolor/jscolor.js</file></action>
+        </reference>
+    </adminhtml_system_config_edit>
 </layout>
