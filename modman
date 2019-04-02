@@ -4,4 +4,6 @@ lib/CloudinaryExtension lib/CloudinaryExtension
 lib/Cloudinary lib/Cloudinary
 app/design/adminhtml/default/default/layout/cloudinary app/design/adminhtml/default/default/layout/cloudinary
 app/design/adminhtml/default/default/template/cloudinary app/design/adminhtml/default/default/template/cloudinary
+app/design/frontend/base/default/layout/cloudinary app/design/frontend/base/default/layout/cloudinary
+app/design/frontend/base/default/template/cloudinary app/design/frontend/base/default/template/cloudinary
 skin/adminhtml/default/default/images/cloudinary skin/adminhtml/default/default/images/cloudinary

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <catalog_product_view>
+        <reference name="head">
+            <block type="core/text" name="cloudinary.product_gallery.head_scripts" ifconfig="cloudinary/product_gallery/enabled">
+                <action method="setText">
+                    <text><![CDATA[<script type="text/javascript" src="https://product-gallery.cloudinary.com/all.js"></script>]]></text>
+                </action>
+            </block>
+        </reference>
+    </catalog_product_view>
+</layout>

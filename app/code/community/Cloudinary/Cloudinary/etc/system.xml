@@ -175,10 +175,335 @@
                         </cloudinary_log_filename>
                     </fields>
                 </log>
+                <product_gallery translate="label">
+                    <label>Product Gallery</label>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <expanded>0</expanded>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Enable Cloudinary's product gallery</label>
+                            <comment>Enable Cloudinary's product gallery (override Magento's default)</comment>
+                            <config_path>cloudinary/product_gallery/enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+
+                        <themeProps type="group" translate="label">
+                            <label>Theme colors</label>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <expanded>1</expanded>
+                            <fields>
+                                <themeProps_primary translate="label">
+                                    <label>Primary</label>
+                                    <config_path>cloudinary/product_gallery/themeProps_primary</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <backend_model>cloudinary_cloudinary/system_config_HexColor</backend_model>
+                                    <sort_order>10</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>color validate-length minimum-length-4 maximum-length-7</validate>
+                                </themeProps_primary>
+                                <themeProps_onPrimary translate="label">
+                                    <label>onPrimary</label>
+                                    <config_path>cloudinary/product_gallery/themeProps_onPrimary</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <backend_model>cloudinary_cloudinary/system_config_HexColor</backend_model>
+                                    <sort_order>20</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>color validate-length minimum-length-4 maximum-length-7</validate>
+                                </themeProps_onPrimary>
+                                <themeProps_active translate="label">
+                                    <label>active</label>
+                                    <config_path>cloudinary/product_gallery/themeProps_active</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <backend_model>cloudinary_cloudinary/system_config_HexColor</backend_model>
+                                    <sort_order>30</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>color validate-length minimum-length-4 maximum-length-7</validate>
+                                </themeProps_active>
+                                <themeProps_onActive translate="label">
+                                    <label>onActive</label>
+                                    <config_path>cloudinary/product_gallery/themeProps_onActive</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <backend_model>cloudinary_cloudinary/system_config_HexColor</backend_model>
+                                    <sort_order>40</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>color validate-length minimum-length-4 maximum-length-7</validate>
+                                </themeProps_onActive>
+                            </fields>
+                        </themeProps>
+
+                        <main_viewer_parameters type="group" translate="label">
+                            <label>Main viewer parameters</label>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <expanded>1</expanded>
+                            <fields>
+                                <transition translate="label comment">
+                                    <label>Fade transition</label>
+                                    <config_path>cloudinary/product_gallery/transition</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_Transition</source_model>
+                                    <sort_order>0</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </transition>
+                                <aspectRatio translate="label comment">
+                                    <label>Aspect ratio</label>
+                                    <config_path>cloudinary/product_gallery/aspectRatio</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_AspectRatio</source_model>
+                                    <sort_order>10</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </aspectRatio>
+                                <navigation translate="label comment">
+                                    <label>Navigation</label>
+                                    <config_path>cloudinary/product_gallery/navigation</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_Navigation</source_model>
+                                    <sort_order>20</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </navigation>
+                                <zoom translate="label comment">
+                                    <label>Show zoom</label>
+                                    <config_path>cloudinary/product_gallery/zoom</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>adminhtml/system_config_source_yesno</source_model>
+                                    <sort_order>30</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </zoom>
+                                <zoomProps_type translate="label comment">
+                                    <label>Zoom type</label>
+                                    <config_path>cloudinary/product_gallery/zoomProps_type</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ZoomType</source_model>
+                                    <sort_order>40</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <zoom>1</zoom>
+                                    </depends>
+                                </zoomProps_type>
+                                <zoomProps_viewerPosition translate="label comment">
+                                    <label>Zoom trigger</label>
+                                    <config_path>cloudinary/product_gallery/zoomProps_viewerPosition</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ZoomViewerPosition</source_model>
+                                    <sort_order>50</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <zoom>1</zoom>
+                                        <zoomProps_type>flyout</zoomProps_type>
+                                    </depends>
+                                </zoomProps_viewerPosition>
+                                <zoomProps_trigger translate="label comment">
+                                    <label>Zoom viewer position</label>
+                                    <config_path>cloudinary/product_gallery/zoomProps_trigger</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ZoomTrigger</source_model>
+                                    <sort_order>60</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <zoom>1</zoom>
+                                    </depends>
+                                </zoomProps_trigger>
+                            </fields>
+                        </main_viewer_parameters>
+
+                        <carousel_parameters type="group" translate="label">
+                            <label>Carousel parameters</label>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <expanded>1</expanded>
+                            <fields>
+                                <carouselLocation translate="label comment" type="select">
+                                    <label>Carousel Location</label>
+                                    <config_path>cloudinary/product_gallery/carouselLocation</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_CarouselLocation</source_model>
+                                    <sort_order>10</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </carouselLocation>
+                                <carouselOffset translate="label comment">
+                                    <label>Carousel Offset</label>
+                                    <config_path>cloudinary/product_gallery/carouselOffset</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>20</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>validate-number</validate>
+                                </carouselOffset>
+                                <carouselStyle translate="label comment">
+                                    <label>Carousel Style</label>
+                                    <config_path>cloudinary/product_gallery/carouselStyle</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_CarouselStyle</source_model>
+                                    <sort_order>30</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </carouselStyle>
+                                <thumbnailProps_width translate="label comment">
+                                    <label>Thumbnail width</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_width</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>40</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>validate-number</validate>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_width>
+                                <thumbnailProps_height translate="label comment">
+                                    <label>Thumbnail height</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_height</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>50</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>validate-number</validate>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_height>
+                                <thumbnailProps_navigationShape translate="label comment">
+                                    <label>Navigation button shape</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_navigationShape</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ThumbnailsNavigationShape</source_model>
+                                    <sort_order>60</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_navigationShape>
+                                <thumbnailProps_selectedStyle translate="label comment">
+                                    <label>Thumbnail selected style</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_selectedStyle</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ThumbnailsSelectedStyle</source_model>
+                                    <sort_order>70</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_selectedStyle>
+                                <thumbnailProps_selectedBorderPosition translate="label comment">
+                                    <label>Thumbnail selected border position</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_selectedBorderPosition</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ThumbnailsSelectedBorderPosition</source_model>
+                                    <sort_order>80</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_selectedBorderPosition>
+                                <thumbnailProps_selectedBorderWidth translate="label comment">
+                                    <label>Thumbnail selected border width</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_selectedBorderWidth</config_path>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>90</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <validate>validate-number</validate>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_selectedBorderWidth>
+                                <thumbnailProps_mediaSymbolShape translate="label comment">
+                                    <label>Thumbnail media icon shape</label>
+                                    <config_path>cloudinary/product_gallery/thumbnailProps_mediaSymbolShape</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_ThumbnailsMediaSymbolShape</source_model>
+                                    <sort_order>100</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <carouselStyle>thumbnails</carouselStyle>
+                                    </depends>
+                                </thumbnailProps_mediaSymbolShape>
+                                <indicatorProps_shape translate="label comment">
+                                    <label>Indicators shape</label>
+                                    <config_path>cloudinary/product_gallery/indicatorProps_shape</config_path>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>cloudinary_cloudinary/system_config_source_ProductGallery_IndicatorsShape</source_model>
+                                    <sort_order>110</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>0</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                    <depends>
+                                        <carouselStyle>indicators</carouselStyle>
+                                    </depends>
+                                </indicatorProps_shape>
+                            </fields>
+                        </carousel_parameters>
+
+                        <custom_free_params translate="label comment">
+                            <label>Custom free parameters (advanced)</label>
+                            <comment>Custom Json code that will add to (or override) the above params</comment>
+                            <config_path>cloudinary/product_gallery/custom_free_params</config_path>
+                            <frontend_type>textarea</frontend_type>
+                            <backend_model>cloudinary_cloudinary/system_config_ProductGalleryCustomFreeParams</backend_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </custom_free_params>
+                    </fields>
+
+                </product_gallery>
                 <advanced translate="label comment">
                     <label>Advanced</label>
                     <show_in_default>1</show_in_default>
-                    <sort_order>5</sort_order>
+                    <sort_order>6</sort_order>
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
