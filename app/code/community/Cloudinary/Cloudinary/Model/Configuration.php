@@ -15,28 +15,60 @@ use CloudinaryExtension\UploadConfig;
 
 class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterface
 {
+    //= Basics
     const CONFIG_PATH_ENABLED = 'cloudinary/setup/cloudinary_enabled';
-    const STATUS_ENABLED = 1;
-    const STATUS_DISABLED = 0;
-    const USER_PLATFORM_TEMPLATE = 'CloudinaryMagento/%s (Magento %s)';
     const CONFIG_PATH_ENVIRONMENT_VARIABLE = 'cloudinary/setup/cloudinary_environment_variable';
-    //= Configuration
     const CONFIG_SMART_SERVING = 'cloudinary/configuration/cloudinary_smart_serving';
     const CONFIG_CDN_SUBDOMAIN = 'cloudinary/configuration/cloudinary_cdn_subdomain';
     const CONFIG_FOLDERED_MIGRATION = 'cloudinary/configuration/cloudinary_foldered_migration';
+
     //= Transformations
     const CONFIG_DEFAULT_GRAVITY = 'cloudinary/transformations/cloudinary_gravity';
     const CONFIG_DEFAULT_QUALITY = 'cloudinary/transformations/cloudinary_image_quality';
     const CONFIG_DEFAULT_DPR = 'cloudinary/transformations/cloudinary_image_dpr';
     const CONFIG_DEFAULT_FETCH_FORMAT = 'cloudinary/transformations/cloudinary_fetch_format';
     const CONFIG_GLOBAL_FREEFORM = 'cloudinary/transformations/cloudinary_free_transform_global';
+
     //= Logging
     const CONFIG_LOG_ACTIVE = 'cloudinary/log/cloudinary_log_active';
     const CONFIG_LOG_FILENAME = 'cloudinary/log/cloudinary_log_filename';
+
     //= Advanced
     const CONFIG_PATH_REMOVE_VERSION_NUMBER = 'cloudinary/advanced/remove_version_number';
     const CONFIG_PATH_USE_ROOT_PATH = 'cloudinary/advanced/use_root_path';
     const CONFIG_PATH_USE_SIGNED_URLS = 'cloudinary/advanced/use_signed_urls';
+
+    //= Product Gallery
+    const CONFIG_PATH_PG_ALL = 'cloudinary/product_gallery';
+    const CONFIG_PATH_PG_ENABLED = 'cloudinary/product_gallery/enabled';
+    const CONFIG_PATH_PG_THEMEPROPS_PRIMARY = 'cloudinary/product_gallery/themeProps_primary';
+    const CONFIG_PATH_PG_THEMEPROPS_ONPRIMARY = 'cloudinary/product_gallery/themeProps_onPrimary';
+    const CONFIG_PATH_PG_THEMEPROPS_ACTIVE = 'cloudinary/product_gallery/themeProps_active';
+    const CONFIG_PATH_PG_THEMEPROPS_ONACTIVE = 'cloudinary/product_gallery/themeProps_onActive';
+    const CONFIG_PATH_PG_TRANSITION = 'cloudinary/product_gallery/transition';
+    const CONFIG_PATH_PG_ASPECT_RATIO = 'cloudinary/product_gallery/aspectRatio';
+    const CONFIG_PATH_PG_ZOOMPROPS_NAVIGATION = 'cloudinary/product_gallery/navigation';
+    const CONFIG_PATH_PG_ZOOM = 'cloudinary/product_gallery/zoom';
+    const CONFIG_PATH_PG_ZOOMPROPS_TYPE = 'cloudinary/product_gallery/zoomProps_type';
+    const CONFIG_PATH_PG_ZOOMPROPS_POSITION = 'cloudinary/product_gallery/zoomPropsViewerPosition';
+    const CONFIG_PATH_PG_ZOOMPROPS_TRIGGER = 'cloudinary/product_gallery/zoomProps_trigger';
+    const CONFIG_PATH_PG_CAROUSEL_LOCATION = 'cloudinary/product_gallery/carouselLocation';
+    const CONFIG_PATH_PG_CAROUSEL_OFFSET = 'cloudinary/product_gallery/carouselOffset';
+    const CONFIG_PATH_PG_CAROUSEL_STYLE = 'cloudinary/product_gallery/carouselStyle';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_WIDTH = 'cloudinary/product_gallery/thumbnailProps_width';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_HEIGHT = 'cloudinary/product_gallery/thumbnailProps_height';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_NAVIGATION_SHAPE = 'cloudinary/product_gallery/thumbnailProps_navigationShape';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_SELECTED_STYLE = 'cloudinary/product_gallery/thumbnailProps_selectedStyle';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_SELECTED_BORDER_POSITION = 'cloudinary/product_gallery/thumbnailProps_selectedBorderPosition';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_SELECTED_BORDER_WIDTH = 'cloudinary/product_gallery/thumbnailProps_selectedBorderWidth';
+    const CONFIG_PATH_PG_THUMBNAILPROPS_MEDIA_ICON_SHAPE = 'cloudinary/product_gallery/thumbnailProps_mediaSymbolShape';
+    const CONFIG_PATH_PG_INDICATORPROPS_SHAPE = 'cloudinary/product_gallery/indicatorProps_shape';
+    const CONFIG_PATH_PG_CUSTOM_FREE_PARAMS = 'cloudinary/product_gallery/custom_free_params';
+
+    //= Others
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
+    const USER_PLATFORM_TEMPLATE = 'CloudinaryMagento/%s (Magento %s)';
 
     private $environmentVariable;
 
@@ -252,6 +284,22 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     private function getDefaultGlobalFreeform()
     {
         return Mage::getStoreConfig(self::CONFIG_GLOBAL_FREEFORM);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledProductGallery()
+    {
+        return (bool) Mage::getStoreConfig(self::CONFIG_PATH_PG_ENABLED);
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductGalleryAll()
+    {
+        return (array) Mage::getStoreConfig(self::CONFIG_PATH_PG_ALL);
     }
 
     /**
