@@ -81,7 +81,7 @@ class Cloudinary_Cloudinary_Model_Observer_ProductGalleryOverride extends Mage_C
                             $publicId = explode('/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/', $publicId);
                             $prefix = array_shift($publicId);
                             $publicId = Mage_Core_Model_Store::URL_TYPE_MEDIA . '/' . implode('/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/', $publicId);
-                            $publicId = preg_replace('/\.[^.]+$/', '', $publicId);
+                            //$publicId = preg_replace('/\.[^.]+$/', '', $publicId);
                             $transformation = basename($prefix);
                         } else {
                             $publicId = null;
