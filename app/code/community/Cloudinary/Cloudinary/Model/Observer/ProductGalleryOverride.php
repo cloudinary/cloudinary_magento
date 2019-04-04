@@ -75,10 +75,23 @@ class Cloudinary_Cloudinary_Model_Observer_ProductGalleryOverride extends Mage_C
             if ($galleryAssets = $this->productGalleryBlock->getGalleryImages()) {
                 foreach ($galleryAssets as $key => $_image) {
                     if ($this->productGalleryBlock->isGalleryImageVisible($_image)) {
-                        $this->cloudinaryPGoptions['mediaAssets'][] = (object)[
-                            "publicId" => $this->productGalleryBlock->getGalleryImageUrl($_image),
-                            "mediaType" => 'image',
-                        ];
+                        $publicId = $this->productGalleryBlock->getGalleryImageUrl($_image);
+                        if (strpos($publicId, '.cloudinary.com/') !== false && strpos($publicId, '/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/') !== false) {
+                            $publicId = preg_replace('/\/v[0-9]{1,10}\//', '/', $publicId);
+                            $publicId = explode('/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/', $publicId);
+                            $prefix = array_shift($publicId);
+                            $publicId = Mage_Core_Model_Store::URL_TYPE_MEDIA . '/' . implode('/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/', $publicId);
+                            $transformation = basename($prefix);
+                        } else {
+                            $publicId = null;
+                        }
+                        if ($publicId) {
+                            $this->cloudinaryPGoptions['mediaAssets'][] = (object)[
+                                "publicId" => $publicId,
+                                "mediaType" => 'image',
+                                "transformation" => $transformation,
+                            ];
+                        }
                     }
                 }
             }
