@@ -1,5 +1,17 @@
-<?php $images = $this->getImages(); ?>
-<div class="entry-edit custom-options product-custom-options">
+<?php
+    $images = $this->getImages();
+    $jsonData = [];
+    foreach ($this->getImages() as $image) {
+        $jsonData[] = [
+            'value_id' => $image->getValueId(),
+            'label' => $image->getLabel(),
+            'free_transformation' => $image->getFreeTransformation(),
+            'file' => $image->getFile(),
+        ];
+    }
+    $jsonData = Mage::helper('core')->jsonEncode($jsonData);
+?>
+<div id="cloudinary_transformation_tab" class="entry-edit custom-options product-custom-options">
     <div class="entry-edit-head">
         <h4>Cloudinary product specific image transformations</h4>
     </div>
@@ -20,7 +32,7 @@
                     <tr class="headings">
                         <th><?php echo Mage::helper('catalog')->__('Image') ?></th>
                         <th><?php echo Mage::helper('catalog')->__('Label') ?></th>
-                        <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Cloudinary free transform') ?></th>
+                        <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Cloudinary free transformation') ?></th>
                         <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Action') ?></th>
                     </tr>
                     </thead>
@@ -209,8 +221,7 @@
             input.on('keydown', function() { self.setPreviewActiveState(id, true); });
             input.on('paste', function() { self.setPreviewActiveState(id, true); });
             input.on('input', function() { self.setPreviewActiveState(id, true); });
-        }
-
+        },
     };
 
     $$('.cloudinary_preview_button').each(function(button) {
@@ -218,5 +229,14 @@
         window.cloudinary.addPreviewButtonListener(button);
         window.cloudinary.addTextChangeListener(button.getAttribute('data-id'));
     });
+
+    window.cloudinary_transformation_tab_images = <?php echo $jsonData; ?>;
+
+    window.cloudinaryTransformationTabApp = new Vue({
+        el: '#cloudinary_transformation_tab',
+        data: {
+            images: window.cloudinary_transformation_tab_images
+        }
+    })
 
 </script>
