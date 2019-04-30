@@ -1,15 +1,17 @@
 <?php
     $images = $this->getImages();
-    $jsonData = [];
+    $imagesData = [];
     foreach ($this->getImages() as $image) {
-        $jsonData[] = [
+        $imagesData[$image->getValueId()] = [
             'value_id' => $image->getValueId(),
             'label' => $image->getLabel(),
             'free_transformation' => $image->getFreeTransformation(),
+            'orig_free_transformation' => $image->getFreeTransformation(),
             'file' => $image->getFile(),
+            'image_url' => $image->getUrl(),
+            'error' => false,
         ];
     }
-    $jsonData = Mage::helper('core')->jsonEncode($jsonData);
 ?>
 <div id="cloudinary_transformation_tab" class="entry-edit custom-options product-custom-options">
     <div class="entry-edit-head">
@@ -20,68 +22,66 @@
 
         <div style="width: 60%;">
 
-            <?php if (count($images) && $this->isCloudinaryEnabled()): ?>
+            <?php if ($this->isCloudinaryEnabled()): ?>
 
-            <div class="grid">
-                <table cellspacing="0" class="data border" id="media_gallery_content_grid" style="margin-top: 10px;">
-                    <col width="250" />
-                    <col width="200" />
-                    <col />
-                    <col width="100" />
-                    <thead>
-                    <tr class="headings">
-                        <th><?php echo Mage::helper('catalog')->__('Image') ?></th>
-                        <th><?php echo Mage::helper('catalog')->__('Label') ?></th>
-                        <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Cloudinary free transformation') ?></th>
-                        <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Action') ?></th>
-                    </tr>
-                    </thead>
-                    <tbody id="media_gallery_content_list">
-                        <tr v-for="image in images">
-                            <td class="cell-image" v-bind:id="'cloudinary_preview_container_' + image.value_id"></td>
-                            <td class="cell-label">{{ image.label }}</td>
-                            <td>
-                                <input type="text"
-                                    v-bind:id="'cloudinary_input_' + image.value_id"
-                                    v-bind:name="'cloudinary_free[' + image.value_id + ']'"
-                                    v-bind:value="image.free_transformation"
-                                    style="width: 80%;" />
-                                <input type="hidden"
-                                    v-bind:id="'cloudinary_input_updated_' + image.value_id"
-                                    v-bind:name="'cloudinary_free_updated[' + image.value_id + ']'"
-                                    v-bind:value="''" />
-                            </td>
-                            <td>
-                                <button class="cloudinary_preview_button" type="button"
-                                    v-bind:id="'cloudinary_preview_button_' + image.value_id"
-                                    v-bind:data-id="image.value_id"
-                                    v-bind:data-file="image.file">
-                                    Preview
-                                </button>
-                            </td>
+                <div v-if="Object.keys(images).length" class="grid">
+                    <table cellspacing="0" class="data border" id="media_gallery_content_grid" style="margin-top: 10px;">
+                        <col width="250" />
+                        <col width="200" />
+                        <col />
+                        <col width="100" />
+                        <thead>
+                        <tr class="headings">
+                            <th><?php echo Mage::helper('catalog')->__('Image') ?></th>
+                            <th><?php echo Mage::helper('catalog')->__('Label') ?></th>
+                            <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Cloudinary free transformation') ?></th>
+                            <th><?php echo Mage::helper('cloudinary_cloudinary')->__('Action') ?></th>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody id="media_gallery_content_list">
+                            <tr v-for="(image, index) in images">
+                                <td class="cell-image">
+                                    <img v-if="image.image_url && !image.error" v-bind:src="image.image_url" style="width:auto;height:auto;max-width:250px;max-height:250px;min-height:50px;" />
+                                    <ul v-if="image.error" class="messages"><li class="error-msg">{{ image.error }}</li></ul>
+                                </td>
+                                <td class="cell-label">{{ image.label }}</td>
+                                <td>
+                                    <input type="text"
+                                        v-bind:name="'cloudinary_free[' + image.value_id + ']'"
+                                        v-model="image.free_transformation"
+                                        style="width: 80%;" />
+                                    <input type="hidden" v-bind:name="'cloudinary_free_updated[' + image.value_id + ']'" v-model="image.updated" />
+                                </td>
+                                <td>
+                                    <button v-bind:class="{ 'disabled': !hasTransformationDiff(image.value_id) }" type="button" v-on:click="updatePreview(image.value_id)" :disabled="!hasTransformationDiff(image.value_id)">
+                                        Preview
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <ul v-if="!images.length" class="messages">
+                    <li class="notice-msg" style="background-image: none !important; margin: 10px 0;">
+                        <p>
+                            The Cloudinary module has not been configured. To use this feature please visit the
+                            <a href="<?php echo $this->getCloudinaryConfigurationLink(); ?>">
+                                Cloudinary Configuration page
+                            </a>
+                            and add an environment variable, then enable auto upload mapping or perform a
+                            manual migration.
+                        </p>
+                    </li>
+                </ul>
 
             <?php else: ?>
 
-            <ul class="messages">
-                <li class="notice-msg" style="background-image: none !important; margin: 10px 0;">
-                    <?php if ($this->isCloudinaryEnabled()): ?>
-                    <p>No product images are available</p>
-                    <?php else: ?>
-                    <p>
-                        The Cloudinary module has not been configured. To use this feature please visit the
-                        <a href="<?php echo $this->getCloudinaryConfigurationLink(); ?>">
-                            Cloudinary Configuration page
-                        </a>
-                        and add an environment variable, then enable auto upload mapping or perform a
-                        manual migration.
-                    </p>
-                    <?php endif; ?>
-                </li>
-            </ul>
+                <ul class="messages">
+                    <li class="notice-msg" style="background-image: none !important; margin: 10px 0;">
+                        <p>No product images are available</p>
+                    </li>
+                </ul>
 
             <?php endif; ?>
 
@@ -108,138 +108,70 @@
 
 <script language="javascript">
 
-    window.cloudinary = {
-
-        currentTransform: {},
-
-        secret: '<?php echo $this->ajaxSampleSecretKey(); ?>',
-
-        getTransformText: function(id) {
-            return $('cloudinary_input_' + id).value
-        },
-
-        getAjaxImageUrl: function() {
-            return '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/cloudinaryajax/image/key/'); ?>' + this.secret;
-        },
-
-        getImageId: function(id) {
-            return 'cloudinary_preview_' + id;
-        },
-
-        getImageContainerId: function(id) {
-            return 'cloudinary_preview_container_' + id;
-        },
-
-        getPreviewButtonId: function(id) {
-            return 'cloudinary_preview_button_' + id;
-        },
-
-        getInputUpdatedId: function(id) {
-            return 'cloudinary_input_updated_' + id;
-        },
-
-        setInputUpdated: function(id) {
-            $(this.getInputUpdatedId(id)).value = '1';
-        },
-
-        getImageFile: function(id) {
-            return $(this.getPreviewButtonId(id)).getAttribute('data-file');
-        },
-
-        getImageHtml: function(id, src) {
-            var id = this.getImageId(id),
-                style = 'width: auto; height: auto; max-width: 250px; max-height: 250px; min-height: 50px;';
-            return '<img id="' + id + '" src="' + src + '" style="' + style + '" />';
-        },
-
-        getErrorHtml: function(message) {
-            return '<ul class="messages"><li class="error-msg">' + message + '</li></ul>';
-        },
-
-        updatePreviewImage: function(id, url) {
-            var $image = $(this.getImageId(id));
-
-            if (!$image) {
-                $(this.getImageContainerId(id)).update(this.getImageHtml(id, url));
-            } else {
-                $image.writeAttribute('src', url);
-            }
-        },
-
-        updatePreview: function(id) {
-            var self = this;
-
-            if (!self.isPreviewActive(id)) {
-                return;
-            }
-
-            self.currentTransform[id] = self.getTransformText(id);
-            self.setPreviewActiveState(id, false);
-
-            new Ajax.Request(this.getAjaxImageUrl(), {
-                method: 'post',
-                parameters: { free: self.currentTransform[id], image: self.getImageFile(id) },
-                onSuccess: function(response) {
-                    self.updatePreviewImage(id, response.responseJSON.url);
-                },
-                onFailure: function(response) {
-                    $(self.getImageContainerId(id)).update(self.getErrorHtml(response.responseJSON.error));
-                }
-            });
-        },
-
-        setPreviewActiveState: function(id, state) {
-            if (state && (this.currentTransform[id] !== this.getTransformText(id))) {
-                this.setInputUpdated(id);
-                $(this.getPreviewButtonId(id)).removeClassName('disabled');
-            } else {
-                $(this.getPreviewButtonId(id)).addClassName('disabled');
-            }
-        },
-
-        isPreviewActive: function(id) {
-            return !$(this.getPreviewButtonId(id)).hasClassName('disabled');
-        },
-
-        addPreviewButtonListener: function(button) {
-            var self = this;
-
-            button.on('click', function() {
-                self.updatePreview(button.getAttribute('data-id'));
-            });
-        },
-
-        addTextChangeListener: function(id) {
-            var self = this,
-                input = $('cloudinary_input_' + id);
-
-
-            input.on('change', function() { self.setPreviewActiveState(id, true); });
-            input.on('keydown', function() { self.setPreviewActiveState(id, true); });
-            input.on('paste', function() { self.setPreviewActiveState(id, true); });
-            input.on('input', function() { self.setPreviewActiveState(id, true); });
-        },
-
-        init: function() {
-            $$('.cloudinary_preview_button').each(function(button) {
-                window.cloudinary.updatePreview(button.getAttribute('data-id'));
-                window.cloudinary.addPreviewButtonListener(button);
-                window.cloudinary.addTextChangeListener(button.getAttribute('data-id'));
-            });
-        }
-    };
-
-    window.cloudinary_transformation_tab_images = <?php echo $jsonData; ?>;
+    Vue.prototype.$http = axios;
+    window.cloudinary_transformation_tab_images = <?php echo Mage::helper('core')->jsonEncode($imagesData); ?>;
     window.cloudinaryTransformationTabApp = new Vue({
         el: '#cloudinary_transformation_tab',
         data: {
-            images: window.cloudinary_transformation_tab_images
+            images: window.cloudinary_transformation_tab_images,
+            ajaxUrl: '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/cloudinaryajax/image/key/') . $this->ajaxSampleSecretKey() ?>?isAjax=1',
+            images_count: <?php echo count($imagesData); ?>
         },
         mounted: function () {
-            window.cloudinary.init();
+            for (var id in this.images) {
+                if (!this.images.hasOwnProperty(id)) continue;
+                this.images[id].free_transformation = this.images[id].free_transformation || '';
+                this.images[id].orig_free_transformation = this.images[id].orig_free_transformation || '';
+                this.updatePreview(id);
+            }
         },
         updated: function () {
-            window.cloudinary.init();
+            if(this.images.length !== this.images_count){
+                this.images_count = this.images.length;
+                for (var id in this.images) {
+                    if (!this.images.hasOwnProperty(id)) continue;
+                    this.images[id].free_transformation = this.images[id].free_transformation || '';
+                    this.images[id].orig_free_transformation = this.images[id].orig_free_transformation || '';
+                    this.updatePreview(id);
+                }
+            }
+        },
+        methods: {
+            updatePreview: function (id) {
+                this.images[id].preview_disabled = true;
+
+                if (/\.tmp$/.test(this.images[id].file)) {
+                    this.images[id].image_url = this.images[id].image_url.replace(new RegExp('\/image\/upload(\/v[0-9]{1,10})?(\/' + this.images[id].orig_free_transformation + ')?(\/v[0-9]{1,10})?\/'), '/image/upload/' + this.images[id].free_transformation + '/');
+                    this.images[id].orig_free_transformation = this.images[id].free_transformation;
+                    return true;
+                }
+                if(this.hasTransformationDiff(id)){
+                    this.images[id].updated = 1;
+                }
+                this.images[id].orig_free_transformation = this.images[id].free_transformation;
+
+                var fd = new FormData();
+                fd.append('free', this.images[id].free_transformation);
+                fd.append('image', this.images[id].file);
+                fd.append('form_key', window.FORM_KEY);
+
+                this.$http.post(
+                    this.ajaxUrl,
+                    fd,
+                    {headers: {'Content-Type': 'multipart/form-data'}}
+                ).then(response => {
+                    this.images[id].error = false;
+                    this.images[id].image_url = response.data.url;
+                    this.images[id].image_url = response.data.url;
+                    this.images[id].preview_disabled = true;
+                }).catch(error => {
+                    this.images[id].error = error.response.data.error;
+                });
+            },
+
+            hasTransformationDiff: function(id){
+                return (this.images[id].orig_free_transformation !== this.images[id].free_transformation);
+            }
         }
     });
 
