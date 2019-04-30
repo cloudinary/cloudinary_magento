@@ -50,8 +50,6 @@
         if (varienGlobalEvents) {
             varienGlobalEvents.attachEventHandler('tabChangeBefore', uploader.onContainerHideBefore);
         }
-
-        console.log(<?php echo $this->getCloudinaryMediaLibraryWidgetOptions(); ?>);
         var cloudinaryMediaLibrary = new CloudinaryMediaLibrary(<?php echo $this->getCloudinaryMediaLibraryWidgetOptions(); ?>);
     })();
 </script>

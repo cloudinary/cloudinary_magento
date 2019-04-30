@@ -109,16 +109,25 @@
 <script language="javascript">
 
     Vue.prototype.$http = axios;
+
+    window._cloudinary_transformation_tab_images = window._cloudinary_transformation_tab_images || {};
+    window.cloudinary_transformation_tab_images = <?php echo Mage::helper('core')->jsonEncode((object)$imagesData); ?>;
+    for (var id in window._cloudinary_transformation_tab_images) {
+        if (!window._cloudinary_transformation_tab_images.hasOwnProperty(id)) continue;
+        window.cloudinary_transformation_tab_images[id] = window._cloudinary_transformation_tab_images[id];
+    }
+
     window.cloudinaryTransformationTabApp = new Vue({
         el: '#cloudinary_transformation_tab',
         data: {
-            images: <?php echo Mage::helper('core')->jsonEncode($imagesData); ?>,
+            images: window.cloudinary_transformation_tab_images,
             ajaxUrl: '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/cloudinaryajax/image/key/') . $this->ajaxSampleSecretKey() ?>?isAjax=1',
             images_count: <?php echo count($imagesData); ?>
         },
         mounted: function () {
             for (var id in this.images) {
                 if (!this.images.hasOwnProperty(id)) continue;
+                this.images[id].image_url = this.images[id].asset_derived_image_url || this.images[id].image_url;
                 this.images[id].free_transformation = this.images[id].free_transformation || '';
                 this.images[id].orig_free_transformation = this.images[id].orig_free_transformation || '';
                 this.updatePreview(id);
@@ -129,6 +138,7 @@
                 this.images_count = this.images.length;
                 for (var id in this.images) {
                     if (!this.images.hasOwnProperty(id)) continue;
+                    this.images[id].image_url = this.images[id].asset_derived_image_url || this.images[id].image_url;
                     this.images[id].free_transformation = this.images[id].free_transformation || '';
                     this.images[id].orig_free_transformation = this.images[id].orig_free_transformation || '';
                     this.updatePreview(id);
@@ -139,9 +149,11 @@
             showLoader: function(){
                 document.getElementById("loading-mask").style.display = "block";
             },
+
             hideLoader: function(){
                 document.getElementById("loading-mask").style.display = "none";
             },
+
             updatePreview: function (id) {
                 this.showLoader();
                 this.images[id].preview_disabled = true;
@@ -183,11 +195,11 @@
             },
 
             addImage: function(image){
-                this.images[image.id] = image;
+                Vue.set(this.images, image.id, image);
             },
 
             removeImage: function(id){
-                delete this.images[id];
+                this.images.splice(id, 1);
             }
         }
     });
