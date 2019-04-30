@@ -57,6 +57,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </cloudinary_environment_variable>
+                        <cloudinary_automatic_login_user translate="label comment">
+                            <label>Automatic login</label>
+                            <comment>Enter the email address of the user to be automatically logged in to the Media Library. Leave blank to prompt each user to login when the Media Library opens.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cloudinary_automatic_login_user>
                     </fields>
                 </setup>
                 <configuration translate="label comment">

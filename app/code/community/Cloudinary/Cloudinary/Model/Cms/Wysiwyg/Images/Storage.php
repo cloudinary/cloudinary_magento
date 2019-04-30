@@ -117,7 +117,8 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
     public function getThumbnailUrl($filePath, $checkFile = false, $origFilePath = null)
     {
         $_origUrl = $origUrl = parent::getThumbnailUrl($filePath, $checkFile);
-
+        return $_origUrl;
+        /*
         if (!$this->_configuration->isEnabled()) {
             return $_origUrl;
         }
@@ -126,7 +127,7 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
             $filePath = $origFilePath;
             $origUrl = parent::getThumbnailUrl($filePath, $checkFile);
         }
-        
+
         if (!$origUrl) {
             return $_origUrl;
         }
@@ -144,7 +145,7 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
                 $this->getConfigData('resize_width'),
                 $this->getConfigData('resize_height')
             )
-        );
+        );*/
     }
 
     /**
