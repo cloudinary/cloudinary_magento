@@ -180,11 +180,11 @@
 
             hasTransformationDiff: function(id){
                 return (this.images[id].orig_free_transformation !== this.images[id].free_transformation);
-            }
+            },
 
             addImage: function(image){
                 this.images[image.id] = image;
-            }
+            },
 
             removeImage: function(id){
                 delete this.images[id];
