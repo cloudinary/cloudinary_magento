@@ -20,6 +20,8 @@
         }));
     }
 
+    window._cloudinary_transformation_tab_images = window._cloudinary_transformation_tab_images || {};
+
     window.CloudinaryMediaLibrary = Class.create();
     window.CloudinaryMediaLibrary.prototype = {
 
@@ -146,10 +148,12 @@
                                 //console.log(file);
                                 widget.successTrigger(file);
 
+                                file.error = false;
+                                file.id = file.id || Math.random().toString(36).substr(2, 16);
+                                file.orig_free_transformation = file.free_transformation;
+                                file.image_url = asset.asset_derived_image_url;
+                                window._cloudinary_transformation_tab_images[file.id] = file;
                                 if (typeof window.cloudinaryTransformationTabApp === 'object') {
-                                    file.id = file.id || Math.random().toString(36).substr(2, 16);
-                                    file.orig_free_transformation = file.free_transformation;
-                                    file.error = false;
                                     window.cloudinaryTransformationTabApp.addImage(file);
                                 }
 
