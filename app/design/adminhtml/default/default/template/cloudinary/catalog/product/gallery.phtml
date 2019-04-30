@@ -3,7 +3,7 @@
     $imagesData = [];
     foreach ($this->getImages() as $image) {
         $imagesData[$image->getValueId()] = [
-            'value_id' => $image->getValueId(),
+            'id' => $image->getValueId(),
             'label' => $image->getLabel(),
             'free_transformation' => $image->getFreeTransformation(),
             'orig_free_transformation' => $image->getFreeTransformation(),
@@ -47,13 +47,13 @@
                                 <td class="cell-label">{{ image.label }}</td>
                                 <td>
                                     <input type="text"
-                                        v-bind:name="'cloudinary_free[' + image.value_id + ']'"
+                                        v-bind:name="'cloudinary_free[' + image.id + ']'"
                                         v-model="image.free_transformation"
                                         style="width: 80%;" />
-                                    <input type="hidden" v-bind:name="'cloudinary_free_updated[' + image.value_id + ']'" v-model="image.updated" />
+                                    <input type="hidden" v-bind:name="'cloudinary_free_updated[' + image.id + ']'" v-model="image.updated" />
                                 </td>
                                 <td>
-                                    <button v-bind:class="{ 'disabled': !hasTransformationDiff(image.value_id) }" type="button" v-on:click="updatePreview(image.value_id)" :disabled="!hasTransformationDiff(image.value_id)">
+                                    <button v-bind:class="{ 'disabled': !hasTransformationDiff(image.id) }" type="button" v-on:click="updatePreview(image.id)" :disabled="!hasTransformationDiff(image.id)">
                                         Preview
                                     </button>
                                 </td>
@@ -109,11 +109,10 @@
 <script language="javascript">
 
     Vue.prototype.$http = axios;
-    window.cloudinary_transformation_tab_images = <?php echo Mage::helper('core')->jsonEncode($imagesData); ?>;
     window.cloudinaryTransformationTabApp = new Vue({
         el: '#cloudinary_transformation_tab',
         data: {
-            images: window.cloudinary_transformation_tab_images,
+            images: <?php echo Mage::helper('core')->jsonEncode($imagesData); ?>,
             ajaxUrl: '<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/cloudinaryajax/image/key/') . $this->ajaxSampleSecretKey() ?>?isAjax=1',
             images_count: <?php echo count($imagesData); ?>
         },
@@ -181,6 +180,14 @@
 
             hasTransformationDiff: function(id){
                 return (this.images[id].orig_free_transformation !== this.images[id].free_transformation);
+            }
+
+            addImage: function(image){
+                this.images[image.id] = image;
+            }
+
+            removeImage: function(id){
+                delete this.images[id];
             }
         }
     });

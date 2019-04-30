@@ -146,10 +146,12 @@
                                 //console.log(file);
                                 widget.successTrigger(file);
 
-                                file.value_id = Math.random().toString(36).substr(2, 16);
-                                file.orig_free_transformation = file.free_transformation;
-                                file.error = false;
-                                window.window.cloudinary_transformation_tab_images[file.value_id] = file;
+                                if (typeof window.cloudinaryTransformationTabApp === 'object') {
+                                    file.id = file.id || Math.random().toString(36).substr(2, 16);
+                                    file.orig_free_transformation = file.free_transformation;
+                                    file.error = false;
+                                    window.cloudinaryTransformationTabApp.addImage(file);
+                                }
 
                             } else {
                                 alert($.mage.__('An error occured during ' + asset.resource_type + ' insert!'));
