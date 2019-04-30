@@ -37,33 +37,29 @@
                     </tr>
                     </thead>
                     <tbody id="media_gallery_content_list">
-                    <?php foreach ($this->getImages() as $image): ?>
-                        <tr>
-                            <td class="cell-image" id="cloudinary_preview_container_<?php echo $image->getValueId(); ?>">
-                            </td>
-                            <td class="cell-label"><?php echo $image->getLabel(); ?></td>
+                        <tr v-for="image in images">
+                            <td class="cell-image" v-bind:id="'cloudinary_preview_container_' + image.value_id"></td>
+                            <td class="cell-label">{{ image.label }}</td>
                             <td>
                                 <input type="text"
-                                       id="cloudinary_input_<?php echo $image->getValueId(); ?>"
-                                       name="cloudinary_free[<?php echo $image->getValueId(); ?>]"
-                                       value="<?php echo $image->getFreeTransformation(); ?>"
-                                       style="width: 80%;" />
+                                    v-bind:id="'cloudinary_input_' + image.value_id"
+                                    v-bind:name="'cloudinary_free[' + image.value_id + ']'"
+                                    v-bind:value="image.free_transformation"
+                                    style="width: 80%;" />
                                 <input type="hidden"
-                                       id="cloudinary_input_updated_<?php echo $image->getValueId(); ?>"
-                                       name="cloudinary_free_updated[<?php echo $image->getValueId(); ?>]"
-                                       value="" />
+                                    v-bind:id="'cloudinary_input_updated_' + image.value_id"
+                                    v-bind:name="'cloudinary_free_updated[' + image.value_id + ']'"
+                                    v-bind:value="''" />
                             </td>
                             <td>
-                                <button id="cloudinary_preview_button_<?php echo $image->getValueId(); ?>"
-                                        class="cloudinary_preview_button"
-                                        type="button"
-                                        data-file="<?php echo $image->getFile(); ?>"
-                                        data-id="<?php echo $image->getValueId(); ?>">
+                                <button class="cloudinary_preview_button" type="button"
+                                    v-bind:id="'cloudinary_preview_button_' + image.value_id"
+                                    v-bind:data-id="image.value_id"
+                                    v-bind:data-file="image.file">
                                     Preview
                                 </button>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -217,26 +213,34 @@
             var self = this,
                 input = $('cloudinary_input_' + id);
 
+
             input.on('change', function() { self.setPreviewActiveState(id, true); });
             input.on('keydown', function() { self.setPreviewActiveState(id, true); });
             input.on('paste', function() { self.setPreviewActiveState(id, true); });
             input.on('input', function() { self.setPreviewActiveState(id, true); });
         },
+
+        init: function() {
+            $$('.cloudinary_preview_button').each(function(button) {
+                window.cloudinary.updatePreview(button.getAttribute('data-id'));
+                window.cloudinary.addPreviewButtonListener(button);
+                window.cloudinary.addTextChangeListener(button.getAttribute('data-id'));
+            });
+        }
     };
 
-    $$('.cloudinary_preview_button').each(function(button) {
-        window.cloudinary.updatePreview(button.getAttribute('data-id'));
-        window.cloudinary.addPreviewButtonListener(button);
-        window.cloudinary.addTextChangeListener(button.getAttribute('data-id'));
-    });
-
     window.cloudinary_transformation_tab_images = <?php echo $jsonData; ?>;
-
     window.cloudinaryTransformationTabApp = new Vue({
         el: '#cloudinary_transformation_tab',
         data: {
             images: window.cloudinary_transformation_tab_images
+        },
+        mounted: function () {
+            window.cloudinary.init();
+        },
+        updated: function () {
+            window.cloudinary.init();
         }
-    })
+    });
 
 </script>

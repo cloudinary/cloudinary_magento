@@ -132,6 +132,7 @@
                                     file.media_type = "image";
                                     file.label = asset.label = context.alt || context.caption || asset.public_id || "";
                                     if (widget.options.addTmpExtension && !/\.tmp$/.test(file.file)) {
+                                        file.orig_file = file.file;
                                         file.file = file.file + '.tmp';
                                     }
                                 }
@@ -141,6 +142,11 @@
                                 file.cloudinary_asset = asset;
                                 //console.log(file);
                                 widget.successTrigger(file);
+
+                                file.value_id = Math.random().toString(36).substr(2, 16);
+                                file.file = file.orig_file;
+                                window.window.cloudinary_transformation_tab_images.push(file);
+
                             } else {
                                 alert($.mage.__('An error occured during ' + asset.resource_type + ' insert!'));
                                 console.error(file);
