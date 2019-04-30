@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <layout>
+    <default>
+        <reference name="head">
+            <action method="addJs" ifconfig="cloudinary/setup/cloudinary_enabled"><name>cloudinary/cloudinary-media-library.js</name></action>
+        </reference>
+    </default>
+
     <adminhtml_cloudinary_index>
         <reference name="content">
             <block type="cloudinary_cloudinary/adminhtml_manage" name="cloudinary_manage" template="cloudinary/manage.phtml"></block>

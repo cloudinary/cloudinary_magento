@@ -18,6 +18,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     //= Basics
     const CONFIG_PATH_ENABLED = 'cloudinary/setup/cloudinary_enabled';
     const CONFIG_PATH_ENVIRONMENT_VARIABLE = 'cloudinary/setup/cloudinary_environment_variable';
+    const CONFIG_PATH_AUTOMATIC_LOGIN_USER = 'cloudinary/setup/cloudinary_automatic_login_user';
     const CONFIG_SMART_SERVING = 'cloudinary/configuration/cloudinary_smart_serving';
     const CONFIG_CDN_SUBDOMAIN = 'cloudinary/configuration/cloudinary_cdn_subdomain';
     const CONFIG_FOLDERED_MIGRATION = 'cloudinary/configuration/cloudinary_foldered_migration';
@@ -93,6 +94,14 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
     public function getCredentials()
     {
         return $this->getEnvironmentVariable()->getCredentials();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAutomaticLoginUser()
+    {
+        return (string) Mage::getStoreConfig(self::CONFIG_PATH_AUTOMATIC_LOGIN_USER);
     }
 
     /**
