@@ -14,6 +14,10 @@
             type: 'text/javascript',
             src: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js'
         }));
+        $$('head')[0].appendChild(new Element('script', {
+            type: 'text/javascript',
+            src: 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js'
+        }));
     }
 
     window.CloudinaryMediaLibrary = Class.create();
@@ -132,7 +136,6 @@
                                     file.media_type = "image";
                                     file.label = asset.label = context.alt || context.caption || asset.public_id || "";
                                     if (widget.options.addTmpExtension && !/\.tmp$/.test(file.file)) {
-                                        file.orig_file = file.file;
                                         file.file = file.file + '.tmp';
                                     }
                                 }
@@ -144,8 +147,9 @@
                                 widget.successTrigger(file);
 
                                 file.value_id = Math.random().toString(36).substr(2, 16);
-                                file.file = file.orig_file;
-                                window.window.cloudinary_transformation_tab_images.push(file);
+                                file.orig_free_transformation = file.free_transformation;
+                                file.error = false;
+                                window.window.cloudinary_transformation_tab_images[file.value_id] = file;
 
                             } else {
                                 alert($.mage.__('An error occured during ' + asset.resource_type + ' insert!'));
