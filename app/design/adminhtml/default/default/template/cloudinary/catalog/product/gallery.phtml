@@ -137,12 +137,20 @@
             }
         },
         methods: {
+            showLoader: function(){
+                document.getElementById("loading-mask").style.display = "block";
+            },
+            hideLoader: function(){
+                document.getElementById("loading-mask").style.display = "none";
+            },
             updatePreview: function (id) {
+                this.showLoader();
                 this.images[id].preview_disabled = true;
 
                 if (/\.tmp$/.test(this.images[id].file)) {
                     this.images[id].image_url = this.images[id].image_url.replace(new RegExp('\/image\/upload(\/v[0-9]{1,10})?(\/' + this.images[id].orig_free_transformation + ')?(\/v[0-9]{1,10})?\/'), '/image/upload/' + this.images[id].free_transformation + '/');
                     this.images[id].orig_free_transformation = this.images[id].free_transformation;
+                    this.hideLoader();
                     return true;
                 }
                 if(this.hasTransformationDiff(id)){
@@ -164,8 +172,10 @@
                     this.images[id].image_url = response.data.url;
                     this.images[id].image_url = response.data.url;
                     this.images[id].preview_disabled = true;
+                    this.hideLoader();
                 }).catch(error => {
                     this.images[id].error = error.response.data.error;
+                    this.hideLoader();
                 });
             },
 
