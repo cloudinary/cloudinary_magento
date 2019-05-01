@@ -42,8 +42,8 @@
                             <tr v-for="(image, index) in images">
                                 <td class="cell-image">
                                     <img v-if="image.is_loading" src="<?php echo $this->getSkinUrl('images/ajax-loader.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape($this->__('Loading...')) ?>" class="v-middle"/>
-                                    <img v-if="image.image_url && !image.error && !image.is_loading" v-bind:src="image.image_url" style="width:auto;height:auto;max-width:250px;max-height:250px;min-height:50px;" />
-                                    <ul v-if="image.error && !image.is_loading" class="messages"><li class="error-msg">{{ image.error }}</li></ul>
+                                    <img v-if="image.image_url && !image.error && image.is_loading !== true" v-bind:src="image.image_url" style="width:auto;height:auto;max-width:250px;max-height:250px;min-height:50px;" />
+                                    <ul v-if="image.error && image.is_loading !== true" class="messages"><li class="error-msg">{{ image.error }}</li></ul>
                                 </td>
                                 <td class="cell-label">{{ image.label }}</td>
                                 <td>
@@ -128,8 +128,8 @@
         mounted: function () {
             for (var id in this.images) {
                 if (!this.images.hasOwnProperty(id)) continue;
-                this.images[id].free_transformation = this.images[id].free_transformation || '';
-                this.images[id].orig_free_transformation = this.images[id].orig_free_transformation || '';
+                Vue.set(this.images[id], 'free_transformation', this.images[id].free_transformation || '');
+                Vue.set(this.images[id], 'orig_free_transformation', this.images[id].orig_free_transformation || '');
                 this.updatePreview(id);
             }
         },
@@ -138,8 +138,8 @@
                 this.images_count = this.images.length;
                 for (var id in this.images) {
                     if (!this.images.hasOwnProperty(id)) continue;
-                    this.images[id].free_transformation = this.images[id].free_transformation || '';
-                    this.images[id].orig_free_transformation = this.images[id].orig_free_transformation || '';
+                    Vue.set(this.images[id], 'free_transformation', this.images[id].free_transformation || '');
+                    Vue.set(this.images[id], 'orig_free_transformation', this.images[id].orig_free_transformation || '');
                     this.updatePreview(id);
                 }
             }
@@ -147,28 +147,52 @@
         methods: {
             showLoader: function(id){
                 document.getElementById("loading-mask").style.display = "block";
-                this.images[id].is_loading = true;
+                Vue.set(this.images[id], 'is_loading', true);
             },
 
             hideLoader: function(id){
                 document.getElementById("loading-mask").style.display = "none";
-                this.images[id].is_loading = false;
+                Vue.set(this.images[id], 'is_loading', false);
+            },
+
+            setPreviewDisabled: function(id, val){
+                Vue.set(this.images[id], 'preview_disabled', val);
+            },
+
+            setUpdated: function(id, val){
+                Vue.set(this.images[id], 'updated', val);
+            },
+
+            setError: function(id, val){
+                Vue.set(this.images[id], 'error', val);
+            },
+
+            setImageUrl: function(id, val){
+                Vue.set(this.images[id], 'image_url', val);
+            },
+
+            setFreeTransformation: function(id, val){
+                Vue.set(this.images[id], 'free_transformation', val);
+            },
+
+            setOrigFreeTransformation: function(id, val){
+                Vue.set(this.images[id], 'orig_free_transformation', val);
             },
 
             updatePreview: function (id) {
                 this.showLoader(id);
-                this.images[id].preview_disabled = true;
+                this.setPreviewDisabled(id, true);
 
                 if (/\.tmp$/.test(this.images[id].file)) {
-                    this.images[id].image_url = this.images[id].image_url.replace(new RegExp('\/image\/upload(\/v[0-9]{1,10})?(\/' + this.images[id].orig_free_transformation + ')?(\/v[0-9]{1,10})?\/'), '/image/upload/' + this.images[id].free_transformation + '/');
-                    this.images[id].orig_free_transformation = this.images[id].free_transformation;
+                    this.setImageUrl(id, this.images[id].image_url.replace(new RegExp('\/image\/upload(\/v[0-9]{1,10})?(\/' + this.images[id].orig_free_transformation + ')?(\/v[0-9]{1,10})?\/'), '/image/upload/' + this.images[id].free_transformation + '/'));
+                    this.setOrigFreeTransformation(id, this.images[id].free_transformation);
                     this.hideLoader(id);
                     return true;
                 }
                 if(this.hasTransformationDiff(id)){
-                    this.images[id].updated = 1;
+                    this.setUpdated(id, 1);
                 }
-                this.images[id].orig_free_transformation = this.images[id].free_transformation;
+                this.setOrigFreeTransformation(id, this.images[id].free_transformation);
 
                 var fd = new FormData();
                 fd.append('free', this.images[id].free_transformation);
@@ -180,13 +204,11 @@
                     fd,
                     {headers: {'Content-Type': 'multipart/form-data'}}
                 ).then(response => {
-                    this.images[id].error = false;
-                    this.images[id].image_url = response.data.url;
-                    this.images[id].image_url = response.data.url;
-                    this.images[id].preview_disabled = true;
+                    this.setError(id, false);
+                    this.setImageUrl(id, response.data.url);
                     this.hideLoader(id);
                 }).catch(error => {
-                    this.images[id].error = error.response.data.error;
+                    this.setError(id, error.response.data.error);
                     this.hideLoader(id);
                 });
             },
