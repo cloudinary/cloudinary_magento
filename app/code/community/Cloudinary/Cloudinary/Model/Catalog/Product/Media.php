@@ -35,7 +35,9 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media extends Mage_Core_Model_
 
     public function removedImagesForProduct(Mage_Catalog_Model_Product $product)
     {
-        return $this->_getRemovedImages($product->getMediaGallery());
+        if ($product->getMediaGallery()){
+            return $this->_getRemovedImages($product->getMediaGallery());
+        }
     }
 
     private function _getRemovedImages(array $mediaGallery)
