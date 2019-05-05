@@ -3,6 +3,7 @@
 use CloudinaryExtension\CloudinaryImageProvider;
 use CloudinaryExtension\Exception\MigrationError;
 use CloudinaryExtension\Migration\BatchUploader;
+use CloudinaryExtension\Migration\BatchDownloader;
 
 class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
 {
@@ -11,10 +12,10 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
         Mage::helper('cloudinary_cloudinary/autoloader')->register();
     }
 
-    public function migrateImages()
+    public function uploadMigration()
     {
         $migrationTask = Mage::getModel('cloudinary_cloudinary/migration')
-            ->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID)
+            ->loadType(Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE)
             ->recordBatchProgress();
 
         $batchUploader = new BatchUploader(
@@ -24,9 +25,9 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
             $migrationTask,
             Mage::getModel('cloudinary_cloudinary/logger'),
             null,
-            function(\Exception $e) {
+            function (\Exception $e) {
                 if ($e instanceof MigrationError) {
-                    Cloudinary_Cloudinary_Model_MigrationError::saveFromException($e);
+                    Cloudinary_Cloudinary_Model_MigrationError::saveFromException($e, Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE);
                 }
             }
         );
@@ -46,6 +47,13 @@ class Cloudinary_Cloudinary_Model_Cron extends Mage_Core_Model_Abstract
         );
 
         $migrationQueue->process();
+
+        return $this;
+    }
+
+    public function downloadMigration()
+    {
+        Mage::helper('cloudinary_cloudinary/BatchDownloader')->downloadImages();
 
         return $this;
     }

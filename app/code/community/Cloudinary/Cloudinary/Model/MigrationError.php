@@ -13,7 +13,7 @@ class Cloudinary_Cloudinary_Model_MigrationError extends Mage_Core_Model_Abstrac
     /**
      * @param \CloudinaryExtension\Exception\MigrationError $e
      */
-    public static function saveFromException(\CloudinaryExtension\Exception\MigrationError $e)
+    public static function saveFromException(\CloudinaryExtension\Exception\MigrationError $e, $type = Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE)
     {
         $image = $e->getImage();
         $filePath = (string)$image;
@@ -25,7 +25,21 @@ class Cloudinary_Cloudinary_Model_MigrationError extends Mage_Core_Model_Abstrac
         $entry->setMessage($e->getMessage());
         $entry->setCode($e->getCode());
         $entry->setTimestamp(time());
+        $entry->setType($type);
 
+        $entry->save();
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    public static function saveFromNormalException(\Exception $e, $type = Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE)
+    {
+        $entry = Mage::getModel('cloudinary_cloudinary/migrationError');
+        $entry->setMessage($e->getMessage());
+        $entry->setCode($e->getCode());
+        $entry->setTimestamp(time());
+        $entry->setType($type);
         $entry->save();
     }
 

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>2.9.8</version>
+            <version>3.0.0</version>
         </Cloudinary_Cloudinary>
     </modules>
 
@@ -246,14 +246,22 @@
 
     <crontab>
         <jobs>
-            <cloudinary_migrate>
+            <cloudinary_upload_migration>
                 <schedule>
                     <cron_expr>*/3 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>cloudinary_cloudinary/cron::migrateImages</model>
+                    <model>cloudinary_cloudinary/cron::uploadMigration</model>
                 </run>
-            </cloudinary_migrate>
+            </cloudinary_upload_migration>
+            <cloudinary_download_migration>
+                <schedule>
+                    <cron_expr>*/3 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>cloudinary_cloudinary/cron::downloadMigration</model>
+                </run>
+            </cloudinary_download_migration>
         </jobs>
     </crontab>
 </config>
