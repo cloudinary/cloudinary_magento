@@ -44,9 +44,12 @@
                             <configuration>
                                 <title>Configuration</title>
                             </configuration>
-                            <cloudinary module="cloudinary_cloudinary">
-                                <title>Manual Migration</title>
-                            </cloudinary>
+                            <upload_migration module="cloudinary_cloudinary">
+                                <title>Manual Migration (upload)</title>
+                            </upload_migration>
+                            <download_migration module="cloudinary_cloudinary">
+                                <title>Manual Migration (download)</title>
+                            </download_migration>
                             <log>
                                 <title>Logs</title>
                             </log>
