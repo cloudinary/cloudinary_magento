@@ -181,6 +181,7 @@
 
             updatePreview: function (id) {
                 this.showLoader(id);
+                this.setFreeTransformation(id, this.images[id].free_transformation.replace(/\s/g, ''));
                 this.setPreviewDisabled(id, true);
 
                 if (/\.tmp$/.test(this.images[id].file)) {

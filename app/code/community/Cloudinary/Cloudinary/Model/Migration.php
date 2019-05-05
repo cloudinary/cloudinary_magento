@@ -4,11 +4,21 @@ use CloudinaryExtension\Migration\Task;
 
 class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract implements Task
 {
-    const CLOUDINARY_MIGRATION_ID = 1;
+    const UPLOAD_MIGRATION_TYPE = 'upload';
+    const DOWNLOAD_MIGRATION_TYPE = 'download';
 
     protected function _construct()
     {
         $this->_init('cloudinary_cloudinary/migration');
+    }
+
+    /**
+     * @return bool
+     */
+    public function loadType($type = self::UPLOAD_MIGRATION_TYPE)
+    {
+        $col = $this->getCollection()->addFieldToFilter('type', $type)->setPageSize(1);
+        return $col->count() ? $col->getFirstItem() : $this->setType($type);
     }
 
     /**
@@ -25,7 +35,6 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract imp
     public function hasBeenStopped()
     {
         $this->load($this->getId());
-
         return (bool) $this->getStarted() == 0;
     }
 
@@ -40,6 +49,7 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract imp
         $this->setStarted(1);
         $this->setStartedAt($this->_dateNow());
         $this->setBatchCount(0);
+        $this->setInfo('[]');
         $this->save();
     }
 
@@ -75,5 +85,23 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract imp
     private function _dateNow()
     {
         return Mage::getModel('core/date')->date('Y/m/d H:i:s');
+    }
+
+    public function getInfo()
+    {
+        $info = $this->getData('info');
+        if (is_array($info) || is_object($info)) {
+            return $info;
+        } else {
+            return (array) @json_decode($info, true);
+        }
+    }
+
+    public function setInfo($info)
+    {
+        if (is_array($info) || is_object($info)) {
+            $info = json_encode($info);
+        }
+        return $this->setData('info', $info);
     }
 }
