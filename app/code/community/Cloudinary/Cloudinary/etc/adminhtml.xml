@@ -9,10 +9,14 @@
                     <title>Configuration</title>
                     <action>adminhtml/system_config/edit/section/cloudinary</action>
                 </configuration>
-                <cloudinary module="cloudinary_cloudinary">
-                    <title>Manual Migration</title>
-                    <action>adminhtml/cloudinary</action>
-                </cloudinary>
+                <upload_migration module="cloudinary_cloudinary">
+                    <title>Manual Migration (upload)</title>
+                    <action>adminhtml/cloudinary/index/type/upload</action>
+                </upload_migration>
+                <download_migration module="cloudinary_cloudinary">
+                    <title>Manual Migration (download)</title>
+                    <action>adminhtml/cloudinary/index/type/download</action>
+                </download_migration>
                 <log>
                     <title>Logs</title>
                     <action>adminhtml/cloudinarylog</action>
