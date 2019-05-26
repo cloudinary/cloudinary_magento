@@ -125,8 +125,10 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
             if ($i === 0) {
                 $headers['http_code'] = $line;
             } else {
-                list($key, $value) = explode(': ', $line);
-                $headers[$key] = $value;
+                list($key, $value) = array_pad(explode(': ', $line), 2, '');
+                if($key){
+                    $headers[$key] = $value;
+                }
             }
         }
         $body = substr($res, $header_size);

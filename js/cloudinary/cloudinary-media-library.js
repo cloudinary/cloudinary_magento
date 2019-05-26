@@ -49,6 +49,7 @@
             this.setOptions(config);
             this.attachEvents();
             this.cldInitialize();
+            console.log(this.options);
         },
 
         setOptions: function(config) {
@@ -183,12 +184,6 @@
             if (this.options.callbackHandler == 'window.MediabrowserInstance' && this.options.callbackHandlerMethod == 'selectFolder' && window.MediabrowserInstance && typeof window.MediabrowserInstance.selectFolder === 'function') {
                 window.MediabrowserInstance.selectFolder(window.MediabrowserInstance.currentNode);
             }
-            /*if (widget.options.triggerSelector && widget.options.triggerEvent) {
-                $(widget.options.triggerSelector).last().trigger(widget.options.triggerEvent, file);
-            }
-            if (widget.options.callbackHandler && widget.options.callbackHandlerMethod && typeof widget.options.callbackHandler[widget.options.callbackHandlerMethod] === 'function') {
-                widget.options.callbackHandler[widget.options.callbackHandlerMethod](file);
-            }*/
         },
 
     };

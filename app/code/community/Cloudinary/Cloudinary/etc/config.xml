@@ -56,7 +56,6 @@
                 <rewrite>
                     <page_menu>Cloudinary_Cloudinary_Block_Adminhtml_Page_Menu</page_menu>
                     <cms_wysiwyg_images_content_uploader>Cloudinary_Cloudinary_Block_Adminhtml_Cms_Wysiwyg_Images_Content_Uploader</cms_wysiwyg_images_content_uploader>
-                    <catalog_category_helper_image>Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image</catalog_category_helper_image>
                 </rewrite>
             </adminhtml>
             <cloudinary_cloudinary>
