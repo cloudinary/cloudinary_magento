@@ -184,21 +184,6 @@
             if (this.options.callbackHandler == 'window.MediabrowserInstance' && this.options.callbackHandlerMethod == 'selectFolder' && window.MediabrowserInstance && typeof window.MediabrowserInstance.selectFolder === 'function') {
                 window.MediabrowserInstance.selectFolder(window.MediabrowserInstance.currentNode);
             }
-            if (this.options.callbackHandler == 'updateHiddenInput') {
-                document.getElementById(this.options.callbackHandlerMethod).setAttribute("value", file.file);
-                var cld_prev = document.createElement("img");
-                cld_prev.setAttribute("src", file.image_url);
-                console.log(cld_prev);
-                console.log(document.getElementById(this.options.triggerSelector));
-
-                document.getElementById(this.options.triggerSelector).innerHTML = cld_prev;
-            }
-            /*if (widget.options.triggerSelector && widget.options.triggerEvent) {
-                $(widget.options.triggerSelector).last().trigger(widget.options.triggerEvent, file);
-            }
-            if (widget.options.callbackHandler && widget.options.callbackHandlerMethod && typeof widget.options.callbackHandler[widget.options.callbackHandlerMethod] === 'function') {
-                widget.options.callbackHandler[widget.options.callbackHandlerMethod](file);
-            }*/
         },
 
     };
