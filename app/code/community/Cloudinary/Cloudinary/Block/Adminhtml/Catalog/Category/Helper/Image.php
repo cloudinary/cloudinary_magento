@@ -45,13 +45,13 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image extend
      */
     public function getElementHtml()
     {
-        return parent::getElementHtml();
+        //return parent::getElementHtml();
         //$html = parent::getElementHtml();
 
         $html = Mage::app()->getLayout()->createBlock('adminhtml/widget_button')
             ->addData(array(
                 'before_html'   => sprintf(
-                    '<div style="display:inline-block;margin-right:12px;" id="%s">',
+                    '<div style="display:inline-block;margin-right:12px;float:right;" id="%s">',
                     $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX)
                 ),
                 'after_html'    => '</div>
@@ -66,17 +66,11 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image extend
             ))->toHtml();
 
         $html .= parent::getElementHtml();
-        //$html = '<button id="id_6c2c39d0c25611be1b08deb8f3c2e195_Uploader-cld_ml_button" title="Add From Cloudinary..." type="button" class="scalable " onclick="" style=""><span><span><span>Add From Cloudinary...</span></span></span></button>' . $html;
+
+        $html .= '<input type="hidden" id="' . $this->getCallbackHandlerMethod() . '" name="' . parent::getName() . '[' . self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_value]" value="' . $this->getValue() . '" />';
+        $html .= '<div id="' . $this->getTriggerSelector() . '" style="display:inline-block;margin-right:12px;float:right;"></div>';
 
         return $html;
-    }
-
-    public function getHtmlId()
-    {
-        if ($this->getData('id')===null) {
-            $this->setData('id', Mage::helper('core')->uniqHash('id_'));
-        }
-        return $this->getData('id');
     }
 
     /**
@@ -133,7 +127,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image extend
      */
     protected function getCldImageUploaderUrl()
     {
-        return Mage::getModel('adminhtml/url')->addSessionParam()->getUrl('*/cloudinaryretrieveimage/upload', array('type' => 'wysiwyg_image'));
+        return Mage::getModel('adminhtml/url')->addSessionParam()->getUrl('*/cloudinaryretrieveimage/upload', array('type' => 'category_image'));
     }
 
     /**
@@ -165,7 +159,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image extend
      */
     protected function getTriggerSelector()
     {
-        return 'triggerSelector';
+        return $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX) . '_preview_container';
     }
 
     /**
@@ -173,7 +167,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image extend
      */
     protected function getCallbackHandler()
     {
-        return 'window.MediabrowserInstance';
+        return 'updateHiddenInput';
     }
 
     /**
@@ -181,6 +175,6 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Category_Helper_Image extend
      */
     protected function getCallbackHandlerMethod()
     {
-        return 'selectFolder';
+        return $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_hidden_field');
     }
 }

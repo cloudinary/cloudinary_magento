@@ -52,7 +52,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
                 break;
         }
         if (!$baseTmpMediaPath) {
-            throw new LocalizedException(__("Empty baseTmpMediaPath"));
+            throw new Mage_Core_Exception(__("Empty baseTmpMediaPath"));
         }
         return $baseTmpMediaPath;
     }
