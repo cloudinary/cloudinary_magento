@@ -37,8 +37,8 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
     {
         return array_filter(
             $imageData,
-            function ($id) use ($imageUpdated) {
-                return $imageUpdated[$id];
+            function ($id) use ($imageUpdated, $imageData) {
+                return (is_numeric($id))? $imageUpdated[$id] : $imageData[$id];
             },
             ARRAY_FILTER_USE_KEY
         );
