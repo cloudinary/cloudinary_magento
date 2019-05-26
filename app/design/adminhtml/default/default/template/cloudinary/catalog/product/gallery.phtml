@@ -47,10 +47,8 @@
                                 </td>
                                 <td class="cell-label">{{ image.label }}</td>
                                 <td>
-                                    <input type="text"
-                                        v-bind:name="'cloudinary_free[' + image.id + ']'"
-                                        v-model="image.free_transformation"
-                                        style="width: 80%;" />
+                                    <input type="text" v-bind:name="'cloudinary_free[' + image.id + ']'" v-model="image.free_transformation" style="width: 80%;" />
+                                    <input type="hidden" v-bind:name="'cloudinary_free_file[' + image.id + ']'" v-model="image.file" />
                                     <input type="hidden" v-bind:name="'cloudinary_free_updated[' + image.id + ']'" v-model="image.updated" />
                                 </td>
                                 <td>

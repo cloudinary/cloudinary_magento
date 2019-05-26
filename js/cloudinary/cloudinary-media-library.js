@@ -153,6 +153,7 @@
                                 file.id = file.id || Math.random().toString(36).substr(2, 16);
                                 file.orig_free_transformation = file.free_transformation;
                                 file.image_url = asset.asset_derived_image_url;
+                                file.updated = file.updated || 1;
                                 window._cloudinary_transformation_tab_images[file.id] = file;
                                 if (typeof window.cloudinaryTransformationTabApp === 'object') {
                                     window.cloudinaryTransformationTabApp.addImage(file);
