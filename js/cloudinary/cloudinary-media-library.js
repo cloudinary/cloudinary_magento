@@ -49,7 +49,6 @@
             this.setOptions(config);
             this.attachEvents();
             this.cldInitialize();
-            console.log(this.options);
         },
 
         setOptions: function(config) {
@@ -70,6 +69,7 @@
                     this.cloudinary_ml = window.cloudinary_ml[this.options.cldMLid] = cloudinary.createMediaLibrary(
                         this.options.cloudinaryMLoptions, {
                             insertHandler: function(data) {
+                                document.body.style.overflow = 'initial';
                                 return widget.cloudinaryInsertHandler(data);
                             }
                         }
@@ -109,7 +109,7 @@
             data.assets.forEach(asset => {
                 //console.log(asset);
                 if (widget.options.imageUploaderUrl) {
-                    asset.asset_url = asset.asset_image_url = asset.secure_url;
+                    asset.asset_url = asset.asset_derived_url = asset.asset_derived_image_url = asset.asset_image_url = asset.secure_url;
                     if (asset.derived && asset.derived[0] && asset.derived[0].secure_url) {
                         asset.asset_derived_url = asset.asset_derived_image_url = asset.derived[0].secure_url;
                         asset.free_transformation = asset.asset_derived_image_url
