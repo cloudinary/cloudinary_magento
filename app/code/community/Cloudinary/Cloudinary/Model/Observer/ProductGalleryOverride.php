@@ -83,6 +83,9 @@ class Cloudinary_Cloudinary_Model_Observer_ProductGalleryOverride extends Mage_C
                             $publicId = Mage_Core_Model_Store::URL_TYPE_MEDIA . '/' . implode('/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/', $publicId);
                             //$publicId = preg_replace('/\.[^.]+$/', '', $publicId);
                             $transformation = basename($prefix);
+                            if (($prefix = basename(dirname($prefix))) && preg_match('/[a-zA-Z].*_[\w.-].*/', $prefix)) {
+                                $transformation .= ',' . $prefix;
+                            }
                         } else {
                             $publicId = null;
                         }

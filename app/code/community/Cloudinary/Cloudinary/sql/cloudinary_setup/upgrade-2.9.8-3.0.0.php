@@ -37,7 +37,7 @@ $table = $con->newTable($table)
     ))->addColumn('info', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
         'comment' => 'Info',
         'nullable' => true,
-        'default' => '[]'
+        //'default' => '[]'
     ));
 
 $con->createTable($table);
