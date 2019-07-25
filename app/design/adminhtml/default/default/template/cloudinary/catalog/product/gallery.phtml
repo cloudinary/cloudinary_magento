@@ -47,7 +47,7 @@
                                 </td>
                                 <td class="cell-label">{{ image.label }}</td>
                                 <td>
-                                    <input type="text" v-bind:name="'cloudinary_free[' + image.id + ']'" v-model="image.free_transformation" style="width: 80%;" />
+                                    <input type="text" v-bind:name="'cloudinary_free[' + image.id + ']'" v-model="image.free_transformation" v-on:keyup="clearWhitespace(image.id)" v-on:change="clearWhitespace(image.id)" style="width: 80%;" />
                                     <input type="hidden" v-bind:name="'cloudinary_free_file[' + image.id + ']'" v-model="image.file" />
                                     <input type="hidden" v-bind:name="'cloudinary_free_updated[' + image.id + ']'" v-model="image.updated" />
                                 </td>
@@ -178,9 +178,13 @@
                 Vue.set(this.images[id], 'orig_free_transformation', val);
             },
 
+            clearWhitespace: function (id) {
+                this.setFreeTransformation(id, this.images[id].free_transformation.replace(/\s/g, ''));
+            },
+
             updatePreview: function (id) {
                 this.showLoader(id);
-                this.setFreeTransformation(id, this.images[id].free_transformation.replace(/\s/g, ''));
+                this.clearWhitespace(id);
                 this.setPreviewDisabled(id, true);
 
                 if (/\.tmp$/.test(this.images[id].file)) {
