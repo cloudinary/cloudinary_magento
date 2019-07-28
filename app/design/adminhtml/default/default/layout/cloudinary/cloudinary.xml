@@ -54,7 +54,7 @@
 
     <adminhtml_catalog_product_edit>
         <reference name="product_tabs">
-            <action method="addTab">
+            <action method="addTab" ifconfig="cloudinary/setup/cloudinary_enabled">
                 <name>Cloudinary</name>
                 <block>cloudinary_cloudinary/adminhtml_catalog_product_edit_tab</block>
             </action>

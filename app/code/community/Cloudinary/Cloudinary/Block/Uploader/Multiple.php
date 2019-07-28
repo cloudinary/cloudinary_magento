@@ -23,26 +23,28 @@ class Cloudinary_Cloudinary_Block_Uploader_Multiple extends Mage_Uploader_Block_
     {
         parent::_prepareLayout();
 
-        $this->setChild(
-            'cloudinary_ml_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->addData(array(
-                    // Workaround for IE9
-                    'before_html'   => sprintf(
-                        '<div style="display:inline-block;" id="%s">',
-                        $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX)
-                    ),
-                    'after_html'    => '</div>
-                        <script type="text/javascript">
-                        //<![CDATA[
-                        var ' . self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_instance_' . $this->getHtmlId() . ' = new CloudinaryMediaLibrary(' . $this->getCloudinaryMediaLibraryWidgetOptions() . ');
-                        //]]>
-                        </script>',
-                    'id'            => $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_button'),
-                    'label'         => Mage::helper('uploader')->__('Add From Cloudinary...'),
-                    'type'          => 'button',
-                ))
-        );
+        if (Mage::getModel('cloudinary_cloudinary/configuration')->isEnabled()) {
+            $this->setChild(
+                'cloudinary_ml_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->addData(array(
+                        // Workaround for IE9
+                        'before_html'   => sprintf(
+                            '<div style="display:inline-block;" id="%s">',
+                            $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX)
+                        ),
+                        'after_html'    => '</div>
+                            <script type="text/javascript">
+                            //<![CDATA[
+                            var ' . self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_instance_' . $this->getHtmlId() . ' = new CloudinaryMediaLibrary(' . $this->getCloudinaryMediaLibraryWidgetOptions() . ');
+                            //]]>
+                            </script>',
+                        'id'            => $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_button'),
+                        'label'         => Mage::helper('uploader')->__('Add From Cloudinary...'),
+                        'type'          => 'button',
+                    ))
+            );
+        }
 
         return $this;
     }
