@@ -64,6 +64,7 @@ class Cloudinary_Cloudinary_Helper_MediaLibraryHelper extends Mage_Core_Helper_A
                     'cloud_name' => $this->credentials["cloud_name"],
                     'api_key' => $this->credentials["api_key"],
                     'cms_type' => 'magento',
+                    'z_index' => 999999
                 );
                 if (($this->credentials["username"] = $this->configuration->getAutomaticLoginUser())) {
                     $this->cloudinaryMLoptions["timestamp"] = $this->timestamp;

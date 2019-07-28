@@ -1,7 +1,7 @@
 <?php
+
 use CloudinaryExtension\CredentialValidator;
 use CloudinaryExtension\Security\CloudinaryEnvironmentVariable;
-use Cloudinary;
 use Cloudinary\Api;
 use CloudinaryExtension\ConfigurationBuilder;
 use CloudinaryExtension\ConfigurationInterface;
