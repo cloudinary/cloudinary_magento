@@ -69,7 +69,6 @@
                     this.cloudinary_ml = window.cloudinary_ml[this.options.cldMLid] = cloudinary.createMediaLibrary(
                         this.options.cloudinaryMLoptions, {
                             insertHandler: function(data) {
-                                document.body.style.overflow = 'initial';
                                 return widget.cloudinaryInsertHandler(data);
                             }
                         }
@@ -98,6 +97,16 @@
         openMediaLibrary: function() {
             this.cldInitialize();
             this.cloudinary_ml.show(this.options.cloudinaryMLshowOptions);
+            var cldBodyOverflowInterval = setInterval(function() {
+                if (document.body.style.overflow === 'hidden') {
+                    if (document.body.style.removeProperty) {
+                        document.body.style.removeProperty('overflow');
+                    } else {
+                        document.body.style.removeAttribute('overflow');
+                    }
+                    clearInterval(cldBodyOverflowInterval);
+                }
+            }, 500);
         },
 
         /**
