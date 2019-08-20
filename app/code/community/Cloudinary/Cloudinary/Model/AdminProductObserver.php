@@ -7,6 +7,7 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
 {
     const CLOUDINARY_FREE_FORM_FIELD = 'cloudinary_free';
     const CLOUDINARY_FREE_UPDATED_FIELD = 'cloudinary_free_updated';
+    const CLOUDINARY_FREE_FILE_FIELD = 'cloudinary_free_file';
 
     /**
      * @param Varien_Event_Observer $event
@@ -71,32 +72,19 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
     {
         $mediaImages = $this->getMediaGalleryImages($product);
 
+        $cloudinaryData = json_decode((string)$product->getCloudinaryData(), true) ?: array();
+        $cloudinaryData['transformation'] = (isset($cloudinaryData['transformation']))? (array) $cloudinaryData['transformation'] : array();
+
         // TODO: Should be removed on future releases
         foreach ($imageData as $id => $freeTransform) {
             Mage::getModel('cloudinary_cloudinary/transformation')
                 ->setImageName($this->getImageNameForId($id, $mediaImages))
                 ->setFreeTransformation($freeTransform)
                 ->save();
-
-            $cloudinaryData = json_decode((string)$product->getCloudinaryData(), true) ?: array();
-            $cloudinaryData['transformation'] = (isset($cloudinaryData['transformation']))? (array) $cloudinaryData['transformation'] : array();
             $cloudinaryData['transformation'][md5($this->getImageNameForId($id, $mediaImages))] = (string) $freeTransform;
-            $product->setCloudinaryData(json_encode($cloudinaryData));
         }
 
-
-        /*foreach ($mediaImages as &$image) {
-            if (isset($imageData[$image["value_id"]])) {
-                $image['cloudinary_transformation'] = $imageData[$image["value_id"]];
-            }
-        }
-
-        $productPost = Mage::app()->getRequest()->getPost("product");
-        $productPost['media_gallery']['images'] = json_encode($mediaImages);
-        Mage::app()->getRequest()->setPost("product", $productPost);
-        $mediaGallery = $product->getMediaGallery();
-        $mediaGallery['images'] = $productPost['media_gallery']['images'];
-        $product->setData('media_gallery', $mediaGallery);*/
+        $product->setCloudinaryData(json_encode($cloudinaryData));
     }
 
     /**
@@ -107,10 +95,11 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
     private function getImageNameForId($id, $images)
     {
         foreach ($images as $image) {
-            if ($image['value_id'] == $id) {
-                return $image['file'];
+            if(isset($image['value_id']) && $image['value_id'] == $id) {
+                return preg_replace('/\.tmp$/', '', $image['file']);
             }
         }
+
 
         return '';
     }
@@ -121,6 +110,18 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
      */
     private function getMediaGalleryImages(Mage_Catalog_Model_Product $product)
     {
-        return json_decode($product->getMediaGallery()['images'], true);
+        $post = Mage::app()->getRequest()->getPost();
+        $images = json_decode($product->getMediaGallery()['images'], true);
+        foreach ($images as &$image) {
+            if(!isset($image['value_id']) && isset($post[self::CLOUDINARY_FREE_FILE_FIELD])){
+                foreach (array_reverse($post[self::CLOUDINARY_FREE_FILE_FIELD]) as $valueId => $file) {
+                    if($image['file'] === $file){
+                        $image['value_id'] = $valueId;
+                        break;
+                    }
+                }
+            }
+        }
+        return $images;
     }
 }

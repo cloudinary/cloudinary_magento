@@ -25,14 +25,30 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function preDispatch()
     {
-        $this->_migrationTask = Mage::getModel('cloudinary_cloudinary/migration')->load(Cloudinary_Cloudinary_Model_Migration::CLOUDINARY_MIGRATION_ID);
+        $this->_migrationTask = Mage::getModel('cloudinary_cloudinary/migration')->loadType($this->getType());
         $this->_cloudinaryConfig = Mage::getModel('cloudinary_cloudinary/configuration');
-
         parent::preDispatch();
     }
 
-    public function indexAction()
+    public function getType()
     {
+        switch ($this->getRequest()->getParam('type')) {
+            case Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE:
+                return Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE;
+                break;
+            case Cloudinary_Cloudinary_Model_Migration::DOWNLOAD_MIGRATION_TYPE:
+                return Cloudinary_Cloudinary_Model_Migration::DOWNLOAD_MIGRATION_TYPE;
+                break;
+            default:
+                throw new Mage_Core_Exception(__('Cloudinary Error: Wrong migration type.'));
+                break;
+        }
+    }
+
+    protected function indexAction()
+    {
+        Mage::register('cloudinary_migration_type', $this->getType());
+
         $this->removeOrphanSyncEntries();
 
         $this->_displayMigrationMessages();
@@ -101,7 +117,9 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     public function clearErrorsAction()
     {
-        $items = Mage::getModel('cloudinary_cloudinary/migrationError')->getCollection()->getItems();
+        $items = Mage::getModel('cloudinary_cloudinary/migrationError')->getCollection()
+            ->addFieldToFilter('type', $this->getType())
+            ->getItems();
 
         foreach ($items as $error) {
             $error->delete();
@@ -117,7 +135,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
             if (!$cron->validate($this->_migrationTask, self::CRON_INTERVAL)) {
                 $this->_displayCronFailureMessage();
-            } else if ($cron->isInitialising($this->_migrationTask)) {
+            } elseif ($cron->isInitialising($this->_migrationTask)) {
                 $this->_displayCronInitialisingMessage();
             }
         }
@@ -125,7 +143,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryController extends Mage_Adminhtm
 
     private function _redirectToManageCloudinary()
     {
-        return $this->_redirect('*/cloudinary');
+        return $this->_redirect('*/cloudinary/index/type/' . $this->getType());
     }
 
     private function _buildMetaRefreshBlock()

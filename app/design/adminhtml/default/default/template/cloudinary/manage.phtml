@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-    function openCloudinaryMigrationPopup() {
+    function openCloudinaryMigrationPopup(type) {
 
         if ($('browser_window') && typeof(Windows) != 'undefined') {
             Windows.focus('browser_window');
@@ -13,7 +13,7 @@
             draggable:true,
             className:'magento',
             windowClassName:'popup-window',
-            title:'Start image migration to Cloudinary',
+            title:'Start image migration ' + (type === 'download' ? 'from' : 'to') + ' Cloudinary',
             width:400,
             height:100,
             zIndex:1000,
@@ -23,71 +23,128 @@
             id:'browser_window'
         });
 
-        dialogWindow.setHTMLContent('<p style="margin-top: 10px;">A cron job has to be configured for a successful migration. Are you sure you have configured a cron job?</p><div class="form-buttons" style="position: absolute; bottom: 10px; right: 10px;"><button title="No" type="button" class="scalable" onclick="closeCloudinaryMigrationPopup();" style="margin-right: 10px;"><span><span><span>No</span></span></span></button><button title="Yes - start migration" type="button" class="scalable" onclick="startCloudinaryMigration();"><span><span><span>Yes - start migration</span></span></span></button></div>');
+        dialogWindow.setHTMLContent('<p style="margin-top: 10px;">A cron job has to be configured for a successful migration. Are you sure you have configured a cron job?</p><div class="form-buttons" style="position: absolute; bottom: 10px; right: 10px;"><button title="No" type="button" class="scalable" onclick="closeCloudinaryMigrationPopup();" style="margin-right: 10px;"><span><span><span>No</span></span></span></button><button title="Yes - start migration" type="button" class="scalable" onclick="startCloudinaryMigration(\''+type+'\');"><span><span><span>Yes - start migration</span></span></span></button></div>');
     }
 
     function closeCloudinaryMigrationPopup() {
         Windows.close('browser_window');
     }
 
-    function startCloudinaryMigration() {
-        setLocation("<?php echo $this->getStartMigrationUrl(); ?>");
+    function startCloudinaryMigration(type) {
+        setLocation('<?php echo $this->getStartMigrationUrl(); ?>');
     }
 
 </script>
 
-<div class="content-header">
-    <table cellspacing="0"><tbody>
-        <tr>
-            <td style="width:50%;"><h3 class="icon-head">Migrate images to Cloudinary</h3></td>
-            <td class="form-buttons">
-                <?php echo $this->getMigrateButton() ?>
-            </td>
-        </tr>
-    </tbody></table>
-</div>
+<?php if ($this->getType() === Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE): ?>
+    <!-- Migration (from local storage to Cloudinary) -->
+    <div class="content-header">
+        <table cellspacing="0"><tbody>
+            <tr>
+                <td style="width:50%;"><h3 class="icon-head">Migrate images to Cloudinary</h3></td>
+                <td class="form-buttons">
+                    <?php echo $this->getMigrateButton() ?>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
 
-<p>
+    <p>
         Manual migration is only required if auto upload mapping cannot be used. New images will be automatically
         uploaded to Cloudinary when they are added to products or CMS pages.
-</p>
-<p>
-    <strong>
-        <?php if ($this->isAutoUploadMappingEnabled()): ?>
-            You have auto upload mapping enabled, and do not need to perform a manual migration.
+    </p>
+    <p>
+        <strong>
+            <?php if ($this->isAutoUploadMappingEnabled()): ?>
+                You have auto upload mapping enabled, and do not need to perform a manual migration.
+            <?php else: ?>
+                You can enable auto upload mapping in the
+            <a href="<?php echo $this->getCloudinaryConfigurationLink(); ?>">Cloudinary Configuration</a> section.
+            <?php endif; ?>
+        </strong>
+    </p>
+
+    <p>
+        <?php if ($this->allImagesSynced()): ?>
+            <div id="messages"><ul class="messages"><li class="notice-msg"><ul><li><span>All images have been successfully migrated to Cloudinary</span></li></ul></li></ul></div>
         <?php else: ?>
-            You can enable auto upload mapping in the
-        <a href="<?php echo $this->getCloudinaryConfigurationLink(); ?>">Cloudinary Configuration</a> section.
+            <p>Image migration progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
+            <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated to Cloudinary.</p>
         <?php endif; ?>
-    </strong>
-</p>
 
-<p>
-    <?php if ($this->allImagesSynced()): ?>
-        <div id="messages"><ul class="messages"><li class="notice-msg"><ul><li><span>All images have been successfully migrated to Cloudinary</span></li></ul></li></ul></div>
-    <?php else: ?>
-        <p>Image migration progress: <?php echo floor($this->getPercentComplete()) ?>%</p>
-        <p><?php echo $this->getSynchronizedImageCount() ?> of <?php echo $this->getTotalImageCount() ?> images migrated to Cloudinary.</p>
-    <?php endif; ?>
+        <div class="migration_errors">
 
-    <div class="migration_errors">
+            <?php
+                $errors = $this->getErrors();
+                $count = sizeof($errors);
+                echo "<div><strong>ERRORS ($count):</strong> (re-occuring errors refresh their timestamp)</div>";
+                echo $this->getClearErrorsButton();
 
-        <?php
+                foreach ($errors as $error) {
+                    $message = $error->getMessage();
+                    $filePath = $error->getFilePath();
+                    $timestamp = $error->getTimestamp();
+                    echo "<div class=\"migration_error\">$filePath: $message ($timestamp)</div>";
+                }
+            ?>
+        </div>
+    </p>
+    <!--/ Migration (from local storage to Cloudinary) -->
+<?php endif; ?>
 
-            $errors = $this->getErrors();
-            $count = sizeof($errors);
-            echo "<div><strong>ERRORS ($count):</strong> (re-occuring errors refresh their timestamp)</div>";
-            echo $this->getClearErrorsButton();
-
-            foreach ($errors as $error){
-                $message = $error->getMessage();
-                $filePath = $error->getFilePath();
-                $timestamp = $error->getTimestamp();
-                echo "<div class=\"migration_error\">$filePath: $message ($timestamp)</div>";
-            }
-        ?>
+<?php if ($this->getType() === Cloudinary_Cloudinary_Model_Migration::DOWNLOAD_MIGRATION_TYPE): $info = $this->getMigrationInfo(); ?>
+    <!-- Reversed migration (from Cloudinary to local storage) -->
+    <div class="content-header">
+        <table cellspacing="0"><tbody>
+            <tr>
+                <td style="width:50%;"><h3 class="icon-head">Migrate images from Cloudinary</h3></td>
+                <td class="form-buttons">
+                    <?php echo $this->getMigrateButton() ?>
+                </td>
+            </tr>
+        </tbody></table>
     </div>
-</p>
+
+    <h4>Migration Info:</h4>
+    <?php if (!empty($info->getData())): ?>
+        <p>
+            <p>Status: <?php echo $info->getData('more_expected')? __('In Progress...') : '<b style="color:#3d6611;">' . __("Done :)") . '</b>' ?>.</p>
+            <p>Global Progress: <?php echo 'Processed ' . $info->getData('resources_processed_total') . ' of ' . $info->getData('resources_count_total') ?>.</p>
+            <p>Downloaded Images (new): <?php echo $info->getData('resources_downloaded_total') ?>.</p>
+            <p>Skipped Images (already exists): <?php echo $info->getData('resources_skipped_total') ?>.</p>
+            <p>Failed Images (errors): <?php echo $info->getData('resources_failed_total') ?>.</p>
+        </p>
+    <?php else: ?>
+        <p>
+            No migration info available yet.
+        </p>
+    <?php endif; ?>
+    <p>
+        *During the migration, a schedule task (cronjob) will download images from Cloudinary to the local media dir.<br>
+        The process will be splitted to batches of <?php echo Cloudinary_Cloudinary_Helper_BatchDownloader::API_REQUEST_MAX_RESULTS; ?> images per round.<br>
+        **More datailed info about the progress will be found in the cloudinary log file (if enabled from system configuration).
+    </p>
+
+    <p>
+        <div class="migration_errors">
+            <?php
+                $errors = $this->getErrors();
+                $count = sizeof($errors);
+                echo "<div><strong>ERRORS ($count):</strong> (re-occuring errors refresh their timestamp)</div>";
+                echo $this->getClearErrorsButton();
+
+                foreach ($errors as $error) {
+                    $message = $error->getMessage();
+                    $filePath = $error->getFilePath();
+                    $timestamp = $error->getTimestamp();
+                    echo "<div class=\"migration_error\">$filePath: $message ($timestamp)</div>";
+                }
+            ?>
+        </div>
+    </p>
+
+    <!--/ Reversed migration (from Cloudinary to local storage) -->
+<?php endif; ?>
 
 <p>
     <strong>

@@ -65,9 +65,9 @@ class Transformation
         return $this;
     }
 
-    public function withFreeform(Freeform $freeform)
+    public function withFreeform(Freeform $freeform, $append = true)
     {
-        $this->freeform = $freeform;
+        $this->freeform = trim(($append) ? $this->freeform . "," . $freeform : $freeform, ",");
         return $this;
     }
 

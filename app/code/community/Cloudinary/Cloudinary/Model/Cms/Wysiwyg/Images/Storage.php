@@ -126,7 +126,7 @@ class Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Mo
             $filePath = $origFilePath;
             $origUrl = parent::getThumbnailUrl($filePath, $checkFile);
         }
-        
+
         if (!$origUrl) {
             return $_origUrl;
         }

@@ -2,9 +2,10 @@
 <config>
     <modules>
         <Cloudinary_Cloudinary>
-            <version>2.9.7</version>
+            <version>3.0.0</version>
         </Cloudinary_Cloudinary>
     </modules>
+
     <global>
         <models>
             <cloudinary_cloudinary>
@@ -14,6 +15,7 @@
             <cms>
                 <rewrite>
                     <adminhtml_template_filter>Cloudinary_Cloudinary_Model_Cms_Adminhtml_Template_Filter</adminhtml_template_filter>
+                    <wysiwyg_images_storage>Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage</wysiwyg_images_storage>
                 </rewrite>
             </cms>
             <catalog>
@@ -23,11 +25,6 @@
                     <template_filter>Cloudinary_Cloudinary_Model_Catalog_Template_Filter</template_filter>
                 </rewrite>
             </catalog>
-            <cms>
-                <rewrite>
-                    <wysiwyg_images_storage>Cloudinary_Cloudinary_Model_Cms_Wysiwyg_Images_Storage</wysiwyg_images_storage>
-                </rewrite>
-            </cms>
             <core>
                 <rewrite>
                     <file_uploader>Cloudinary_Cloudinary_Model_Cms_Uploader</file_uploader>
@@ -58,11 +55,18 @@
             <adminhtml>
                 <rewrite>
                     <page_menu>Cloudinary_Cloudinary_Block_Adminhtml_Page_Menu</page_menu>
+                    <cms_wysiwyg_images_content_uploader>Cloudinary_Cloudinary_Block_Adminhtml_Cms_Wysiwyg_Images_Content_Uploader</cms_wysiwyg_images_content_uploader>
                 </rewrite>
             </adminhtml>
             <cloudinary_cloudinary>
                 <class>Cloudinary_Cloudinary_Block</class>
             </cloudinary_cloudinary>
+            <uploader>
+				<rewrite>
+					<single>Cloudinary_Cloudinary_Block_Uploader_Single</single>
+                    <multiple>Cloudinary_Cloudinary_Block_Uploader_Multiple</multiple>
+				</rewrite>
+			</uploader>
         </blocks>
         <cms>
             <page>
@@ -134,7 +138,35 @@
             </types>
         </cache>
     </global>
+
+    <frontend>
+        <layout>
+            <updates>
+                <frontend_cloudinary>
+                    <file>cloudinary/cloudinary.xml</file>
+                </frontend_cloudinary>
+            </updates>
+        </layout>
+        <events>
+            <controller_action_layout_render_before_catalog_product_view>
+                <observers>
+                    <cloudinary_product_gallery_override>
+                        <class>cloudinary_cloudinary/observer_ProductGalleryOverride</class>
+                        <method>execute</method>
+                    </cloudinary_product_gallery_override>
+                </observers>
+            </controller_action_layout_render_before_catalog_product_view>
+        </events>
+    </frontend>
+
     <adminhtml>
+        <layout>
+            <updates>
+                <adminhtml_cloudinary>
+                    <file>cloudinary/cloudinary.xml</file>
+                </adminhtml_cloudinary>
+            </updates>
+        </layout>
         <events>
             <admin_system_config_changed_section_cloudinary>
                 <observers>
@@ -154,6 +186,7 @@
             </catalog_product_save_before>
         </events>
     </adminhtml>
+
     <admin>
         <routers>
             <adminhtml>
@@ -165,6 +198,7 @@
             </adminhtml>
         </routers>
     </admin>
+
     <default>
         <cloudinary>
             <transformations>
@@ -180,27 +214,53 @@
                 <cloudinary_log_active>0</cloudinary_log_active>
                 <cloudinary_log_filename>cloudinary</cloudinary_log_filename>
             </log>
+            <product_gallery>
+                <enabled>0</enabled>
+                <themeProps_primary>#ffffff</themeProps_primary>
+                <themeProps_onPrimary>#000000</themeProps_onPrimary>
+                <themeProps_active>#0078ff</themeProps_active>
+                <themeProps_onActive>#ffffff</themeProps_onActive>
+                <transition>slide</transition>
+                <aspectRatio>square</aspectRatio>
+                <navigation>mouseover</navigation>
+                <zoom>1</zoom>
+                <zoomProps_type>inline</zoomProps_type>
+                <zoomProps_viewerPosition>right</zoomProps_viewerPosition>
+                <zoomProps_trigger>click</zoomProps_trigger>
+                <carouselLocation>left</carouselLocation>
+                <carouselOffset>5</carouselOffset>
+                <carouselStyle>thumbnails</carouselStyle>
+                <thumbnailProps_width>64</thumbnailProps_width>
+                <thumbnailProps_height>64</thumbnailProps_height>
+                <thumbnailProps_navigationShape>rectangle</thumbnailProps_navigationShape>
+                <thumbnailProps_selectedStyle>all</thumbnailProps_selectedStyle>
+                <thumbnailProps_selectedBorderPosition>left</thumbnailProps_selectedBorderPosition>
+                <thumbnailProps_selectedBorderWidth>2</thumbnailProps_selectedBorderWidth>
+                <thumbnailProps_mediaSymbolShape>round</thumbnailProps_mediaSymbolShape>
+                <indicatorProps_shape>round</indicatorProps_shape>
+                <custom_free_params>{}</custom_free_params>
+            </product_gallery>
         </cloudinary>
     </default>
+
     <crontab>
         <jobs>
-            <cloudinary_migrate>
+            <cloudinary_upload_migration>
                 <schedule>
                     <cron_expr>*/3 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>cloudinary_cloudinary/cron::migrateImages</model>
+                    <model>cloudinary_cloudinary/cron::uploadMigration</model>
                 </run>
-            </cloudinary_migrate>
+            </cloudinary_upload_migration>
+            <cloudinary_download_migration>
+                <schedule>
+                    <cron_expr>*/3 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>cloudinary_cloudinary/cron::downloadMigration</model>
+                </run>
+            </cloudinary_download_migration>
         </jobs>
     </crontab>
-    <adminhtml>
-        <layout>
-            <updates>
-                <adminhtml_cloudinary>
-                    <file>cloudinary/cloudinary.xml</file>
-                </adminhtml_cloudinary>
-            </updates>
-        </layout>
-    </adminhtml>
 </config>

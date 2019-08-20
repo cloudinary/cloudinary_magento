@@ -1,7 +1,6 @@
 <?php
 
-class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Product_Edit_Tab extends Mage_Adminhtml_Block_Widget
-    implements Mage_Adminhtml_Block_Widget_Tab_Interface
+class Cloudinary_Cloudinary_Block_Adminhtml_Catalog_Product_Edit_Tab extends Mage_Adminhtml_Block_Widget implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
     public function canShowTab()
     {

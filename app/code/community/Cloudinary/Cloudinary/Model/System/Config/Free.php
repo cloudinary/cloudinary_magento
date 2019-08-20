@@ -30,7 +30,7 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
      */
     protected function _beforeSave()
     {
-        //Clear config cache before mapping
+        //Clear config cache
         Mage::app()->getCacheInstance()->cleanType("config");
         Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => "config"));
         Mage::getConfig()->reinit();
@@ -105,18 +105,40 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
 
     /**
      * @param string $url
-     * @return Zend_Http_Response
+     * @return object
      */
     public function httpRequest($url)
     {
-        $curl = new Varien_Http_Adapter_Curl();
-        $curl->write(Zend_Http_Client::GET, $url);
-        $response = $curl->read();
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_VERBOSE => 1,
+            CURLOPT_HEADER => 1,
+        ]);
+        $res = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err = curl_error($ch);
+        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $headers = array();
+        foreach (explode("\r\n", substr($res, 0, $header_size)) as $i => $line) {
+            if ($i === 0) {
+                $headers['http_code'] = $line;
+            } else {
+                list($key, $value) = array_pad(explode(': ', $line), 2, '');
+                if($key){
+                    $headers[$key] = $value;
+                }
+            }
+        }
+        $body = substr($res, $header_size);
+        curl_close($ch);
+
         $response = (object)[
-            "code" => Zend_Http_Response::extractCode($response),
-            "body" => Zend_Http_Response::extractBody($response),
-            "headers" => (array) Zend_Http_Response::extractHeaders($response),
-            "error" => $curl->getError()
+            "code" => $httpCode,
+            "body" => $body,
+            "headers" => (array) $headers,
+            "error" => $err
         ];
         return $response;
     }

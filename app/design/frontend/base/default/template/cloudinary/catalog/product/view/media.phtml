@@ -1,0 +1,16 @@
+<?php
+/**
+ * @var $this Cloudinary_Cloudinary_Block
+ */
+?>
+<div id="<?= $this->getCldPGid() ?>" class="cloudinary-product-gallery" style="max-width:100%;margin:auto"></div>
+<script>
+//<![CDATA[
+    (function() {
+        window.cloudinary_pg = window.cloudinary_pg || [];
+        var cldPGid = '<?= $this->getCldPGid() ?>' || 0;
+        window.cloudinary_pg[cldPGid] = cloudinary.galleryWidget(<?= $this->getCloudinaryPGOptions() ?>);
+        window.cloudinary_pg[cldPGid].render();
+    })();
+//]]>
+</script>
