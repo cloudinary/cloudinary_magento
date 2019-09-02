@@ -81,7 +81,7 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
                 ->setImageName($this->getImageNameForId($id, $mediaImages))
                 ->setFreeTransformation($freeTransform)
                 ->save();
-            $cloudinaryData['transformation'][md5($this->getImageNameForId($id, $mediaImages))] = (string) $freeTransform;
+            $cloudinaryData['transformation'][hash('sha256', $this->getImageNameForId($id, $mediaImages))] = (string) $freeTransform;
         }
 
         $product->setCloudinaryData(json_encode($cloudinaryData));
@@ -122,6 +122,7 @@ class Cloudinary_Cloudinary_Model_AdminProductObserver extends Mage_Core_Model_A
                 }
             }
         }
+
         return $images;
     }
 }

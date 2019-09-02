@@ -64,16 +64,18 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
             } else {
                 Mage::getSingleton('adminhtml/session')->addError(sprintf(self::ERROR_FORMAT, self::ERROR_DEFAULT));
             }
+
             return false;
         }
 
-        if (is_object($response) && ($response->error || !in_array($response->code, [200,301,302]))) {
+        if (is_object($response) && ($response->error || !in_array($response->code, array(200,301,302)))) {
             $this->setValue(null);
             if ($strict) {
                 throw new Mage_Core_Exception($this->formatError($response));
             } else {
                 Mage::getSingleton('adminhtml/session')->addError($this->formatError($response));
             }
+
             return false;
         }
 
@@ -110,12 +112,14 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
     public function httpRequest($url)
     {
         $ch = curl_init();
-        curl_setopt_array($ch, [
+        curl_setopt_array(
+            $ch, array(
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_VERBOSE => 1,
             CURLOPT_HEADER => 1,
-        ]);
+            )
+        );
         $res = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $err = curl_error($ch);
@@ -131,15 +135,16 @@ class Cloudinary_Cloudinary_Model_System_Config_Free extends Mage_Core_Model_Con
                 }
             }
         }
+
         $body = substr($res, $header_size);
         curl_close($ch);
 
-        $response = (object)[
+        $response = (object)array(
             "code" => $httpCode,
             "body" => $body,
             "headers" => (array) $headers,
             "error" => $err
-        ];
+        );
         return $response;
     }
 

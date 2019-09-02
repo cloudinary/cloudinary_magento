@@ -17,7 +17,8 @@ class Cloudinary_Cloudinary_Model_Cms_Synchronisation
         return $this->getData('filename');
     }
 
-    public function getRelativePath(){
+    public function getRelativePath()
+    {
         return Mage::getModel('cloudinary_cloudinary/configuration')->getMigratedPath($this->getFilename());
     }
 

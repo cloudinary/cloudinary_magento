@@ -50,8 +50,9 @@ class Cloudinary_Cloudinary_Model_Observer_ProductGalleryOverride extends Mage_C
     protected function getHtmlId()
     {
         if (!$this->htmlId) {
-            $this->htmlId = md5(uniqid('', true));
+            $this->htmlId = hash('sha256', uniqid('', true));
         }
+
         return $this->htmlId;
     }
 
@@ -71,7 +72,7 @@ class Cloudinary_Cloudinary_Model_Observer_ProductGalleryOverride extends Mage_C
         if (is_null($this->cloudinaryPGoptions) || $refresh) {
             $this->cloudinaryPGoptions = $this->productGalleryHelper->getCloudinaryPGOptions($refresh, $ignoreDisabled);
             $this->cloudinaryPGoptions['container'] = '#' . $this->getCldPGid();
-            $this->cloudinaryPGoptions['mediaAssets'] = [];
+            $this->cloudinaryPGoptions['mediaAssets'] = array();
             if ($galleryAssets = $this->productGalleryBlock->getGalleryImages()) {
                 foreach ($galleryAssets as $key => $_image) {
                     if ($this->productGalleryBlock->isGalleryImageVisible($_image)) {
@@ -89,17 +90,19 @@ class Cloudinary_Cloudinary_Model_Observer_ProductGalleryOverride extends Mage_C
                         } else {
                             $publicId = null;
                         }
+
                         if ($publicId) {
-                            $this->cloudinaryPGoptions['mediaAssets'][] = (object)[
+                            $this->cloudinaryPGoptions['mediaAssets'][] = (object)array(
                                 "publicId" => $publicId,
                                 "mediaType" => 'image',
                                 "transformation" => $transformation,
-                            ];
+                            );
                         }
                     }
                 }
             }
         }
+
         return Mage::helper('core')->jsonEncode($this->cloudinaryPGoptions);
     }
 }

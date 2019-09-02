@@ -11,13 +11,15 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
             $this->validateRemoteFileExtensions($localUniqFilePath);
             $this->retrieveRemoteImage($remoteFileUrl, $localUniqFilePath);
             $localFileFullPath = $this->appendAbsoluteFileSystemPath($localUniqFilePath);
-            Mage::getSingleton('core/file_validator_image')->setAllowedImageTypes(['jpg','jpeg','gif','png'])->validate($localFileFullPath);
+            Mage::getSingleton('core/file_validator_image')->setAllowedImageTypes(array('jpg','jpeg','gif','png'))->validate($localFileFullPath);
             $result = $this->appendResultSaveRemoteImage($localUniqFilePath, $baseTmpMediaPath);
 
-            Mage::dispatchEvent('catalog_product_gallery_upload_image_after', array(
+            Mage::dispatchEvent(
+                'catalog_product_gallery_upload_image_after', array(
                 'result' => $result,
                 'action' => $this
-            ));
+                )
+            );
         } catch (Exception $e) {
             $result = array(
                 'error' => $e->getMessage(),
@@ -51,9 +53,11 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
                 }
                 break;
         }
+
         if (!$baseTmpMediaPath) {
             throw new Mage_Core_Exception(__("Empty baseTmpMediaPath"));
         }
+
         return $baseTmpMediaPath;
     }
 
@@ -70,6 +74,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
                 $localTmpFileName = Varien_File_Uploader::getDispretionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
                 break;
         }
+
         return $localTmpFileName;
     }
 
@@ -83,7 +88,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
     private function validateRemoteFileExtensions($filePath)
     {
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        if (!in_array($extension, ['jpg','jpeg','gif','png'])) {
+        if (!in_array($extension, array('jpg','jpeg','gif','png'))) {
             throw new Mage_Core_Exception(__('Disallowed file type.'));
         }
     }
@@ -99,6 +104,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
         if (substr($tmpFileName, 0, strlen($baseTmpMediaPath)) == $baseTmpMediaPath) {
             $tmpFileName = substr($tmpFileName, strlen($baseTmpMediaPath));
         }
+
         $result['name'] = basename($localUniqFilePath);
         $result['type'] = Mage::helper('uploader/file')->getMimeTypeByExtension(@pathinfo($localFileFullPath, PATHINFO_EXTENSION));
         $result['error'] = 0;
@@ -133,6 +139,7 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
                 __('The preview image information is unavailable. Check your connection and try again.')
             );
         }
+
         Mage::getSingleton('core/file_storage_file')->saveFile(array('filename' => $localFilePath, 'content' => $image), true);
     }
 
@@ -168,6 +175,15 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryretrieveimageController extends 
             $storage = Mage::getModel('cms/wysiwyg_images_storage');
             Mage::register('storage', $storage);
         }
+
         return Mage::registry('storage');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed();
     }
 }

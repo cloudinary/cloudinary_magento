@@ -57,7 +57,7 @@ class Cloudinary_Cloudinary_Model_SynchronizationChecker implements Synchronizat
      */
     private function getSynchronizationCacheKeyFromImageName($imageName)
     {
-        return sprintf('cloudinary_sync_%s', md5($imageName));
+        return sprintf('cloudinary_sync_%s', hash('sha256', $imageName));
     }
 
     /**

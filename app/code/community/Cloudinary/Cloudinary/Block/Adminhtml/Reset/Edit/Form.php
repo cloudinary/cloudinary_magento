@@ -20,10 +20,12 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Reset_Edit_Form extends Mage_Adminht
 
         $fieldset = $form->addFieldset('display', array('class' => 'fieldset-wide'));
 
-        $fieldset->addField('password', 'password', array(
+        $fieldset->addField(
+            'password', 'password', array(
             'name' => 'password',
             'label' => Mage::helper('cloudinary_cloudinary')->__('Enter your admin password to confirm reset')
-        ));
+            )
+        );
 
         return parent::_prepareForm();
     }

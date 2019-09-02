@@ -109,6 +109,7 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         if (!$this->_configuration->isEnabled()) {
             return parent::__toString();
         }
+
         $image = $this->_imageFactory->build(
             $this->_getRequestedImageFile(),
             function () {

@@ -78,6 +78,6 @@ class Cloudinary_Cloudinary_Adminhtml_CloudinaryajaxController extends Mage_Admi
      */
     protected function _isAllowed()
     {
-        return true;
+        return parent::_isAllowed();
     }
 }

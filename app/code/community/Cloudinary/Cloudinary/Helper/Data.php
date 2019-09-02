@@ -13,10 +13,12 @@ class Cloudinary_Cloudinary_Helper_Data extends Mage_Core_Helper_Abstract
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $err = curl_error($ch);
         curl_close($ch);
-        return new Varien_Object(array(
+        return new Varien_Object(
+            array(
             "code" => $httpCode,
             "body" => $result,
             "error" => $err
-        ));
+            )
+        );
     }
 }
