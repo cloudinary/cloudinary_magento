@@ -122,6 +122,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
                 ->withFetchFormat(FetchFormat::fromString(FetchFormat::FETCH_FORMAT_AUTO))
                 ->withoutFormat();
         }
+
         return $transformation;
     }
 
@@ -184,6 +185,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
         } catch (Exception $e) {
             Mage::logException($e);
         }
+
         return false;
     }
 
@@ -194,6 +196,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
         } else {
             $result = basename($file);
         }
+
         return $result;
     }
 
@@ -202,6 +205,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
         if ($this->isFolderedMigration()) {
             return $this->folderTranslator->reverse($migratedPath);
         }
+
         return $migratedPath;
     }
 
@@ -250,8 +254,10 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
             } else {
                 $value = Mage::helper('core')->decrypt(Mage::getStoreConfig(self::CONFIG_PATH_ENVIRONMENT_VARIABLE));
             }
+
             $this->environmentVariable = CloudinaryEnvironmentVariable::fromString($value);
         }
+
         return $this->environmentVariable;
     }
 
@@ -277,6 +283,7 @@ class Cloudinary_Cloudinary_Model_Configuration implements ConfigurationInterfac
         if (Mage::getStoreConfigFlag(self::CONFIG_DEFAULT_FETCH_FORMAT)) {
             return FetchFormat::FETCH_FORMAT_AUTO;
         }
+
         return '';
     }
 

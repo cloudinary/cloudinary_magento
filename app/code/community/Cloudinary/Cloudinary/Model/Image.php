@@ -50,6 +50,7 @@ class Cloudinary_Cloudinary_Model_Image extends Mage_Core_Model_Abstract
         if (!array_key_exists($key, $imageDetails)) {
             throw new BadFilePathException("Invalid image data structure. Missing " . $key);
         }
+
         return $imageDetails[$key];
     }
 

@@ -32,7 +32,9 @@ class Cloudinary_Cloudinary_Model_Cms_Template_Filter extends Mage_Widget_Model_
         
         $image = $this->imageFactory->build(
             $imagePath,
-            function() use($construction) { return parent::mediaDirective($construction);}
+            function() use($construction) {
+            return parent::mediaDirective($construction);
+            }
         );
 
         return $this->urlGenerator->generateFor($image);

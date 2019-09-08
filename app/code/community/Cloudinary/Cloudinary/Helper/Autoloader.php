@@ -21,8 +21,7 @@ class Cloudinary_Cloudinary_Helper_Autoloader
     {
         spl_autoload_register(
             function ($className) {
-                if(
-                    strpos($className, Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_EXTENSION_LIB_PATH . '\\') === 0 ||
+                if(strpos($className, Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_EXTENSION_LIB_PATH . '\\') === 0 ||
                     strpos($className, Cloudinary_Cloudinary_Helper_Autoloader::CLOUDINARY_LIB_PATH . '\\') === 0
                 ) {
                     include_once preg_replace(Cloudinary_Cloudinary_Helper_Autoloader::CONVERT_CLASS_TO_PATH_REGEX, '/', $className) . '.php';

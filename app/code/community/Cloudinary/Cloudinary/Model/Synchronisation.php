@@ -25,6 +25,7 @@ class Cloudinary_Cloudinary_Model_Synchronisation extends Mage_Core_Model_Abstra
         if (!$this->getValue()) {
             return null;
         }
+
         return $this->_baseMediaPath() . $this->getValue();
     }
 

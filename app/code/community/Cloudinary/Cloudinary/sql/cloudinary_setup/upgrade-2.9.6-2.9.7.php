@@ -4,7 +4,8 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer->addAttribute('catalog_product', 'cloudinary_data', array(
+$installer->addAttribute(
+    'catalog_product', 'cloudinary_data', array(
     'group'                   => 'General',
     'label'                   => 'Cloudinary Data',
     'input'                   => 'text',
@@ -19,6 +20,7 @@ $installer->addAttribute('catalog_product', 'cloudinary_data', array(
     'used_in_product_listing' => '1',
     'global'                  => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
     'note'                    => '',
-));
+    )
+);
 
 $installer->endSetup();

@@ -17,6 +17,7 @@ class Cloudinary_Cloudinary_Model_CollectionCounter implements Countable
         foreach ($this->_collections as $collection) {
             $count += $collection->getSize();
         }
+
         return $count;
     }
 }

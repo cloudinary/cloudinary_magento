@@ -7,10 +7,11 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media extends Mage_Core_Model_
     public function getProductMediaGallery(Mage_Catalog_Model_Product $product)
     {
         $mediaGallery = (array) $product->getData('media_gallery');
-        $mediaGallery['images'] = isset($mediaGallery['images'])? $mediaGallery['images'] : [];
+        $mediaGallery['images'] = isset($mediaGallery['images'])? $mediaGallery['images'] : array();
         if (!is_array($mediaGallery['images'])) {
             $mediaGallery['images'] = (array) @json_decode($mediaGallery['images'], true);
         }
+
         return $mediaGallery;
     }
 
