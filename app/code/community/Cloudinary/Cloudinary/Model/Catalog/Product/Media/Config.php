@@ -48,9 +48,11 @@ class Cloudinary_Cloudinary_Model_Catalog_Product_Media_Config extends Mage_Cata
             return parent::getMediaUrl($file);
         }
 
-        $image = $this->_imageFactory->build($file, function () use ($file) {
+        $image = $this->_imageFactory->build(
+            $file, function () use ($file) {
             return parent::getMediaUrl($file);
-        });
+            }
+        );
 
         return $this->_urlGenerator->generateFor(
             $image,

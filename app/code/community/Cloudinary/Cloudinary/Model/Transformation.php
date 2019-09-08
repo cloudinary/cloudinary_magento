@@ -48,8 +48,8 @@ class Cloudinary_Cloudinary_Model_Transformation extends Mage_Core_Model_Abstrac
         $transformationString = false;
         if ($product) {
             $cloudinaryData = json_decode((string)$product->getCloudinaryData(), true) ?: array();
-            if (isset($cloudinaryData['transformation']) && isset($cloudinaryData['transformation'][md5($imageFile)])) {
-                $transformationString = $cloudinaryData['transformation'][md5($imageFile)];
+            if (isset($cloudinaryData['transformation']) && isset($cloudinaryData['transformation'][hash('sha256', $imageFile)])) {
+                $transformationString = $cloudinaryData['transformation'][hash('sha256', $imageFile)];
             } else {
                 $updateProduct = true;
                 $transformationString = $this->cache->loadCache(
@@ -61,6 +61,7 @@ class Cloudinary_Cloudinary_Model_Transformation extends Mage_Core_Model_Abstrac
                         if (($this->getImageName() === $imageFile) && $this->hasFreeTransformation()) {
                             return $this->getFreeTransformation();
                         }
+
                         return '';
                     }
                 );
@@ -82,7 +83,7 @@ class Cloudinary_Cloudinary_Model_Transformation extends Mage_Core_Model_Abstrac
 
         if (isset($updateProduct)) {
             //$initialEnvironmentInfo = Mage::getSingleton('core/app_emulation')->startEnvironmentEmulation(Mage_Core_Model_App::ADMIN_STORE_ID);
-            $cloudinaryData['transformation'][md5($imageFile)] = $transformationString;
+            $cloudinaryData['transformation'][hash('sha256', $imageFile)] = $transformationString;
             $product->setCloudinaryData(json_encode($cloudinaryData));
             $product->getResource()->saveAttribute($product, 'cloudinary_data');
             //Mage::getSingleton('core/app_emulation')->stopEnvironmentEmulation($initialEnvironmentInfo);
@@ -107,13 +108,14 @@ class Cloudinary_Cloudinary_Model_Transformation extends Mage_Core_Model_Abstrac
                     $transformation->getFreeTransformation()
                 );
             }
+
             $this->cache->saveCache(self::TRANSFORM_CACHE_WARM_KEY, '1');
         }
     }
 
     private function getTransformCacheKeyFromImageFile($imageFile)
     {
-        return sprintf('cloudinary_transform_%s', md5($imageFile));
+        return sprintf('cloudinary_transform_%s', hash('sha256', $imageFile));
     }
 
     /**

@@ -69,14 +69,21 @@ class Cloudinary_Cloudinary_Helper_MediaLibraryHelper extends Mage_Core_Helper_A
                 if (($this->credentials["username"] = $this->configuration->getAutomaticLoginUser())) {
                     $this->cloudinaryMLoptions["timestamp"] = $this->timestamp;
                     $this->cloudinaryMLoptions["username"] = $this->credentials["username"];
-                    $this->cloudinaryMLoptions["signature"] = $this->signature = hash('sha256', urldecode(http_build_query([
-                        'cloud_name' => $this->credentials['cloud_name'],
-                        'timestamp'  => $this->timestamp,
-                        'username'   => $this->credentials['username'],
-                    ])) . $this->credentials['api_secret']);
+                    $this->cloudinaryMLoptions["signature"] = $this->signature = hash(
+                        'sha256', urldecode(
+                            http_build_query(
+                                array(
+                                'cloud_name' => $this->credentials['cloud_name'],
+                                'timestamp'  => $this->timestamp,
+                                'username'   => $this->credentials['username'],
+                                )
+                            )
+                        ) . $this->credentials['api_secret']
+                    );
                 }
             }
         }
+
         if ($this->cloudinaryMLoptions) {
             $this->cloudinaryMLoptions['multiple'] = $multiple;
         }
@@ -92,13 +99,14 @@ class Cloudinary_Cloudinary_Helper_MediaLibraryHelper extends Mage_Core_Helper_A
      */
     public function getCloudinaryMLshowOptions($resourceType = null, $path = "")
     {
-        $options = [];
+        $options = array();
         if ($resourceType || $resourceType) {
             $options["folder"] = array(
                 "path" => $path,
                 "resource_type" => $resourceType,
             );
         }
+
         return $options;
     }
 }

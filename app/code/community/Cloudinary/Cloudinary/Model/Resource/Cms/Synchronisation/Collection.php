@@ -42,6 +42,7 @@ class Cloudinary_Cloudinary_Model_Resource_Cms_Synchronisation_Collection
                 Mage::getSingleton('core/session')->addError("Couldn't find path " . $value);
                 Mage::register('error_' . $value, true);
             }
+
             throw $e;
         }
     }

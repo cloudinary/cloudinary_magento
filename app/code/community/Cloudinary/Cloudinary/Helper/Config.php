@@ -28,7 +28,7 @@ class Cloudinary_Cloudinary_Helper_Config extends Mage_Core_Helper_Abstract
                 $this->doFlatten(sprintf('%s/%s', $key, $childKey), $childValue, $output);
             }
         } else {
-            $output[substr($key, 0,  -6)] = $value;
+            $output[substr($key, 0, -6)] = $value;
         }
     }
 }

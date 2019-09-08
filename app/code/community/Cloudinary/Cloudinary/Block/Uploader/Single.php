@@ -27,7 +27,8 @@ class Cloudinary_Cloudinary_Block_Uploader_Single extends Mage_Uploader_Block_Si
             $this->setChild(
                 'cloudinary_ml_button',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->addData(array(
+                    ->addData(
+                        array(
                         // Workaround for IE9
                         'before_html'   => sprintf(
                             '<div style="display:inline-block;" id="%s">',
@@ -42,7 +43,8 @@ class Cloudinary_Cloudinary_Block_Uploader_Single extends Mage_Uploader_Block_Si
                         'id'            => $this->getElementId(self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_button'),
                         'label'         => Mage::helper('uploader')->__('Add From Cloudinary...'),
                         'type'          => 'button',
-                    ))
+                        )
+                    )
             );
         }
 
@@ -71,7 +73,9 @@ class Cloudinary_Cloudinary_Block_Uploader_Single extends Mage_Uploader_Block_Si
         if (!($cloudinaryMLoptions = Mage::helper('cloudinary_cloudinary/MediaLibraryHelper')->getCloudinaryMLOptions($multiple, $refresh))) {
             return null;
         }
-        return Mage::helper('core')->jsonEncode(array(
+
+        return Mage::helper('core')->jsonEncode(
+            array(
             'htmlId' => $this->getHtmlId(),
             'cldMLid' => self::DEFAULT_CLD_ML_BUTTON_ID_SUFFIX . '_' . $this->getHtmlId(),
             'imageUploaderUrl' => $this->getCldImageUploaderUrl(),
@@ -84,7 +88,8 @@ class Cloudinary_Cloudinary_Block_Uploader_Single extends Mage_Uploader_Block_Si
             'addTmpExtension' => $this->getAddTmpExtension(),
             'cloudinaryMLoptions' => $cloudinaryMLoptions,
             'cloudinaryMLshowOptions' => Mage::helper('cloudinary_cloudinary/MediaLibraryHelper')->getCloudinaryMLshowOptions('image'),
-        ));
+            )
+        );
     }
 
     /**

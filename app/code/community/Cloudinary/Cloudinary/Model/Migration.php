@@ -102,6 +102,7 @@ class Cloudinary_Cloudinary_Model_Migration extends Mage_Core_Model_Abstract imp
         if (is_array($info) || is_object($info)) {
             $info = json_encode($info);
         }
+
         return $this->setData('info', $info);
     }
 }

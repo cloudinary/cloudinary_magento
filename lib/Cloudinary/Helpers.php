@@ -1,14 +1,14 @@
 <?php
 
 namespace {
-    function cl_upload_url($options = array()) 
+    function cl_upload_url($options = array())
     {
         if (!@$options["resource_type"]) $options["resource_type"] = "auto";
         $endpoint = array_key_exists('chunk_size', $options) ? 'upload_chunked' : 'upload';
-        return Cloudinary::cloudinary_api_url($endpoint, $options);      
+        return Cloudinary::cloudinary_api_url($endpoint, $options);
     }
 
-    function cl_upload_tag_params($options = array()) 
+    function cl_upload_tag_params($options = array())
     {
         $params = Cloudinary\Uploader::build_upload_params($options);
         if (Cloudinary::option_get($options, "unsigned")) {
@@ -18,7 +18,7 @@ namespace {
         }
         return json_encode($params);
     }
-    
+
     function cl_unsigned_image_upload_tag($field, $upload_preset, $options = array())
     {
       return cl_image_upload_tag($field, array_merge($options, array("unsigned"=>TRUE, "upload_preset"=>$upload_preset)));
@@ -29,7 +29,7 @@ namespace {
         return cl_upload_tag($field, $options);
     }
 
-    function cl_upload_tag($field, $options = array()) 
+    function cl_upload_tag($field, $options = array())
     {
         $html_options = Cloudinary::option_get($options, "html", array());
 
@@ -66,7 +66,7 @@ namespace {
 
         return $form;
     }
-    
+
     // Examples
     // cl_image_tag("israel.png", array("width"=>100, "height"=>100, "alt"=>"hello") # W/H are not sent to cloudinary
     // cl_image_tag("israel.png", array("width"=>100, "height"=>100, "alt"=>"hello", "crop"=>"fit") # W/H are sent to cloudinary
@@ -94,33 +94,33 @@ namespace {
         $html .= Cloudinary::html_attrs($options) . "/>";
         return $html;
     }
-    
+
     function fetch_image_tag($url, $options = array()) {
         $options["type"] = "fetch";
         return cl_image_tag($url, $options);
     }
-    
+
     function facebook_profile_image_tag($profile, $options = array()) {
         $options["type"] = "facebook";
         return cl_image_tag($profile, $options);
     }
-    
+
     function gravatar_profile_image_tag($email, $options = array()) {
         $options["type"] = "gravatar";
         $options["format"] = "jpg";
-        return cl_image_tag(md5(strtolower(trim($email))), $options);
+        return cl_image_tag(hash('sha256', strtolower(trim($email))), $options);
     }
-    
+
     function twitter_profile_image_tag($profile, $options = array()) {
         $options["type"] = "twitter";
         return cl_image_tag($profile, $options);
     }
-    
+
     function twitter_name_profile_image_tag($profile, $options = array()) {
         $options["type"] = "twitter_name";
         return cl_image_tag($profile, $options);
     }
-    
+
     function cloudinary_js_config() {
         $params = array();
         foreach (Cloudinary::$JS_CONFIG_PARAMS as $param) {
@@ -131,7 +131,7 @@ namespace {
             "$.cloudinary.config(" . json_encode($params) . ");\n" .
             "</script>\n";
     }
-    
+
     function cloudinary_url($source, $options = array()) {
         return cloudinary_url_internal($source, $options);
     }
@@ -140,10 +140,10 @@ namespace {
             $options["secure"] = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' )
                 || ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' );
         }
-    
+
         return Cloudinary::cloudinary_url($source, $options);
     }
-    
+
     function cl_sprite_url($tag, $options = array()) {
         if (substr($tag, -strlen(".css")) != ".css") {
             $options["format"] = "css";
@@ -151,7 +151,7 @@ namespace {
         $options["type"] = "sprite";
         return cloudinary_url_internal($tag, $options);
     }
-    
+
     function cl_sprite_tag($tag, $options = array()) {
         return "<link rel='stylesheet' type='text/css' href='" . cl_sprite_url($tag, $options) . "'>";
     }
@@ -212,7 +212,7 @@ namespace {
         } else {
             $video_options['poster'] = cl_video_thumbnail_path($source, $options);
         }
-        
+
         if (empty($video_options['poster'])) unset($video_options['poster']);
 
 
@@ -230,7 +230,7 @@ namespace {
         $html .= Cloudinary::html_attrs($video_options ) . '>';
 
         if ($multi_source) {
-            
+
             foreach($source_types as $source_type) {
                 $transformation = Cloudinary::option_consume($source_transformation, $source_type, array());
                 $transformation = array_merge($options, $transformation);

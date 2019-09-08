@@ -70,6 +70,7 @@ class Cloudinary_Cloudinary_Model_System_Config_Credentials extends Mage_Adminht
             if (!$rawValue) {
                 throw new Mage_Core_Exception(__(self::CREDENTIALS_CHECK_MISSING));
             }
+
             if ($isSaveAllowed) {
                 $this->validate($this->getCredentialsFromEnvironmentVariable($rawValue));
             } else {
@@ -106,14 +107,15 @@ class Cloudinary_Cloudinary_Model_System_Config_Credentials extends Mage_Adminht
     {
         try {
             Cloudinary::config_from_url(str_replace('CLOUDINARY_URL=', '', $environmentVariable));
-            $credentials = [
+            $credentials = array(
                 "cloud_name" => Cloudinary::config_get('cloud_name'),
                 "api_key" => Cloudinary::config_get('api_key'),
                 "api_secret" => Cloudinary::config_get('api_secret')
-            ];
+            );
             if (Cloudinary::config_get('private_cdn')) {
                 $credentials["private_cdn"] = Cloudinary::config_get('private_cdn');
             }
+
             return $credentials;
         } catch (\Exception $e) {
             throw new Mage_Core_Exception(__(self::CREDENTIALS_CHECK_FAILED));

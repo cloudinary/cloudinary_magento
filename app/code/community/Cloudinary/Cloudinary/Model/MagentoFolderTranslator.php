@@ -33,21 +33,19 @@ class Cloudinary_Cloudinary_Model_MagentoFolderTranslator implements \Cloudinary
         if (preg_match($this->absolutePathRegex, $result)) {
             // the input is absolute, we truncate the magento base dir to get the relative path
             $result = preg_replace("#^$baseDir#", '', $result);
-
         } else if (preg_match($this->productPathRegex, $result)) {
             /* the input appears to be a product image, we insert the path to product images relative to magento base dir
              * (by default /media/catalog/product/ ) */
             $catalogMediapath = Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
             $result = $this->removeMagentoBaseDir($catalogMediapath) . $result;
-
         } else if (preg_match($this->mediaPathRegex, $result)) {
             // the input appears to be relative to the magento base dir
             // NOP, the result should be the input
-
         } else {
             // we just assume the input is relative to the media library, in which case the relative path is "/media/$path" (in defualt case)
             $result = $this->mediaDir . $result;
         }
+
         $result .= $baseName;
 
         return $result;

@@ -85,6 +85,7 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
         if (!$this->hasData('migration_info')) {
             $this->setData('migration_info', new Varien_Object($this->_migrationTask->getInfo()));
         }
+
         return $this->getData('migration_info');
     }
 
@@ -99,12 +100,14 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
 
         return $this->getLayout()
             ->createBlock('adminhtml/widget_button')
-            ->setData(array(
+            ->setData(
+                array(
                 'id' => 'cloudinary_migration_start_' . $type,
                 'label' => $this->helper('adminhtml')->__('Start Migration'),
                 'disabled' => $type === Cloudinary_Cloudinary_Model_Migration::UPLOAD_MIGRATION_TYPE && $this->allImagesSynced(),
                 'onclick' => 'openCloudinaryMigrationPopup(\''.$type.'\');'
-            ))
+                )
+            )
             ->toHtml();
     }
 
@@ -122,12 +125,14 @@ class Cloudinary_Cloudinary_Block_Adminhtml_Manage extends Mage_Adminhtml_Block_
     private function _makeButton($label, $action, $disabled = false)
     {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData(array(
+            ->setData(
+                array(
                 'id' => 'cloudinary_migration_start_' . $action,
                 'label' => $this->helper('adminhtml')->__($label),
                 'disabled' => $disabled,
                 'onclick' => "setLocation('{$this->getUrl(sprintf('*/cloudinary/%s/type/%s', $action, $this->getType()))}')"
-            ));
+                )
+            );
 
         return $button->toHtml();
     }

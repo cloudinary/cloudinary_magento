@@ -1,8 +1,8 @@
 <?php
     $images = $this->getImages();
-    $imagesData = [];
+    $imagesData = array();
     foreach ($this->getImages() as $image) {
-        $imagesData[$image->getValueId()] = [
+        $imagesData[$image->getValueId()] = array(
             'id' => $image->getValueId(),
             'label' => $image->getLabel(),
             'free_transformation' => $image->getFreeTransformation(),
@@ -10,7 +10,7 @@
             'file' => $image->getFile(),
             'image_url' => $image->getUrl(),
             'error' => false,
-        ];
+        );
     }
 ?>
 <div id="cloudinary_transformation_tab" class="entry-edit custom-options product-custom-options">
@@ -23,7 +23,6 @@
         <div style="width: 60%;">
 
             <?php if ($this->isCloudinaryEnabled()): ?>
-
                 <div v-if="Object.keys(images).length" class="grid">
                     <table cellspacing="0" class="data border" id="media_gallery_content_grid" style="margin-top: 10px;">
                         <col width="250" />
@@ -75,7 +74,6 @@
                 </ul>
 
             <?php else: ?>
-
                 <ul class="messages">
                     <li class="notice-msg" style="background-image: none !important; margin: 10px 0;">
                         <p>No product images are available</p>

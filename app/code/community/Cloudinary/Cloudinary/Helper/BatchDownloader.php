@@ -115,23 +115,27 @@ class Cloudinary_Cloudinary_Helper_BatchDownloader extends Mage_Core_Helper_Abst
             $this->_info["iteration"]++;
             $this->log('Iteration #' . $this->_info["iteration"]);
             $this->migrationTask->setBatchCount($this->_info["iteration"]);
-            $this->saveInfo(array(
+            $this->saveInfo(
+                array(
                 "iteration" => $this->_info["iteration"],
                 "resources_count" => 0,
                 "resources_processed" => 0,
                 "resources_downloaded" => 0,
                 "resources_skipped" => 0,
                 "resources_failed" => 0,
-            ));
+                )
+            );
 
             $response = $this->getResources($this->_info["next_cursor"]);
             $response->setResourcesCount(count($response->getResources()));
-            $this->saveInfo(array(
+            $this->saveInfo(
+                array(
                 "next_cursor" => $response->getNextCursor(),
                 "more_expected" => ($response->getNextCursor())? true : false,
                 "resources_count" => $this->_info["resources_count"] + $response->getResourcesCount(),
                 "resources_count_total" => $this->_info["resources_count_total"] + $response->getResourcesCount(),
-            ));
+                )
+            );
             if ($response->getResourcesCount() > 0) {
                 $this->log('Found ' . $response->getResourcesCount() . ' image(s) to sync on this round. ' . (($response->getNextCursor()) ? '*More Rounds Expected*' : '*Last Round*'));
                 foreach ($response->getResources() as $i => &$resource) {
@@ -174,14 +178,16 @@ class Cloudinary_Cloudinary_Helper_BatchDownloader extends Mage_Core_Helper_Abst
                             $res = Cloudinary_Cloudinary_Helper_Data::curlGetContents($remoteFileUrl);
                             if (!$res || $res->getError() || empty(($image = $res->getBody()))) {
                                 throw new Mage_Core_Exception(
-                                        __('The preview image information is unavailable. Check your connection and try again.')
-                                    );
+                                    __('The preview image information is unavailable. Check your connection and try again.')
+                                );
                             }
+
                             $this->log('=== [Processing] Saving...');
                             Mage::getSingleton('core/file_storage_file')->saveFile(array('filename' => $localFileName, 'content' => $image), true);
                             if (!@file_exists($localFilePath)) {
                                 throw new Mage_Core_Exception(__("Image not saved."));
                             }
+
                             $this->log('=== [Processing] Saved.');
                             $this->saveInfo(array("resources_downloaded" => $this->_info["resources_downloaded"]+1, "resources_downloaded_total" => $this->_info["resources_downloaded_total"]+1));
                         }
@@ -228,13 +234,15 @@ class Cloudinary_Cloudinary_Helper_BatchDownloader extends Mage_Core_Helper_Abst
      */
     private function getResources($nextCursor = null)
     {
-        $response = $this->api->resources(array(
+        $response = $this->api->resources(
+            array(
             "resource_type" => 'image',
             "type" => "upload",
             "prefix" => 'media' . DIRECTORY_SEPARATOR,
             "max_results" => self::API_REQUEST_MAX_RESULTS,
             "next_cursor" => $nextCursor,
-        ));
+            )
+        );
         $this->_rateLimitResetAt = $response->rate_limit_reset_at;
         $this->_rateLimitAllowed = $response->rate_limit_allowed;
         $this->_rateLimitRemaining = $response->rate_limit_remaining;
@@ -255,6 +263,7 @@ class Cloudinary_Cloudinary_Helper_BatchDownloader extends Mage_Core_Helper_Abst
                 $this->logger->notice($message);
                 break;
         }
+
         return $this;
     }
 
@@ -268,7 +277,7 @@ class Cloudinary_Cloudinary_Helper_BatchDownloader extends Mage_Core_Helper_Abst
     private function validateRemoteFileExtensions($filePath)
     {
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        if (!in_array($extension, ['jpg','jpeg','gif','png'])) {
+        if (!in_array($extension, array('jpg','jpeg','gif','png'))) {
             throw new Mage_Core_Exception(__('Disallowed file type.'));
         }
     }
@@ -290,13 +299,14 @@ class Cloudinary_Cloudinary_Helper_BatchDownloader extends Mage_Core_Helper_Abst
             if (Cloudinary::config_get('private_cdn')) {
                 $credentials["private_cdn"] = Cloudinary::config_get('private_cdn');
             }
+
             return $credentials;
         } catch (\Exception $e) {
             throw new Mage_Core_Exception(__(self::CREDENTIALS_CHECK_FAILED));
         }
     }
 
-    private function saveInfo(array $info = [])
+    private function saveInfo(array $info = array())
     {
         $this->_info = array_merge($this->_info, $info);
         $this->migrationTask->setInfo($this->_info)->save();

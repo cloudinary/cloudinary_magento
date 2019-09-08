@@ -8,15 +8,15 @@ class Cloudinary_Cloudinary_Helper_ProductGalleryHelper extends Mage_Core_Helper
     /**
      * @var ConfigurationInterface
      */
-    protected $configuration;
+    protected $_configuration;
 
     /**
      * Cloudinary PG Options
      * @var array|null
      */
-    protected $cloudinaryPGoptions;
+    protected $_cloudinaryPGoptions;
 
-    const CASTING = [
+    protected $_casting = array(
         'themeProps_primary' => 'string',
         'themeProps_onPrimary' => 'string',
         'themeProps_active' => 'string',
@@ -39,14 +39,14 @@ class Cloudinary_Cloudinary_Helper_ProductGalleryHelper extends Mage_Core_Helper
         'thumbnailProps_selectedBorderWidth' => 'float',
         'thumbnailProps_mediaSymbolShape' => 'string',
         'indicatorProps_shape' => 'string',
-    ];
+    );
 
     /**
      * @method __construct
      */
     public function __construct()
     {
-        $this->configuration = Mage::getModel('cloudinary_cloudinary/configuration');
+        $this->_configuration = Mage::getModel('cloudinary_cloudinary/configuration');
     }
 
     /**
@@ -57,39 +57,44 @@ class Cloudinary_Cloudinary_Helper_ProductGalleryHelper extends Mage_Core_Helper
      */
     public function getCloudinaryPGOptions($refresh = false, $ignoreDisabled = false)
     {
-        if ((is_null($this->cloudinaryPGoptions) || $refresh) && ($ignoreDisabled || ($this->configuration->isEnabled() && $this->configuration->isEnabledProductGallery()))) {
-            $this->cloudinaryPGoptions = $this->configuration->getProductGalleryAll();
-            foreach ($this->cloudinaryPGoptions as $key => $value) {
+        if ((is_null($this->_cloudinaryPGoptions) || $refresh) && ($ignoreDisabled || ($this->_configuration->isEnabled() && $this->_configuration->isEnabledProductGallery()))) {
+            $this->_cloudinaryPGoptions = $this->_configuration->getProductGalleryAll();
+            foreach ($this->_cloudinaryPGoptions as $key => $value) {
                 //Change casting
-                if (isset(self::CASTING[$key])) {
-                    \settype($value, self::CASTING[$key]);
-                    $this->cloudinaryPGoptions[$key] = $value;
+                if (isset($this->_casting[$key])) {
+                    \settype($value, $this->_casting[$key]);
+                    $this->_cloudinaryPGoptions[$key] = $value;
                 }
+
                 //Build options hierarchy
                 $path = explode("_", $key);
                 $_path = $path[0];
-                if (in_array($_path, ['themeProps','zoomProps','thumbnailProps','indicatorProps'])) {
-                    if (!isset($this->cloudinaryPGoptions[$_path])) {
-                        $this->cloudinaryPGoptions[$_path] = [];
+                if (in_array($_path, array('themeProps','zoomProps','thumbnailProps','indicatorProps'))) {
+                    if (!isset($this->_cloudinaryPGoptions[$_path])) {
+                        $this->_cloudinaryPGoptions[$_path] = array();
                     }
+
                     array_shift($path);
                     $path = implode("_", $path);
-                    $this->cloudinaryPGoptions[$_path][$path] = $value;
-                    unset($this->cloudinaryPGoptions[$key]);
+                    $this->_cloudinaryPGoptions[$_path][$path] = $value;
+                    unset($this->_cloudinaryPGoptions[$key]);
                 }
             }
-            if (isset($this->cloudinaryPGoptions['enabled'])) {
-                unset($this->cloudinaryPGoptions['enabled']);
+
+            if (isset($this->_cloudinaryPGoptions['enabled'])) {
+                unset($this->_cloudinaryPGoptions['enabled']);
             }
-            if (isset($this->cloudinaryPGoptions['custom_free_params'])) {
-                $customFreeParams = (array) @json_decode($this->cloudinaryPGoptions['custom_free_params'], true);
-                $this->cloudinaryPGoptions = array_replace_recursive($this->cloudinaryPGoptions, $customFreeParams);
-                unset($this->cloudinaryPGoptions['custom_free_params']);
+
+            if (isset($this->_cloudinaryPGoptions['custom_free_params'])) {
+                $customFreeParams = (array) @json_decode($this->_cloudinaryPGoptions['custom_free_params'], true);
+                $this->_cloudinaryPGoptions = array_replace_recursive($this->_cloudinaryPGoptions, $customFreeParams);
+                unset($this->_cloudinaryPGoptions['custom_free_params']);
             }
-            $this->cloudinaryPGoptions['cloudName'] = (string)$this->configuration->getCloud();
+
+            $this->_cloudinaryPGoptions['cloudName'] = (string)$this->_configuration->getCloud();
         }
 
-        return $this->cloudinaryPGoptions;
+        return $this->_cloudinaryPGoptions;
     }
 
     /**
@@ -97,6 +102,6 @@ class Cloudinary_Cloudinary_Helper_ProductGalleryHelper extends Mage_Core_Helper
      */
     public function canDisplayProductGallery()
     {
-        return ($this->configuration->isEnabled() && $this->configuration->isEnabledProductGallery()) ? true : false;
+        return ($this->_configuration->isEnabled() && $this->_configuration->isEnabledProductGallery()) ? true : false;
     }
 }
