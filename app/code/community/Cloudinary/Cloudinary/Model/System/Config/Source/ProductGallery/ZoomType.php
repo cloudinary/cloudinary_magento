@@ -14,8 +14,8 @@ class Cloudinary_Cloudinary_Model_System_Config_Source_ProductGallery_ZoomType
                 'label' => 'Flyout',
             ),
             array(
-                'value' => 'lightbox',
-                'label' => 'Lightbox',
+                'value' => 'popup',
+                'label' => 'Popup',
             ),
         );
     }
