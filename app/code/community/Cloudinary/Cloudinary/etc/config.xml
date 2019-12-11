@@ -92,6 +92,15 @@
             </cloudinary_cloudinary>
         </helpers>
         <events>
+            <controller_front_init_before>
+                <observers>
+                    <cloudinary_autoloader>
+                        <type>singleton</type>
+                        <class>cloudinary_cloudinary/observer_autoload</class>
+                        <method>autoloadRegister</method>
+                    </cloudinary_autoloader>
+                </observers>
+            </controller_front_init_before>
             <catalog_product_save_after>
                 <observers>
                     <upload_images_to_cloudinary>

@@ -6,5 +6,4 @@ app/design/frontend/base/default/template/cloudinary app/design/frontend/base/de
 app/etc/modules/Cloudinary_Cloudinary.xml app/etc/modules/Cloudinary_Cloudinary.xml
 js/cloudinary js/cloudinary
 lib/CloudinaryExtension lib/CloudinaryExtension
-lib/Cloudinary lib/Cloudinary
 skin/adminhtml/default/default/images/cloudinary skin/adminhtml/default/default/images/cloudinary
