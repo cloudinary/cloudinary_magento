@@ -1,0 +1,70 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "3265de913ba9de963f729a4f0be09a73",
+    "packages": [
+        {
+            "name": "cloudinary/cloudinary_php",
+            "version": "1.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cloudinary/cloudinary_php.git",
+                "reference": "e33619e48ea8fa0350c007d640777091bfa4fdbc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/e33619e48ea8fa0350c007d640777091bfa4fdbc",
+                "reference": "e33619e48ea8fa0350c007d640777091bfa4fdbc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ],
+                "files": [
+                    "src/Helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cloudinary",
+                    "homepage": "https://github.com/cloudinary/cloudinary_php/graphs/contributors"
+                }
+            ],
+            "description": "Cloudinary PHP SDK",
+            "homepage": "https://github.com/cloudinary/cloudinary_php",
+            "keywords": [
+                "cdn",
+                "cloud",
+                "cloudinary",
+                "image management",
+                "sdk"
+            ],
+            "time": "2019-11-28T15:57:33+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
