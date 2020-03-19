@@ -147,7 +147,8 @@ class Cloudinary_Cloudinary_Helper_Image extends Mage_Catalog_Helper_Image
         } else {
             return $this->_configuration->getDefaultTransformation()
                 ->withDimensions($this->_dimensions)
-                ->withCrop(Crop::fit());
+                //->withCrop(Crop::fit());
+                ->withCrop(Crop::limit());
         }
     }
 }
