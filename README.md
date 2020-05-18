@@ -10,7 +10,7 @@ Magento 1 module for integration with Cloudinary.
 3. Install the package...
 
 ## Install Manually
-1. Download & copy/drag the directories `app`, `lib` & `skin` into your Magento 1 root dir.
+1. Download & copy/drag the directories `app`, `js`, `lib` & `skin` into your Magento 1 root dir.
 2. Clear cache from Magento admin panel or by running `rm -rf var/cache/* var/full_page_cache/*` under your Magento 1 root dir.
 
 ## Install Using Modman

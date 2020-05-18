@@ -128,6 +128,15 @@
                     </load_custom_autoloaders>
                 </observers>
             </controller_front_init_before>
+            <core_collection_abstract_load_before>
+                <observers>
+                    <load_custom_autoloaders2>
+                        <type>singleton</type>
+                        <class>cloudinary_cloudinary/observer_system</class>
+                        <method>loadCustomAutoloaders</method>
+                    </load_custom_autoloaders2>
+                </observers>
+            </core_collection_abstract_load_before>
         </events>
         <resources>
             <cloudinary_setup>

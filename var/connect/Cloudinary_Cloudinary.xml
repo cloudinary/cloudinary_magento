@@ -1,5 +1,5 @@
 <_>
-   <form_key>UQi1chJu9f8zOXQ6</form_key>
+   <form_key>3koVpGc1HNOKsgdQ</form_key>
    <name>Cloudinary_Cloudinary</name>
    <channel>community</channel>
    <version_ids>
@@ -9,7 +9,7 @@
    <description>Cloudinary supercharges your images! Upload images to the cloud, deliver optimized via a fast CDN, perform smart resizing and apply effects.</description>
    <license>MIT License (MITL)</license>
    <license_uri/>
-   <version>3.1.1</version>
+   <version>3.1.2</version>
    <stability>stable</stability>
    <notes>      - Match MEQP1 coding standards
    </notes>
@@ -41,7 +41,7 @@
             <max/>
          </max>
          <files>
-            <files>                                      </files>
+            <files>                                       </files>
          </files>
       </package>
       <extension>

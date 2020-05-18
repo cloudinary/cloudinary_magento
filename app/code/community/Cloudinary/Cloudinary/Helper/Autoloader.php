@@ -7,14 +7,18 @@ class Cloudinary_Cloudinary_Helper_Autoloader
     const CLOUDINARY_LIB_PATH = 'Cloudinary';
     const CONVERT_CLASS_TO_PATH_REGEX = '#\\\|_(?!.*\\\)#';
 
+    private $_registered;
     private $_originalAutoloaders;
 
     public function register()
     {
-        $this->_deregisterVarienAutoloaders();
-        $this->_registerCloudinaryAutoloader();
-        $this->_registerCloudinaryExtensionAutoloader();
-        $this->_reregisterVarienAutoloaders();
+        if(!$this->_registered){
+            $this->_registered = true;
+            $this->_deregisterVarienAutoloaders();
+            $this->_registerCloudinaryAutoloader();
+            $this->_registerCloudinaryExtensionAutoloader();
+            $this->_reregisterVarienAutoloaders();
+        }
     }
 
     private function _registerCloudinaryExtensionAutoloader()
@@ -67,4 +71,4 @@ class Cloudinary_Cloudinary_Helper_Autoloader
             spl_autoload_register($autoloader);
         }
     }
-} 
+}
