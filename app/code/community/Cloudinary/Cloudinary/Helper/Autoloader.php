@@ -18,6 +18,7 @@ class Cloudinary_Cloudinary_Helper_Autoloader
             $this->_registerCloudinaryAutoloader();
             $this->_registerCloudinaryExtensionAutoloader();
             $this->_reregisterVarienAutoloaders();
+            require_once(Mage::getBaseDir('lib') . DS . 'CloudinaryExtension' . DS . 'vendor' . DS. 'autoload.php');
         }
     }
 
