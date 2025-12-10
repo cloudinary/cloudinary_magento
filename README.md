@@ -2,6 +2,8 @@
 
 Magento 1 module for integration with Cloudinary.
 
+**⚠️ PLEASE NOTE:** Magento 1 reached end-of-life in June 2020. Accordingly, the Cloudinary Magento 1 extension is no longer available and will not receive updates.
+
 ---
 
 ## Install From Magento Admin (Using Magento Connect Manager)
